@@ -4,3 +4,6 @@ donde
 	euros = 567, # cantidad de euros
 	centimos1 = 456, # céntimos
 	centimos2 = 10 # más céntimos.
+
+Hola
+Hola buenas tardes
