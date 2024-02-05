@@ -15,8 +15,19 @@ public class AnalizadorLexicoTiny {
 	private static String NL = System.getProperty("line.separator");
    
 	private static enum Estado {
-		INICIO, REC_POR, REC_DIV, REC_PAP, REC_PCIERR, REC_COMA, REC_IGUAL,
-		REC_MAS, REC_MENOS, REC_ID, REC_ENT, REC_0, REC_IDEC, REC_DEC, REC_COM, REC_EOF
+		INICIO, REC_POR, REC_DIV, REC_PAP, REC_PCIERR, REC_COMA, REC_ASIG,
+		REC_MAS, REC_MENOS, REC_ID, REC_ENT, REC_EOF,
+		
+		
+		
+		REC_0, 
+		REC_IDEC, REC_DEC, /*REC_DEC0, REC_ODEC,*/
+		
+		REC_GT, REC_GE, REC_LT, REC_LE, REC_EQ, REC_EX, REC_NE,
+		REC_LLAP, REC_LLCIERRE, REC_SEPT, REC_SEP,	
+		REC_E, REC_MASE, REC_MENOSE, REC_ENTE, 
+		
+		REC_PYC, REC_EVAL, REC_COM 
 	}
 
 	private Estado estado;
@@ -37,7 +48,7 @@ public class AnalizadorLexicoTiny {
 		while(true) {
 			switch(estado) {
 			case INICIO: // Estado no final, si no reconoce caracter finaliza con error
-				if(hayLetra())  transita(Estado.REC_ID);
+				if(hayLetra()) transita(Estado.REC_ID);
 				else if (hayDigitoPos()) transita(Estado.REC_ENT);
 				else if (hayCero()) transita(Estado.REC_0);
 				else if (haySuma()) transita(Estado.REC_MAS);
@@ -46,11 +57,21 @@ public class AnalizadorLexicoTiny {
 				else if (hayDiv()) transita(Estado.REC_DIV);
 				else if (hayPAp()) transita(Estado.REC_PAP);
 				else if (hayPCierre()) transita(Estado.REC_PCIERR);
-				else if (hayIgual()) transita(Estado.REC_IGUAL);
+				else if (hayIgual()) transita(Estado.REC_ASIG); // CAMBIAR
 				else if (hayComa()) transita(Estado.REC_COMA);
 				else if (hayAlmohadilla()) transitaIgnorando(Estado.REC_COM);
 				else if (haySep()) transitaIgnorando(Estado.INICIO);
 				else if (hayEOF()) transita(Estado.REC_EOF);
+				
+				else if (hayPYC()) transita(Estado.REC_PYC);
+				else if (hayEVAL()) transita(Estado.REC_EVAL);
+				else if (hayAMP()) transita(Estado.REC_SEPT);
+				else if (hayLLAP()) transita(Estado.REC_LLAP);
+				else if (hayLLCIERRE()) transita(Estado.REC_LLCIERRE);
+				else if (hayLT()) transita(Estado.REC_LT);
+				else if (hayGT()) transita(Estado.REC_GT);
+				else if (hayEX()) transita(Estado.REC_EX);								
+				
 				else error();
 				break;
 			case REC_ID: // lee letras y numeros
@@ -60,6 +81,7 @@ public class AnalizadorLexicoTiny {
 			case REC_ENT: // lee numeros
 				if (hayDigito()) transita(Estado.REC_ENT);
 				else if (hayPunto()) transita(Estado.REC_IDEC);
+				else if(hayE()) transita(Estado.REC_E);
 				else return unidadEnt();
 				break;
 			case REC_0:
@@ -80,7 +102,7 @@ public class AnalizadorLexicoTiny {
 			case REC_DIV: return unidadDiv();              
 			case REC_PAP: return unidadPAp();
 			case REC_PCIERR: return unidadPCierre();
-			case REC_IGUAL: return unidadIgual();
+			//case REC_ASIG: return unidadIgual();
 			case REC_COMA: return unidadComa();
 			// Comentario lee todo el comentario, sin almacenarlo. Lee un salto de linea, vuelve al inicio.
 			case REC_COM: 
@@ -96,8 +118,59 @@ public class AnalizadorLexicoTiny {
 				break;
 			case REC_DEC: 
 				if (hayDigitoPos()) transita(Estado.REC_DEC);
-				else if (hayCero()) transita(Estado.REC_IDEC);
+				else if (hayCero()) transita(Estado.REC_IDEC); 
+				// TODO MIRAR, PUEDE QUE SEA UN OPERADOR
+				else if(hayE()) transita(Estado.REC_E); 
 				else return unidadReal();
+				break;				
+			
+			case REC_LLAP: return unidadLLAP();
+			case REC_LLCIERRE: return unidadLLCIERRE();
+			case REC_EVAL: return unidadEVAL();
+			case REC_PYC: return unidadPYC();
+			
+			
+			case REC_SEPT: // NO FINAL
+				if(hayAMP()) transita(Estado.REC_SEP);
+				else error();
+				break;
+			case REC_LT: 
+				if(hayIgual()) transita(Estado.REC_LE);
+				else return unidadLT();
+				break;
+			case REC_GT: 
+				if(hayIgual()) transita(Estado.REC_GE); 
+				else return unidadGT();
+				break;
+			case REC_EX: 
+				if(hayIgual()) transita(Estado.REC_NE);
+				else error();
+				break;
+			case REC_ASIG: 
+				if(hayIgual()) transita(Estado.REC_EQ);
+				else return unidadASIG();
+				break;				
+			case REC_LE: return unidadLE();
+			case REC_GE: return unidadGE();
+			case REC_NE: return unidadNE();
+			case REC_SEP: return unidadSEP();
+			case REC_EQ: return unidadEQ();
+			case REC_E:
+				if(haySuma()) transita(Estado.REC_MASE);
+				else if(hayResta()) transita(Estado.REC_MENOSE);
+				else error();	
+				break;
+			case REC_MASE: 
+				if(hayDigito()) transita(Estado.REC_ENTE);
+				else error();
+				break;
+			case REC_MENOSE:
+				if(hayDigito()) transita(Estado.REC_ENTE);
+				else error();	
+				break;
+			case REC_ENTE:
+				if(hayDigito()) transita(Estado.REC_ENTE);
+				else return unidadE();
 				break;
 			}
 		}    
@@ -153,12 +226,40 @@ public class AnalizadorLexicoTiny {
 	private boolean hayNL() {return sigCar == '\r' || sigCar == '\b' || sigCar == '\n';}
 	private boolean hayEOF() {return sigCar == -1;}
 	
+	private boolean hayPYC() {return sigCar == ';';}
+	private boolean hayEVAL() {return sigCar == '@';}
+	private boolean hayAMP() {return sigCar == '&';}
+	private boolean hayLLAP() {return sigCar == '{';}
+	private boolean hayLLCIERRE() {return sigCar == '}';}
+	private boolean hayLT() {return sigCar == '<';}
+	private boolean hayGT() {return sigCar == '>';}
+	private boolean hayEX() {return sigCar == '!';}
+	
+	private boolean hayE() {return sigCar == 'e' || sigCar == 'E';}
+	
+	
+	
+	
+	
+	// PALABRAS RESERVADAS TRUE, FALSE, AND, OR, NOT, BOOL,ENT, REAL
 	private UnidadLexica unidadId() {
 		switch(lex.toString()) {
-         	case "evalua":  
-         		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.EVALUA);
-         	case "donde":    
-         		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.DONDE);
+         	case "true":  
+         		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.TRUE);
+         	case "false":  
+         		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.FALSE);    
+         	case "and":  
+         		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.AND);    
+         	case "or":  
+         		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.OR);    
+         	case "not":  
+         		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.NOT);    
+         	case "bool":  
+         		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.BOOL);    
+         	case "int":  
+         		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.ENT);    
+         	case "real":  
+         		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.REAL);    
          	default:    
          		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.IDEN,lex.toString());     
 		}
@@ -187,16 +288,60 @@ public class AnalizadorLexicoTiny {
 	}    
 	private UnidadLexica unidadPCierre() {
 	   return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.PCIERRE);     
-	}    
-	private UnidadLexica unidadIgual() {
-		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.IGUAL);     
-	}    
+	}  	  
 	private UnidadLexica unidadComa() {
 		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.COMA);     
 	}    
 	private UnidadLexica unidadEof() {
 		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.EOF);     
-	}    
+	}  
+	
+	private UnidadLexica unidadLLAP() {
+		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.LLAP);     
+	} 
+	private UnidadLexica unidadLLCIERRE() {
+		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.LLCIERRE);     
+	} 
+	private UnidadLexica unidadEVAL() {
+		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.EVAL);     
+	}
+	private UnidadLexica unidadPYC() {
+		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.PYC);     
+	} 
+	
+	private UnidadLexica unidadLT() {
+		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.LT);     
+	} 
+	private UnidadLexica unidadGT() {
+		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.GT);     
+	} 
+	private UnidadLexica unidadASIG() {
+		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.ASIG);     
+	} 
+	
+	private UnidadLexica unidadLE() {
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.LE,lex.toString());     
+	} 
+	private UnidadLexica unidadGE() {
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.GE,lex.toString());
+	} 
+	private UnidadLexica unidadNE() {
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.NE,lex.toString());
+	}
+	private UnidadLexica unidadSEP() {
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.SEP,lex.toString());
+	}
+	private UnidadLexica unidadEQ() {
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.EQ,lex.toString());
+	}
+	
+	private UnidadLexica unidadE() {
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.E,lex.toString());     
+	}
+	
+	
+	
+	
 	
 	private void error() {
 		//System.err.println("error"); // DOMJUDGE
