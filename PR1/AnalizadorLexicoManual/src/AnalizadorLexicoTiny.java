@@ -21,7 +21,7 @@ public class AnalizadorLexicoTiny {
 		
 		
 		REC_0, 
-		REC_IDEC, REC_DEC, /*REC_DEC0, REC_ODEC,*/
+		REC_IDECP, REC_IDEC, REC_DEC, REC_DEC0, REC_ODEC,
 		
 		REC_GT, REC_GE, REC_LT, REC_LE, REC_EQ, REC_EX, REC_NE,
 		REC_LLAP, REC_LLCIERRE, REC_SEPT, REC_SEP,	
