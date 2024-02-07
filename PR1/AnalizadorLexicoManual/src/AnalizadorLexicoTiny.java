@@ -87,6 +87,7 @@ public class AnalizadorLexicoTiny {
 				break;
 			case REC_0:
 				if (hayPunto()) transita(Estado.REC_IDECP);
+				else if(hayE()) transita(Estado.REC_E);
 				else return unidadEnt();
 				break;
 			case REC_MAS:
@@ -250,7 +251,29 @@ public class AnalizadorLexicoTiny {
 	
 	// PALABRAS RESERVADAS TRUE, FALSE, AND, OR, NOT, BOOL,ENT, REAL
 	private UnidadLexica unidadId() {
-		switch(lex.toString()) {
+		String word=lex.toString();
+		char[] wordA=word.toCharArray();		
+		String[] pReservadas = {"true", "false","and","or","not","bool","ent","real"};
+		ClaseLexica[] clases = {ClaseLexica.TRUE, ClaseLexica.FALSE, ClaseLexica.AND, 
+				ClaseLexica.OR, ClaseLexica.NOT, ClaseLexica.BOOL, ClaseLexica.ENT, ClaseLexica.REAL};
+		
+		// SE PUEDE MEJORAR LA EFICIENCIA PERO ASI QUEDA MAS LIMPIO EL CODIGO
+				
+		int m=pReservadas.length;
+		int i, j;
+		for(i=0;i<m;i++) {
+			if(wordA[0]==pReservadas[i].charAt(0) || wordA[0]==pReservadas[i].charAt(0)-32) {
+				for(j=1;j<pReservadas[i].length();j++) {
+					if(wordA[j]!=pReservadas[i].charAt(j) && 
+							wordA[j]!=pReservadas[i].charAt(j)-32) break;
+				}
+				if(j==pReservadas[i].length()) 
+					return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,clases[i]);
+			}
+		}
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.IDEN,word);
+		
+		/*switch(lex.toString()) {
          	case "true":  
          		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.TRUE);
          	case "false":  
@@ -269,7 +292,7 @@ public class AnalizadorLexicoTiny {
          		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.REAL);    
          	default:    
          		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.IDEN,lex.toString());     
-		}
+		}*/
 	}  
    
 	private UnidadLexica unidadEnt() {
