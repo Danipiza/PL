@@ -21,7 +21,8 @@ public class AnalizadorLexicoTiny {
 		
 		
 		REC_0, 
-		REC_IDECP, REC_IDEC, REC_DEC, REC_DEC0, REC_ODEC,
+		
+		REC_IDECP, REC_IDEC, REC_0DEC, //REC_DEC, REC_DEC0,
 		
 		REC_GT, REC_GE, REC_LT, REC_LE, REC_EQ, REC_EX, REC_NE,
 		REC_LLAP, REC_LLCIERRE, REC_SEPT, REC_SEP,	
@@ -80,12 +81,12 @@ public class AnalizadorLexicoTiny {
 				break;
 			case REC_ENT: // lee numeros
 				if (hayDigito()) transita(Estado.REC_ENT);
-				else if (hayPunto()) transita(Estado.REC_IDEC);
+				else if (hayPunto()) transita(Estado.REC_IDECP);
 				else if(hayE()) transita(Estado.REC_E);
 				else return unidadEnt();
 				break;
 			case REC_0:
-				if (hayPunto()) transita(Estado.REC_IDEC);
+				if (hayPunto()) transita(Estado.REC_IDECP);
 				else return unidadEnt();
 				break;
 			case REC_MAS:
@@ -111,18 +112,24 @@ public class AnalizadorLexicoTiny {
 				else transitaIgnorando(Estado.REC_COM);
 				break;
 			case REC_EOF: return unidadEof();
-			case REC_IDEC: // Estado no final, si no reconoce caracter finaliza con error
-				if (hayDigitoPos()) transita(Estado.REC_DEC);
-				else if (hayCero()) transita(Estado.REC_IDEC);
+			
+			// NUEVO --------------------------------------------
+			case REC_IDECP: // No final.
+				if (hayDigito()) transita(Estado.REC_IDEC);
 				else error();
 				break;
-			case REC_DEC: 
-				if (hayDigitoPos()) transita(Estado.REC_DEC);
-				else if (hayCero()) transita(Estado.REC_IDEC); 
-				// TODO MIRAR, PUEDE QUE SEA UN OPERADOR
-				else if(hayE()) transita(Estado.REC_E); 
+			case REC_IDEC: 
+				if (hayDigitoPos()) transita(Estado.REC_IDEC);
+				else if (hayCero()) transita(Estado.REC_0DEC);
 				else return unidadReal();
-				break;				
+				break;
+			case REC_0DEC: 
+				if (hayDigitoPos()) transita(Estado.REC_IDEC);
+				else if (hayCero()) transita(Estado.REC_0DEC); 
+				else error();
+				break;	
+				
+			// --------------------------------------------------
 			
 			case REC_LLAP: return unidadLLAP();
 			case REC_LLCIERRE: return unidadLLCIERRE();
