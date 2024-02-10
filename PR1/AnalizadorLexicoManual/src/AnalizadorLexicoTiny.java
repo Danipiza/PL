@@ -65,7 +65,7 @@ public class AnalizadorLexicoTiny {
 				else if (hayIgual()) transita(Estado.REC_ASIG); // CAMBIAR
 				else if (hayComa()) transita(Estado.REC_COMA);
 				else if (hayAlmohadilla()) transitaIgnorando(Estado.REC_COMT);
-				else if (haySep()) transitaIgnorando(Estado.INICIO);
+				else if (haySep()||hayNL()) transitaIgnorando(Estado.INICIO);
 				else if (hayEOF()) transita(Estado.REC_EOF);
 				
 				else if (hayPYC()) transita(Estado.REC_PYC);
@@ -75,8 +75,7 @@ public class AnalizadorLexicoTiny {
 				else if (hayLLCIERRE()) transita(Estado.REC_LLCIERRE);
 				else if (hayLT()) transita(Estado.REC_LT);
 				else if (hayGT()) transita(Estado.REC_GT);
-				else if (hayEX()) transita(Estado.REC_EX);								
-				
+				else if (hayEX()) transita(Estado.REC_EX);									
 				else error();
 				break;
 			case REC_ID: // lee letras y numeros
@@ -389,14 +388,17 @@ public class AnalizadorLexicoTiny {
 		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.E,lex.toString());     
 	}
 	
-	
-	
-	
-	
+		
 	private void error() throws RuntimeException {
+		try {
+			sigCar();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 		//System.err.println("error"); // DOMJUDGE
 		//System.err.println("("+filaActual+','+columnaActual+"):Caracter inexperado");  
-		throw new RuntimeException("ERROR");		
+		throw new RuntimeException("ERROR");
 		//System.exit(1);
 	}
 
