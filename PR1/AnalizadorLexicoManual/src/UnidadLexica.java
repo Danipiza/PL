@@ -47,7 +47,7 @@ public abstract class UnidadLexica {
 		hashMap.put(ClaseLexica.NOT, "<not>");
 		hashMap.put(ClaseLexica.BOOL, "<bool>");
 		hashMap.put(ClaseLexica.ENT, "<int>");
-		//hashMap.put(ClaseLexica.REAL, "<real>");
+		hashMap.put(ClaseLexica.REAL, "<real>");
 		
 		
 		
@@ -65,9 +65,8 @@ public abstract class UnidadLexica {
 	public int columna() { return columna; }
 	
 	public String print() {
-		//if(clase==ClaseLexica.SEP) tmp=true;
-		
-		if(clase==ClaseLexica.IDEN) return lexema();
-		else return hashMap.get(clase);				
+		return hashMap.get(clase);
 	}
+	
+	
 }

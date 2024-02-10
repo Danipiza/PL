@@ -1,5 +1,9 @@
 import java.io.FileInputStream;
 import java.io.Reader;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
@@ -28,7 +32,7 @@ public class AnalizadorLexicoTiny {
 		REC_LLAP, REC_LLCIERRE, REC_SEPT, REC_SEP,	
 		REC_E, REC_MASE, REC_MENOSE, REC_ENTE, 
 		
-		REC_PYC, REC_EVAL, REC_COM 
+		REC_PYC, REC_EVAL, REC_COMT, REC_COM 
 	}
 
 	private Estado estado;
@@ -60,7 +64,7 @@ public class AnalizadorLexicoTiny {
 				else if (hayPCierre()) transita(Estado.REC_PCIERR);
 				else if (hayIgual()) transita(Estado.REC_ASIG); // CAMBIAR
 				else if (hayComa()) transita(Estado.REC_COMA);
-				else if (hayAlmohadilla()) transitaIgnorando(Estado.REC_COM);
+				else if (hayAlmohadilla()) transitaIgnorando(Estado.REC_COMT);
 				else if (haySep()) transitaIgnorando(Estado.INICIO);
 				else if (hayEOF()) transita(Estado.REC_EOF);
 				
@@ -107,6 +111,10 @@ public class AnalizadorLexicoTiny {
 			//case REC_ASIG: return unidadIgual();
 			case REC_COMA: return unidadComa();
 			// Comentario lee todo el comentario, sin almacenarlo. Lee un salto de linea, vuelve al inicio.
+			case REC_COMT:
+				if(hayAlmohadilla()) transitaIgnorando(Estado.REC_COM);
+				else error();
+				break;
 			case REC_COM: 
 				if (hayNL()) transitaIgnorando(Estado.INICIO);
 				else if (hayEOF()) transita(Estado.REC_EOF);
@@ -252,13 +260,25 @@ public class AnalizadorLexicoTiny {
 	// PALABRAS RESERVADAS TRUE, FALSE, AND, OR, NOT, BOOL,ENT, REAL
 	private UnidadLexica unidadId() {
 		String word=lex.toString();
-		char[] wordA=word.toCharArray();		
+		word.toLowerCase();
+		Map<String, ClaseLexica> mWord = new HashMap<String,ClaseLexica>();						
 		String[] pReservadas = {"true", "false","and","or","not","bool","ent","real"};
 		ClaseLexica[] clases = {ClaseLexica.TRUE, ClaseLexica.FALSE, ClaseLexica.AND, 
 				ClaseLexica.OR, ClaseLexica.NOT, ClaseLexica.BOOL, ClaseLexica.ENT, ClaseLexica.REAL};
+		for(int i=0;i<pReservadas.length;i++) {
+			mWord.put(pReservadas[i],clases[i]);
+		}
 		
+		if(mWord.containsKey(word)) {
+			return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,mWord.get(word));
+		}
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.IDEN,word);
+		
+		
+		
+		/*
 		// SE PUEDE MEJORAR LA EFICIENCIA PERO ASI QUEDA MAS LIMPIO EL CODIGO
-				
+		
 		int m=pReservadas.length;
 		int i, j;
 		for(i=0;i<m;i++) {
@@ -270,8 +290,8 @@ public class AnalizadorLexicoTiny {
 				if(j==pReservadas[i].length()) 
 					return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,clases[i]);
 			}
-		}
-		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.IDEN,word);
+		}*/
+		
 		
 		/*switch(lex.toString()) {
          	case "true":  
@@ -373,10 +393,11 @@ public class AnalizadorLexicoTiny {
 	
 	
 	
-	private void error() {
+	private void error() throws RuntimeException {
 		//System.err.println("error"); // DOMJUDGE
-		System.err.println("("+filaActual+','+columnaActual+"):Caracter inexperado");  
-		System.exit(1);
+		//System.err.println("("+filaActual+','+columnaActual+"):Caracter inexperado");  
+		throw new RuntimeException("ERROR");		
+		//System.exit(1);
 	}
 
 	public static void main(String arg[]) throws IOException {
@@ -386,7 +407,7 @@ public class AnalizadorLexicoTiny {
 		// lee el input.txt, hasta el final del fichero, o error.
 		do {
 			unidad = al.sigToken();			
-			System.out.println(unidad.print());
+			//System.out.println(unidad.print());
 		}
 		while (unidad.clase() != ClaseLexica.EOF);
 	} 

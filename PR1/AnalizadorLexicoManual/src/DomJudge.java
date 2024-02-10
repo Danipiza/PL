@@ -20,14 +20,14 @@ public class DomJudge {
 			try {
 				unidad = al.sigToken();
 				System.out.println(unidad);
-				//System.out.println(unidad.print());
+			} catch (RuntimeException e) {
+				System.out.println("ERROR");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			} 
 			
 		}
-		while (unidad.clase() != ClaseLexica.EOF);
+		while (unidad.clase() == null || unidad.clase() != ClaseLexica.EOF);
 	}
 
 }
