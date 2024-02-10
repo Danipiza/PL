@@ -19,6 +19,7 @@ public abstract class UnidadLexica {
 	}
 	
 	private void init() {
+		// básicamente el valor de print de todas las unidades univaluadas
 		hashMap = new HashMap<>();
 		hashMap.put(ClaseLexica.PAP, "(");
 		hashMap.put(ClaseLexica.PCIERRE, ")");
@@ -30,15 +31,15 @@ public abstract class UnidadLexica {
 		hashMap.put(ClaseLexica.EVAL, "@");
 		hashMap.put(ClaseLexica.EOF, "EOF");
 		hashMap.put(ClaseLexica.GT, ">");
-		hashMap.put(ClaseLexica.GE, ">=");
 		hashMap.put(ClaseLexica.LT, "<");
-		hashMap.put(ClaseLexica.LE, "<=");
-		hashMap.put(ClaseLexica.EQ, "==");
-		hashMap.put(ClaseLexica.NE, "!=");
 		hashMap.put(ClaseLexica.PYC, ";");
 		hashMap.put(ClaseLexica.LLAP, "{");
 		hashMap.put(ClaseLexica.LLCIERRE, "}");
-		hashMap.put(ClaseLexica.SEP, "&&");
+		// hashMap.put(ClaseLexica.SEP, "&&");
+		// hashMap.put(ClaseLexica.GE, ">=");
+		// hashMap.put(ClaseLexica.LE, "<=");
+		// hashMap.put(ClaseLexica.EQ, "==");
+		// hashMap.put(ClaseLexica.NE, "!=");
 		
 		hashMap.put(ClaseLexica.TRUE, "<true>");
 		hashMap.put(ClaseLexica.FALSE, "<false>");

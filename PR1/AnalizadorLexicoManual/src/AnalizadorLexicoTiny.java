@@ -9,6 +9,12 @@ import java.io.IOException;
 
 public class AnalizadorLexicoTiny {
 
+	public static class ECaracterInesperado extends RuntimeException {
+		public ECaracterInesperado(String msg) {
+			super(msg);
+		}
+	}; 
+
 	private Reader input;
 	private StringBuffer lex;
 	private int sigCar;
@@ -259,7 +265,7 @@ public class AnalizadorLexicoTiny {
 	// PALABRAS RESERVADAS TRUE, FALSE, AND, OR, NOT, BOOL,ENT, REAL
 	private UnidadLexica unidadId() {
 		String word=lex.toString();
-		word.toLowerCase();
+		String wordLowered = word.toLowerCase();
 		Map<String, ClaseLexica> mWord = new HashMap<String,ClaseLexica>();						
 		String[] pReservadas = {"true", "false","and","or","not","bool","ent","real"};
 		ClaseLexica[] clases = {ClaseLexica.TRUE, ClaseLexica.FALSE, ClaseLexica.AND, 
@@ -268,8 +274,8 @@ public class AnalizadorLexicoTiny {
 			mWord.put(pReservadas[i],clases[i]);
 		}
 		
-		if(mWord.containsKey(word)) {
-			return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,mWord.get(word));
+		if(mWord.containsKey(wordLowered)) {
+			return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,mWord.get(wordLowered));
 		}
 		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.IDEN,word);
 		
@@ -390,6 +396,7 @@ public class AnalizadorLexicoTiny {
 	
 		
 	private void error() throws RuntimeException {
+		int curCar = sigCar;
 		try {
 			sigCar();
 		} catch (IOException e) {
@@ -398,7 +405,8 @@ public class AnalizadorLexicoTiny {
 		} 
 		//System.err.println("error"); // DOMJUDGE
 		//System.err.println("("+filaActual+','+columnaActual+"):Caracter inexperado");  
-		throw new RuntimeException("ERROR");
+		//throw new RuntimeException("ERROR");
+		throw new ECaracterInesperado("("+filaActual+','+columnaActual+"):Caracter inexperado:"+(char)curCar);
 		//System.exit(1);
 	}
 
