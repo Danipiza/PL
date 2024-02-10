@@ -385,8 +385,8 @@ public class AnalizadorLexicoTiny {
 		UnidadLexica unidad;
 		// lee el input.txt, hasta el final del fichero, o error.
 		do {
-			unidad = al.sigToken();
-			System.out.println(unidad);
+			unidad = al.sigToken();			
+			System.out.println(unidad.print());
 		}
 		while (unidad.clase() != ClaseLexica.EOF);
 	} 
