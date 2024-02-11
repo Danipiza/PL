@@ -8,6 +8,12 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 
 public class AnalizadorLexicoTiny {
+	
+	public static class ECaracterInesperado extends RuntimeException {
+		public ECaracterInesperado(String msg) {
+			super(msg);
+		}
+	}
 
 	private Reader input;
 	private StringBuffer lex;
@@ -315,10 +321,10 @@ public class AnalizadorLexicoTiny {
 	}  
    
 	private UnidadLexica unidadEnt() {
-		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.ENT,lex.toString());     
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.LITERALENTERO,lex.toString());     
 	}    
 	private UnidadLexica unidadReal() {
-		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.REAL,lex.toString());     
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.LITERALREAL,lex.toString());     
 	}    
 	private UnidadLexica unidadMas() {
 		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.MAS);     
@@ -390,15 +396,16 @@ public class AnalizadorLexicoTiny {
 	
 		
 	private void error() throws RuntimeException {
+		int curCar = sigCar;
 		try {
 			sigCar();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		//System.err.println("error"); // DOMJUDGE
-		//System.err.println("("+filaActual+','+columnaActual+"):Caracter inexperado");  
-		throw new RuntimeException("ERROR");
+		
+		throw new ECaracterInesperado("("+filaActual+','+columnaActual+"):Caracter inexperado:"+(char)curCar);
+		//throw new RuntimeException("ERROR");
 		//System.exit(1);
 	}
 
