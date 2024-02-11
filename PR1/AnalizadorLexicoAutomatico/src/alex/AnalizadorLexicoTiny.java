@@ -7,6 +7,7 @@ package alex;
 
 // See https://github.com/jflex-de/jflex/issues/222
 @SuppressWarnings("FallThrough")
+public
 class AnalizadorLexicoTiny {
 
   /** This character denotes the end of file. */
@@ -369,7 +370,7 @@ class AnalizadorLexicoTiny {
    *
    * @param   in  the java.io.Reader to read input from.
    */
-  AnalizadorLexicoTiny(java.io.Reader in) {
+  public AnalizadorLexicoTiny(java.io.Reader in) {
     ops = new ALexOperations(this);
     this.zzReader = in;
   }
