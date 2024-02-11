@@ -1,3 +1,5 @@
+package alex;
+
 %%
 %line
 %column
@@ -52,8 +54,6 @@ parteEntera = {digitoPositivo}{digito}*
 parteDecimal = {digito}* {digitoPositivo}
 separador = [ \t\r\b\n]
 comentario = #[^\n]* 
-evalua = evalua
-donde = donde
 identificador = {letra}({letra}|{digito})*
 literalEntero = [\+,\-]?{parteEntera}
 literalReal = [\+,\-]?{parteEntera}\.{parteDecimal}
@@ -92,7 +92,7 @@ amp = &&
 
 %%
 
-{int}                  {return ops.unidadInt();}
+{int}                  {return ops.unidadEnt();}
 {real}                  {return ops.unidadReal();}
 {true}                  {return ops.unidadTrue();}
 {false}                  {return ops.unidadFalse();}
@@ -117,8 +117,6 @@ amp = &&
 
 {separador}               {}
 {comentario}              {}
-{evalua}                  {return ops.unidadEvalua();}
-{donde}                   {return ops.unidadDonde();}
 {literalEntero}            {return ops.unidadLiteralEnt();}
 {literalReal}              {return ops.unidadLiteralReal();}
 {identificador}           {return ops.unidadId();}
@@ -126,36 +124,37 @@ amp = &&
 
 
 
-{operadorSuma}            {return ops.unidadSuma();}
-{operadorResta}           {return ops.unidadResta();}
-{operadorMultiplicacion}  {return ops.unidadMul();}
+{operadorSuma}            {return ops.unidadMas();}
+{operadorResta}           {return ops.unidadMenos();}
+{operadorMultiplicacion}  {return ops.unidadPor();}
 {operadorDivision}        {return ops.unidadDiv();}
 
-{operadorMayor}        {return ops.unidadMayor();}
-{operadorMayorIgual}        {return ops.unidadMayorIgual();}
-{operadorMenor}        {return ops.unidadMenor();}
-{operadorMenorIgual}        {return ops.unidadMenorIgual();}
-{operadorIgual}        {return ops.unidadIgual();}
-{operadorDistinto}        {return ops.unidadDistinto();}
+{operadorMayor}        {return ops.unidadGT();}
+{operadorMayorIgual}        {return ops.unidadGE();}
+{operadorMenor}        {return ops.unidadLT();}
+{operadorMenorIgual}        {return ops.unidadLE();}
+{operadorIgual}        {return ops.unidadEQ();}
+{operadorDistinto}        {return ops.unidadNE();}
 
 
-{puntoycoma}        {return ops.unidadPuntoycoma();}
-{llaveApertura}        {return ops.unidadLlAp();}
-{llaveCierre}        {return ops.unidadLlCierre();}
-{eval}        {return ops.unidadEval();}
+{puntoycoma}        {return ops.unidadPYC();}
+{llaveApertura}        {return ops.unidadLLAP();}
+{llaveCierre}        {return ops.unidadLLCIERRE();}
+{eval}        {return ops.unidadEVAL();}
 {modulo}        {return ops.unidadModulo();}
 {corcheteApertura}        {return ops.unidadCAp();}
 {corcheteCierre}        {return ops.unidadCCierre();}
 {punto}        {return ops.unidadPunto();}
 {circunflejo}        {return ops.unidadCircunflejo();}
 {ampersand}        {return ops.unidadAmpersand();}
-{amp}        {return ops.unidadAmp();}
+{amp}        {return ops.unidadSEP();}
 
 
 {parentesisApertura}      {return ops.unidadPAp();}
 {parentesisCierre}        {return ops.unidadPCierre();} 
-{asignar}                   {return ops.unidadAsignar();} 
+{asignar}                   {return ops.unidadASIG();} 
 {coma}                    {return ops.unidadComa();}
+<<EOF>>                   {return ops.unidadEof();}
 [^]                       {ops.error();}  
 
 

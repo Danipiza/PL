@@ -321,10 +321,10 @@ public class AnalizadorLexicoTiny {
 	}  
    
 	private UnidadLexica unidadEnt() {
-		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.ENT,lex.toString());     
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.LITERALENTERO,lex.toString());     
 	}    
 	private UnidadLexica unidadReal() {
-		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.REAL,lex.toString());     
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.LITERALREAL,lex.toString());     
 	}    
 	private UnidadLexica unidadMas() {
 		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.MAS);     
