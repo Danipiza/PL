@@ -9,12 +9,6 @@ import java.io.IOException;
 
 public class AnalizadorLexicoTiny {
 
-	public static class ECaracterInesperado extends RuntimeException {
-		public ECaracterInesperado(String msg) {
-			super(msg);
-		}
-	}; 
-
 	private Reader input;
 	private StringBuffer lex;
 	private int sigCar;
@@ -265,7 +259,7 @@ public class AnalizadorLexicoTiny {
 	// PALABRAS RESERVADAS TRUE, FALSE, AND, OR, NOT, BOOL,ENT, REAL
 	private UnidadLexica unidadId() {
 		String word=lex.toString();
-		String wordLowered = word.toLowerCase();
+		String wordLC = word.toLowerCase();
 		Map<String, ClaseLexica> mWord = new HashMap<String,ClaseLexica>();						
 		String[] pReservadas = {"true", "false","and","or","not","bool","ent","real"};
 		ClaseLexica[] clases = {ClaseLexica.TRUE, ClaseLexica.FALSE, ClaseLexica.AND, 
@@ -274,8 +268,8 @@ public class AnalizadorLexicoTiny {
 			mWord.put(pReservadas[i],clases[i]);
 		}
 		
-		if(mWord.containsKey(wordLowered)) {
-			return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,mWord.get(wordLowered));
+		if(mWord.containsKey(wordLC)) {
+			return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,mWord.get(wordLC));
 		}
 		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.IDEN,word);
 		
@@ -321,10 +315,10 @@ public class AnalizadorLexicoTiny {
 	}  
    
 	private UnidadLexica unidadEnt() {
-		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.LITERALENTERO,lex.toString());     
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.ENT,lex.toString());     
 	}    
 	private UnidadLexica unidadReal() {
-		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.LITERALREAL,lex.toString());     
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.REAL,lex.toString());     
 	}    
 	private UnidadLexica unidadMas() {
 		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.MAS);     
@@ -396,7 +390,6 @@ public class AnalizadorLexicoTiny {
 	
 		
 	private void error() throws RuntimeException {
-		int curCar = sigCar;
 		try {
 			sigCar();
 		} catch (IOException e) {
@@ -405,8 +398,7 @@ public class AnalizadorLexicoTiny {
 		} 
 		//System.err.println("error"); // DOMJUDGE
 		//System.err.println("("+filaActual+','+columnaActual+"):Caracter inexperado");  
-		//throw new RuntimeException("ERROR");
-		throw new ECaracterInesperado("("+filaActual+','+columnaActual+"):Caracter inexperado:"+(char)curCar);
+		throw new RuntimeException("ERROR");
 		//System.exit(1);
 	}
 
