@@ -12,9 +12,9 @@ public class DomJudge {
 		
 		try {
 			// INPUT
-			//Reader input = new InputStreamReader(new FileInputStream("input.txt"));
+			Reader input = new InputStreamReader(new FileInputStream("input.txt"));
 			// DOMJUDGE
-			Reader input = new InputStreamReader(System.in);
+			//Reader input = new InputStreamReader(System.in);
 			al = new AnalizadorLexicoTiny(input);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -35,7 +35,7 @@ public class DomJudge {
 			} 	
 			
 		}
-		while (unidad.clase() == null || unidad.clase() != ClaseLexica.EOF);
+		while (unidad == null || unidad.clase() != ClaseLexica.EOF);
 	}
 
 }
