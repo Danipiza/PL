@@ -19,8 +19,9 @@ public class DomJudge {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		UnidadLexica unidad = new UnidadLexicaUnivaluada(0, 0, ClaseLexica.AND);
-		
+
+		UnidadLexica unidad = null;
+		//UnidadLexica unidad = new UnidadLexicaUnivaluada(0, 0, ClaseLexica.AND);
 		
 		do {
 			try {

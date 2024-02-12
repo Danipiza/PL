@@ -118,7 +118,16 @@ public class AnalizadorLexicoTiny {
 			// Comentario lee todo el comentario, sin almacenarlo. Lee un salto de linea, vuelve al inicio.
 			case REC_COMT:
 				if(hayAlmohadilla()) transitaIgnorando(Estado.REC_COM);
-				else error();
+				// Para Domjudge? After half of an hour of thinking, now I doublt the necesity to make this modification
+				// Maybe #hola -> ERROR ola is actually the right behavior???
+				// But just in case, now it will output ERROR hola
+				// I don't think there is a better work-around... 
+				// In REC_COMT, h is already read. If we don't transit to INICIO, the letter h will be ignored because of LEX.delete()
+				else {
+					System.out.println("ERROR");
+					transita(Estado.INICIO);
+				}
+				//else error();
 				break;
 			case REC_COM: 
 				if (hayNL()) transitaIgnorando(Estado.INICIO);
