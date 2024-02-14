@@ -36,7 +36,8 @@ public class AnalizadorLexicoTiny {
 		
 		REC_GT, REC_GE, REC_LT, REC_LE, REC_EQ, REC_EX, REC_NE,
 		REC_LLAP, REC_LLCIERRE, REC_SEPT, REC_SEP,	
-		REC_E, REC_MASE, REC_MENOSE, REC_ENTE, 
+		
+		REC_E, REC_MASE, REC_MENOSE, REC_ENTE, REC_ENT0,
 		
 		REC_PYC, REC_EVAL, REC_COMT, REC_COM 
 	}
@@ -144,6 +145,7 @@ public class AnalizadorLexicoTiny {
 			case REC_IDEC: 
 				if (hayDigitoPos()) transita(Estado.REC_IDEC);
 				else if (hayCero()) transita(Estado.REC_0DEC);
+				else if(hayE()) transita(Estado.REC_E);
 				else return unidadReal();
 				break;
 			case REC_0DEC: 
@@ -188,20 +190,26 @@ public class AnalizadorLexicoTiny {
 			case REC_E:
 				if(haySuma()) transita(Estado.REC_MASE);
 				else if(hayResta()) transita(Estado.REC_MENOSE);
+				if(hayDigitoPos()) transita(Estado.REC_ENTE);
+				else if(hayCero()) transita(Estado.REC_ENT0);
 				else error();	
 				break;
 			case REC_MASE: 
-				if(hayDigito()) transita(Estado.REC_ENTE);
+				if(hayDigitoPos()) transita(Estado.REC_ENTE);
+				else if(hayCero()) transita(Estado.REC_ENT0);
 				else error();
 				break;
 			case REC_MENOSE:
-				if(hayDigito()) transita(Estado.REC_ENTE);
+				if(hayDigitoPos()) transita(Estado.REC_ENTE);
+				else if(hayCero()) transita(Estado.REC_ENT0);
 				else error();	
 				break;
 			case REC_ENTE:
-				if(hayDigito()) transita(Estado.REC_ENTE);
+				if(hayDigitoPos()) transita(Estado.REC_ENTE);
+				else if(hayCero()) transita(Estado.REC_ENT0);
 				else return unidadE();
-				break;
+				break;			
+			case REC_ENT0: return unidadE();
 			}
 		}    
 	}

@@ -6,7 +6,7 @@ import java.io.Reader;
 
 import alex.*;
 
-public class Main {
+public class DomJudge {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		Reader input = new InputStreamReader(new FileInputStream("input.txt"));
 		AnalizadorLexicoTiny al = new AnalizadorLexicoTiny(input);

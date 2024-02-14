@@ -6,6 +6,7 @@ package alex;
 %class AnalizadorLexicoTiny
 %type  UnidadLexica
 %unicode
+%public
 
 %{
   private ALexOperations ops;
@@ -52,11 +53,15 @@ digitoPositivo = [1-9]
 digito = ({digitoPositivo}|0)
 parteEntera = {digitoPositivo}{digito}*
 parteDecimal = {digito}* {digitoPositivo}
+parteExponential = [Ee][\+,\-]?({parteEntera} | 0)
+
 separador = [ \t\r\b\n]
-comentario = #[^\n]* 
+comentario = ##[^\n]* 
 identificador = {letra}({letra}|{digito})*
 literalEntero = [\+,\-]?{parteEntera}
-literalReal = [\+,\-]?{parteEntera}\.{parteDecimal}
+
+literalReal =  {literalEntero}((.{parteDecimal})|{parteExponential}|(.{parteDecimal}){parteExponential})
+
 literalCadena = "([^\"]|\.)*"
 
 

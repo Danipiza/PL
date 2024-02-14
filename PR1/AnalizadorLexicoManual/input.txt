@@ -1,8 +1,5 @@
 {
 ## Programa simple de ejemplo
-Real
-REAl
-rAL ent EnT
 real peso;
 bool pesado
 &&
