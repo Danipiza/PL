@@ -25,7 +25,7 @@ public class AnalizadorLexicoTiny {
 	private static String NL = System.getProperty("line.separator");
    
 	private static enum Estado {
-		INICIO, REC_POR, REC_DIV, REC_PAP, REC_PCIERR, REC_COMA, REC_ASIG,
+		INICIO, REC_POR, REC_DIV, REC_PAP, REC_PCIERR, REC_ASIG,
 		REC_MAS, REC_MENOS, REC_ID, REC_ENT, REC_EOF,
 		
 		
@@ -70,7 +70,7 @@ public class AnalizadorLexicoTiny {
 				else if (hayPAp()) transita(Estado.REC_PAP);
 				else if (hayPCierre()) transita(Estado.REC_PCIERR);
 				else if (hayIgual()) transita(Estado.REC_ASIG); // CAMBIAR
-				else if (hayComa()) transita(Estado.REC_COMA);
+				//else if (hayComa()) transita(Estado.REC_COMA);
 				else if (hayAlmohadilla()) transitaIgnorando(Estado.REC_COMT);
 				else if (haySep()||hayNL()) transitaIgnorando(Estado.INICIO);
 				else if (hayEOF()) transita(Estado.REC_EOF);
@@ -115,7 +115,7 @@ public class AnalizadorLexicoTiny {
 			case REC_PAP: return unidadPAp();
 			case REC_PCIERR: return unidadPCierre();
 			//case REC_ASIG: return unidadIgual();
-			case REC_COMA: return unidadComa();
+			//case REC_COMA: return unidadComa();
 			// Comentario lee todo el comentario, sin almacenarlo. Lee un salto de linea, vuelve al inicio.
 			case REC_COMT:
 				if(hayAlmohadilla()) transitaIgnorando(Estado.REC_COM);
@@ -244,8 +244,8 @@ public class AnalizadorLexicoTiny {
 		sigCar = '\n';
 	}
    
-	private boolean hayLetra() {return sigCar >= 'a' && sigCar <= 'z' ||
-                                      sigCar >= 'A' && sigCar <= 'z';}
+	private boolean hayLetra() {return sigCar == '_' || sigCar >= 'a' && sigCar <= 'z' ||
+                                      sigCar >= 'A' && sigCar <= 'Z';}
 	private boolean hayDigitoPos() {return sigCar >= '1' && sigCar <= '9';}
 	private boolean hayCero() {return sigCar == '0';}
 	private boolean hayDigito() {return hayDigitoPos() || hayCero();}
@@ -256,7 +256,7 @@ public class AnalizadorLexicoTiny {
 	private boolean hayPAp() {return sigCar == '(';}
 	private boolean hayPCierre() {return sigCar == ')';}
 	private boolean hayIgual() {return sigCar == '=';}
-	private boolean hayComa() {return sigCar == ',';}
+	//private boolean hayComa() {return sigCar == ',';}
 	private boolean hayPunto() {return sigCar == '.';}
 	private boolean hayAlmohadilla() {return sigCar == '#';}
 	private boolean haySep() {return sigCar == ' ' || sigCar == '\t' || sigCar=='\n';}
@@ -283,7 +283,7 @@ public class AnalizadorLexicoTiny {
 		String word=lex.toString();
 		String wordLC = word.toLowerCase();
 		Map<String, ClaseLexica> mWord = new HashMap<String,ClaseLexica>();						
-		String[] pReservadas = {"true", "false","and","or","not","bool","ent","real"};
+		String[] pReservadas = {"true", "false","and","or","not","bool","int","real"};
 		ClaseLexica[] clases = {ClaseLexica.TRUE, ClaseLexica.FALSE, ClaseLexica.AND, 
 				ClaseLexica.OR, ClaseLexica.NOT, ClaseLexica.BOOL, ClaseLexica.ENT, ClaseLexica.REAL};
 		for(int i=0;i<pReservadas.length;i++) {
@@ -360,9 +360,6 @@ public class AnalizadorLexicoTiny {
 	private UnidadLexica unidadPCierre() {
 	   return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.PCIERRE);     
 	}  	  
-	private UnidadLexica unidadComa() {
-		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.COMA);     
-	}    
 	private UnidadLexica unidadEof() {
 		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.EOF);     
 	}  
@@ -426,7 +423,8 @@ public class AnalizadorLexicoTiny {
 	}
 
 	public static void main(String arg[]) throws IOException {
-		Reader input = new InputStreamReader(new FileInputStream("input.txt"));
+		System.out.println("AQUI NO ES, ES EN DOMJUDGE");
+		/*Reader input = new InputStreamReader(new FileInputStream("input.txt"));
 		AnalizadorLexicoTiny al = new AnalizadorLexicoTiny(input);
 		UnidadLexica unidad;
 		// lee el input.txt, hasta el final del fichero, o error.
@@ -434,6 +432,6 @@ public class AnalizadorLexicoTiny {
 			unidad = al.sigToken();			
 			//System.out.println(unidad.print());
 		}
-		while (unidad.clase() != ClaseLexica.EOF);
+		while (unidad.clase() != ClaseLexica.EOF);*/
 	} 
 }

@@ -48,19 +48,20 @@ nl = [Nn][Ll]
 type = [Tt][Yy][Pp][Ee]
 call = [Cc][Aa][Ll][Ll]
 
-letra  = ([A-Z]|[a-z])
+letra  = ([A-Z]|[a-z]|_)
 digitoPositivo = [1-9]
 digito = ({digitoPositivo}|0)
-parteEntera = {digitoPositivo}{digito}*
-parteDecimal = {digito}* {digitoPositivo}
-parteExponential = [Ee][\+,\-]?({parteEntera} | 0)
+parteEntera = (({digitoPositivo}{digito}*) | 0)
+parteDecimal = (({digito}* {digitoPositivo})|0)
+parteExponencial = [Ee][\+\-]?{parteEntera}
 
 separador = [ \t\r\b\n]
 comentario = ##[^\n]* 
 identificador = {letra}({letra}|{digito})*
-literalEntero = [\+,\-]?{parteEntera}
+literalEntero = [\+\-]?{parteEntera}
 
-literalReal =  {literalEntero}((.{parteDecimal})|{parteExponential}|(.{parteDecimal}){parteExponential})
+
+literalReal =  {literalEntero}(((.{parteDecimal})|{parteExponencial})|(.{parteDecimal}{parteExponencial}))
 
 literalCadena = "([^\"]|\.)*"
 
@@ -161,5 +162,4 @@ amp = &&
 {coma}                    {return ops.unidadComa();}
 <<EOF>>                   {return ops.unidadEof();}
 [^]                       {ops.error();}  
-
 

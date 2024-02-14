@@ -8,9 +8,18 @@ import alex.*;
 
 public class DomJudge {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		Reader input = new InputStreamReader(new FileInputStream("input.txt"));
-		AnalizadorLexicoTiny al = new AnalizadorLexicoTiny(input);
-		UnidadLexica unidad;
+		AnalizadorLexicoTiny al = null;
+		
+		
+	
+		// INPUT
+		//Reader input = new InputStreamReader(new FileInputStream("input.txt"));
+		// DOMJUDGE
+		Reader input = new InputStreamReader(System.in);
+		al = new AnalizadorLexicoTiny(input);
+		
+
+		UnidadLexica unidad = null;
 		
 		do {
 			unidad = al.yylex();
@@ -19,3 +28,4 @@ public class DomJudge {
 		while (unidad.clase() != ClaseLexica.EOF);
 	}        
 } 
+ 
