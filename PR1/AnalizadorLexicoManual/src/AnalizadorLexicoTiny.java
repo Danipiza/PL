@@ -205,8 +205,7 @@ public class AnalizadorLexicoTiny {
 				else error();	
 				break;
 			case REC_ENTE:
-				if(hayDigitoPos()) transita(Estado.REC_ENTE);
-				else if(hayCero()) transita(Estado.REC_ENT0);
+				if(hayDigito()) transita(Estado.REC_ENTE);				
 				else return unidadE();
 				break;			
 			case REC_ENT0: return unidadE();
