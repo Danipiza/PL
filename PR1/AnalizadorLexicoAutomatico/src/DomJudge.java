@@ -13,9 +13,9 @@ public class DomJudge {
 		
 	
 		// INPUT
-		//Reader input = new InputStreamReader(new FileInputStream("input.txt"));
+		Reader input = new InputStreamReader(new FileInputStream("input.txt"));
 		// DOMJUDGE
-		Reader input = new InputStreamReader(System.in);
+		// Reader input = new InputStreamReader(System.in);
 		al = new AnalizadorLexicoTiny(input);
 		
 

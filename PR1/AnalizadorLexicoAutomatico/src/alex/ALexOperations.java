@@ -206,7 +206,7 @@ public class ALexOperations {
 	}
 
 	public void error() {
-		System.err.println("***"+alex.fila()+" Caracter inexperado: "+alex.lexema());
+		System.err.println("ERROR");
 	}
 	
 }

@@ -28,7 +28,7 @@ package alex;
 true = [Tt][Rr][Uu][Ee]  
 false = [Ff][Aa][Ll][Ss][Ee]
 and = [Aa][Nn][Dd]
-or = [Nn][Rr]
+or = [Oo][Rr]
 not = [Nn][Oo][Tt]
 bool = [Bb][Oo][Oo][Ll]
 real =  [Rr][Ee][Aa][Ll]
@@ -61,9 +61,8 @@ identificador = {letra}({letra}|{digito})*
 literalEntero = [\+\-]?{parteEntera}
 
 
-literalReal =  {literalEntero}(((.{parteDecimal})|{parteExponencial})|(.{parteDecimal}{parteExponencial}))
-
-literalCadena = "([^\"]|\.)*"
+literalReal =  {literalEntero}({parteExponencial}|(\.{parteDecimal})|(\.{parteDecimal}{parteExponencial}))
+literalCadena = \"[^\"]*\"
 
 
 operadorSuma = \+
@@ -160,6 +159,4 @@ amp = &&
 {parentesisCierre}        {return ops.unidadPCierre();} 
 {asignar}                   {return ops.unidadASIG();} 
 {coma}                    {return ops.unidadComa();}
-<<EOF>>                   {return ops.unidadEof();}
 [^]                       {ops.error();}  
-
