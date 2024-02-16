@@ -3,7 +3,16 @@ import java.io.Reader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AnalizadorLexicoTiny {
+	
+	public static class ECaracterInesperado extends RuntimeException {
+		public ECaracterInesperado(String msg) {
+			super(msg);
+		}
+	}
 
 	private Reader input;
 	private StringBuffer lex;
@@ -154,6 +163,24 @@ public class AnalizadorLexicoTiny {
 	private boolean hayEOF() {return sigCar == -1;}
 	
 	private UnidadLexica unidadId() {
+		String word=lex.toString();
+		String wordLC = word.toLowerCase();
+		Map<String, ClaseLexica> mWord = new HashMap<String,ClaseLexica>();						
+		String[] pReservadas = {"evalua", "donde"};
+		ClaseLexica[] clases = {ClaseLexica.EVALUA, ClaseLexica.DONDE};
+		for(int i=0;i<pReservadas.length;i++) {
+			mWord.put(pReservadas[i],clases[i]);
+		}
+		
+		if(mWord.containsKey(wordLC)) {
+			return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,mWord.get(wordLC));
+		}
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.IDEN,word);
+		
+		
+	}  
+	
+	/*private UnidadLexica unidadId() {
 		switch(lex.toString()) {
          	case "evalua":  
          		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.EVALUA);
@@ -162,7 +189,7 @@ public class AnalizadorLexicoTiny {
          	default:    
          		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.IDEN,lex.toString());     
 		}
-	}  
+	} */ 
    
 	private UnidadLexica unidadEnt() {
 		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.ENT,lex.toString());     
@@ -198,10 +225,18 @@ public class AnalizadorLexicoTiny {
 		return new UnidadLexicaUnivaluada(filaInicio,columnaInicio,ClaseLexica.EOF);     
 	}    
 	
-	private void error() {
-		//System.err.println("error"); // DOMJUDGE
-		System.err.println("("+filaActual+','+columnaActual+"):Caracter inexperado");  
-		System.exit(1);
+	private void error() throws RuntimeException {
+		int curCar = sigCar;
+		try {
+			sigCar();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+		throw new ECaracterInesperado("("+filaActual+','+columnaActual+"):Caracter inexperado:"+(char)curCar);
+		//throw new RuntimeException("ERROR");
+		//System.exit(1);
 	}
 
 	public static void main(String arg[]) throws IOException {
