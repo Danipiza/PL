@@ -162,73 +162,81 @@ public class AnalizadorSintacticoEval {
    private void OP0() {
 	   empareja(ClaseLexica.ASIG);
    }
-   
-   private void RE0() {
-       switch(anticipo.clase()) {
-           case MAS, MENOS: 
-               OP0();
-               E1();
-               RE0();
-               break;
-           default: 
-              esperados(ClaseLexica.MAS,ClaseLexica.MENOS);
-              break;
-       }    
-    }
-   
-
+         
+   // E2 RE1
    private void E1() {
        E2();
        RE1();
    }
    
+   // OP1 E2 RE1
    private void RE1() {
        switch(anticipo.clase()) {
-           case POR, DIV: 
+           case LT, GT, LE, GE, EQ, NE: 
                OP1();
                E2();
                RE1();
                break;
            default: 
-              esperados(ClaseLexica.POR,ClaseLexica.DIV);
-              break;
+        	   esperados(ClaseLexica.LT, ClaseLexica.GT, ClaseLexica.LE,
+            		  ClaseLexica.GE, ClaseLexica.EQ, ClaseLexica.NE);
+        	   break;
        }    
-    }
-   
-   private void E2() {
-      switch(anticipo.clase()) {
-          case ENT: empareja(ClaseLexica.ENT); break;
-          case REAL: empareja(ClaseLexica.REAL); break; 
-          case IDEN: empareja(ClaseLexica.IDEN); break;
-          case PAP: 
-               empareja(ClaseLexica.PAP); 
-               E0(); 
-               empareja(ClaseLexica.PCIERRE); 
-               break;
-          default:
-              esperados(ClaseLexica.ENT,ClaseLexica.REAL,ClaseLexica.IDEN,ClaseLexica.PAP);
-              error();
-   }   
    }
-   
    
    private void OP1() {
-     switch(anticipo.clase()) {
-         case POR: empareja(ClaseLexica.POR); break;  
-         case DIV: empareja(ClaseLexica.DIV); break;  
-         default:    
-             esperados(ClaseLexica.POR,ClaseLexica.DIV);             
-             error();
-     }  
+	     switch(anticipo.clase()) {
+	         case LT: empareja(ClaseLexica.LT); break;  
+	         case GT: empareja(ClaseLexica.GT); break;  
+	         case LE: empareja(ClaseLexica.LE); break;  
+	         case GE: empareja(ClaseLexica.GE); break;  
+	         case EQ: empareja(ClaseLexica.EQ); break;  
+	         case NE: empareja(ClaseLexica.NE); break;  
+	         default:   	                          
+	             error();
+	     }  
+	   }
+	    
+   
+   // E3 FE3 RE2
+   private void E2() {
+	   E3();
+       FE3();
+       RE2();
    }
-       
+   
+   
+   
+   
+   private void FE3() {
+	   switch(anticipo.clase()) {
+       case MENOS: 
+           empareja(ClaseLexica.MENOS);
+           E3();           
+           break;
+       default: 
+    	   esperados(ClaseLexica.MENOS);
+    	   break;
+	   }  
+   }   
+   
+   private void RE2() {
+	   
+   }
+   
+   private void E3() {
+	   
+   }
+      
+   
+   
+   
 
    private void esperados(ClaseLexica ... esperadas) {
        for(ClaseLexica c: esperadas) {
            esperados.add(c);
        }
    }
-   
    
    private void empareja(ClaseLexica claseEsperada) {
       if (anticipo.clase() == claseEsperada)
@@ -238,6 +246,7 @@ public class AnalizadorSintacticoEval {
           error();
       }
    }
+   
    private void sigToken() {
       try {
         //anticipo = alex.yylex();    	
