@@ -29,7 +29,7 @@ public abstract class UnidadLexica {
 		hashMap.put(ClaseLexica.POR, "*");
 		hashMap.put(ClaseLexica.DIV, "/");
 		hashMap.put(ClaseLexica.EVAL, "@");
-		hashMap.put(ClaseLexica.EOF, "EOF");
+		hashMap.put(ClaseLexica.EOF, "<EOF>");
 		hashMap.put(ClaseLexica.GT, ">");
 		//hashMap.put(ClaseLexica.GE, ">=");
 		hashMap.put(ClaseLexica.LT, "<");

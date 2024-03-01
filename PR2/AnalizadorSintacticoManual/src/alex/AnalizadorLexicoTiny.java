@@ -28,8 +28,8 @@ public class AnalizadorLexicoTiny {
 	private int filaActual;
 	private int columnaActual;
 	private static String NL = System.getProperty("line.separator");
-	
 	private GestionErroresEval errores;
+	
    
 	private static enum Estado {
 		INICIO, REC_POR, REC_DIV, REC_PAP, REC_PCIERR, REC_ASIG,
@@ -51,8 +51,9 @@ public class AnalizadorLexicoTiny {
 
 	private Estado estado;
 
-	public AnalizadorLexicoTiny(Reader input) throws IOException {
+	public AnalizadorLexicoTiny(Reader input, GestionErroresEval errores) throws IOException {
 		this.input = input;
+		this.errores = errores;
 		lex = new StringBuffer();
 		sigCar = input.read();
 		filaActual=1;
@@ -410,8 +411,8 @@ public class AnalizadorLexicoTiny {
 		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.EQ,lex.toString());
 	}
 	
-	private UnidadLexica unidadE() {
-		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.E,lex.toString());     
+	private UnidadLexica unidadE() { // TODO												E
+		return new UnidadLexicaMultivaluada(filaInicio,columnaInicio,ClaseLexica.LITERALREAL,lex.toString());     
 	}
 	
 		
@@ -423,9 +424,9 @@ public class AnalizadorLexicoTiny {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		
-		throw new ECaracterInesperado("("+filaActual+','+columnaActual+"):Caracter inexperado:"+(char)curCar);
-		//throw new RuntimeException("ERROR");
+		errores.errorLexico(filaActual,columnaActual,""); 
+		//throw new ECaracterInesperado("("+filaActual+','+columnaActual+"):Caracter inexperado:"+(char)curCar);
+		throw new ECaracterInesperado("ERROR_LEXICO");
 		//System.exit(1);
 	}
 
