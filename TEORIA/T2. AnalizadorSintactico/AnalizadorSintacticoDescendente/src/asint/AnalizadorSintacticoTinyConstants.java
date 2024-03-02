@@ -21,15 +21,113 @@ public interface AnalizadorSintacticoTinyConstants {
   /** RegularExpression Id. */
   int parteDecimal = 5;
   /** RegularExpression Id. */
-  int donde = 8;
+  int parteExponencial = 6;
   /** RegularExpression Id. */
-  int evalua = 9;
+  int donde = 9;
   /** RegularExpression Id. */
-  int iden = 10;
+  int evalua = 10;
   /** RegularExpression Id. */
-  int lit_ent = 11;
+  int TRUE = 11;
   /** RegularExpression Id. */
-  int lit_real = 12;
+  int FALSE = 12;
+  /** RegularExpression Id. */
+  int and = 13;
+  /** RegularExpression Id. */
+  int or = 14;
+  /** RegularExpression Id. */
+  int not = 15;
+  /** RegularExpression Id. */
+  int bool = 16;
+  /** RegularExpression Id. */
+  int real = 17;
+  /** RegularExpression Id. */
+  int INT = 18;
+  /** RegularExpression Id. */
+  int string = 19;
+  /** RegularExpression Id. */
+  int NULL = 20;
+  /** RegularExpression Id. */
+  int proc = 21;
+  /** RegularExpression Id. */
+  int IF = 22;
+  /** RegularExpression Id. */
+  int ELSE = 23;
+  /** RegularExpression Id. */
+  int WHILE = 24;
+  /** RegularExpression Id. */
+  int struct = 25;
+  /** RegularExpression Id. */
+  int NEW = 26;
+  /** RegularExpression Id. */
+  int delete = 27;
+  /** RegularExpression Id. */
+  int read = 28;
+  /** RegularExpression Id. */
+  int write = 29;
+  /** RegularExpression Id. */
+  int nl = 30;
+  /** RegularExpression Id. */
+  int type = 31;
+  /** RegularExpression Id. */
+  int call = 32;
+  /** RegularExpression Id. */
+  int identificador = 33;
+  /** RegularExpression Id. */
+  int literalEntero = 34;
+  /** RegularExpression Id. */
+  int literalReal = 35;
+  /** RegularExpression Id. */
+  int literalCadena = 36;
+  /** RegularExpression Id. */
+  int suma = 37;
+  /** RegularExpression Id. */
+  int resta = 38;
+  /** RegularExpression Id. */
+  int mul = 39;
+  /** RegularExpression Id. */
+  int div = 40;
+  /** RegularExpression Id. */
+  int mayor = 41;
+  /** RegularExpression Id. */
+  int mayorIgual = 42;
+  /** RegularExpression Id. */
+  int menor = 43;
+  /** RegularExpression Id. */
+  int menorIgual = 44;
+  /** RegularExpression Id. */
+  int igual = 45;
+  /** RegularExpression Id. */
+  int distinto = 46;
+  /** RegularExpression Id. */
+  int asignar = 47;
+  /** RegularExpression Id. */
+  int puntoycoma = 48;
+  /** RegularExpression Id. */
+  int parentesisApertura = 49;
+  /** RegularExpression Id. */
+  int parentesisCierre = 50;
+  /** RegularExpression Id. */
+  int llaveApertura = 51;
+  /** RegularExpression Id. */
+  int llaveCierre = 52;
+  /** RegularExpression Id. */
+  int eval = 53;
+  /** RegularExpression Id. */
+  int modulo = 54;
+  /** RegularExpression Id. */
+  int corcheteApertura = 55;
+  /** RegularExpression Id. */
+  int corcheteCierre = 56;
+  /** RegularExpression Id. */
+  int punto = 57;
+  /** RegularExpression Id. */
+  int coma = 58;
+  /** RegularExpression Id. */
+  int circunflejo = 59;
+  /** RegularExpression Id. */
+  int ampersand = 60;
+  /** RegularExpression Id. */
+  int separador = 61;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -42,21 +140,62 @@ public interface AnalizadorSintacticoTinyConstants {
     "<digito>",
     "<parteEntera>",
     "<parteDecimal>",
-    "<token of kind 6>",
+    "<parteExponencial>",
     "<token of kind 7>",
+    "<token of kind 8>",
     "\"donde\"",
     "\"evalua\"",
-    "<iden>",
-    "<lit_ent>",
-    "<lit_real>",
-    "\",\"",
-    "\"=\"",
-    "\"(\"",
-    "\")\"",
+    "\"true\"",
+    "\"false\"",
+    "\"and\"",
+    "\"or\"",
+    "\"not\"",
+    "\"bool\"",
+    "\"real\"",
+    "\"int\"",
+    "\"string\"",
+    "\"null\"",
+    "\"proc\"",
+    "\"if\"",
+    "\"else\"",
+    "\"while\"",
+    "\"struct\"",
+    "\"new\"",
+    "\"delete\"",
+    "\"read\"",
+    "\"write\"",
+    "\"nl\"",
+    "\"type\"",
+    "\"call\"",
+    "<identificador>",
+    "<literalEntero>",
+    "<literalReal>",
+    "<literalCadena>",
     "\"+\"",
     "\"-\"",
     "\"*\"",
     "\"/\"",
+    "\">\"",
+    "\">=\"",
+    "\"<\"",
+    "\"<=\"",
+    "\"==\"",
+    "\"!=\"",
+    "\"=\"",
+    "\";\"",
+    "\"(\"",
+    "\")\"",
+    "\"{\"",
+    "\"}\"",
+    "\"@\"",
+    "\"%\"",
+    "\"[\"",
+    "\"]\"",
+    "\".\"",
+    "\",\"",
+    "\"^\"",
+    "\"&\"",
+    "\"&&\"",
   };
 
 }

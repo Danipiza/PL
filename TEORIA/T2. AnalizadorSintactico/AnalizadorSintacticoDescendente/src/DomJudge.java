@@ -10,10 +10,10 @@ import java.io.Reader;
 public class DomJudge{
    public static void main(String[] args) throws Exception {
      try{  
-    	 Reader input = new InputStreamReader(new FileInputStream("input.txt"));
-    	 //Reader input = new InputStreamReader(System.in);
+    	 //Reader input = new InputStreamReader(new FileInputStream("input.txt"));
+    	 Reader input = new InputStreamReader(System.in);
     	 AnalizadorSintacticoTiny asint = new AnalizadorSintacticoTinyDJ(input);
-    	 asint.analiza();
+    	 asint.programa();
      }
      catch(ParseException e) {
         System.out.println("ERROR_SINTACTICO"); 
