@@ -32,18 +32,35 @@ public String getImage() {
 package alex;
 
 public enum ClaseLexica {
-	// De Tiny(0)
-	IDEN, PAP, PCIERRE, ASIG, COMA, 
-	MAS, MENOS, POR, DIV, EVAL, EOF, 
+	IDEN, LITERALCADENA, LITERALENTERO, LITERALREAL, 
 	
-	GT, GE, LT, LE, EQ, NE, PYC, LLAP, LLCIERRE, SEP, E, LITERALENTERO, LITERALREAL,
 	
-	TRUE, FALSE, AND, OR, NOT, BOOL,ENT, REAL,
+	MAS("+"), MENOS("-"), POR("*"), DIV("/"), 
+	GT(">"), GE(">="), LT("<"), LE("<="), EQ("=="), NE("!="), 
+	ASIG("="),PYC(";"), PAP("("), PCIERRE(")"),LLAP("{"), LLCIERRE("}"),
+	
+	EVAL("@"), MOD("%"), CAP("["), CCIERRE("]"), PUNTO("."),COMA(","), 
+	CIRCUNFLEJO("^"), AMP("&"), SEP("&&"), 
+	
+	
 
-	// Nuevo
-	MOD, CAP, CCIERRE, PUNTO, CIRCUNFLEJO, AMP,
+	  
+	
+	
+	EOF("<EOF>"),
+	TRUE("<true>"), FALSE("<false>"), AND("<and>"), OR("<or>"), NOT("<not>"), BOOL("<bool>"), ENT("<int>"), REAL("<real>"),
+	STRING("<string>"), NULL("<null>"), PROC("<proc>"), IF("<if>"), ELSE("<else>"), WHILE("<while>"), STRUCT("<struct>"), NEW("<new>"),
+	DELETE("<delete>"), READ("<read>"), WRITE("<write>"), NL("<nl>"), TYPE("<type>"), CALL("<call>");
+	private String image;
+	
+	public String getImage() {
+	     return image;
+	 }
+	 private ClaseLexica() {
+	     image = toString();
+	 }
+	 private ClaseLexica(String image) {
+	    this.image = image;  
+	 }
+	}
 
-	LITERALCADENA,
-
-	STRING, NULL, PROC, IF, ELSE, WHILE, STRUCT, NEW, DELETE, READ, WRITE, NL, TYPE, CALL,
-}
