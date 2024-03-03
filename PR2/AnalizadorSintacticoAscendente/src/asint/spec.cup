@@ -5,9 +5,11 @@ import alex.AnalizadorLexicoTiny;
 import alex.UnidadLexica;
 import errors.GestionErroresTiny;
 
+
 scan with {: 
   return getScanner().next_token(); 
 :};
+
 parser code {: 
    private GestionErroresTiny errores;
    public void syntax_error(Symbol unidadLexica) {
@@ -24,11 +26,17 @@ init with {:
 
 
 
-terminal      IDEN, PAP, PCIERRE, ASIG, COMA, MAS, MENOS, POR, DIV, EVAL, GT,                            GE, LT, LE, EQ, NE, PYC, LLAP, LLCIERRE, SEP, E, LITERALENTERO, LITERALREAL,TRUE, FALSE, AND, OR, NOT, BOOL,ENT, REAL,MOD, CAP, CCIERRE, PUNTO, CIRCUNFLEJO, AMP, LITERALCADENA, STRING, NULL, PROC, IF, ELSE, WHILE, STRUCT, NEW, DELETE, READ, WRITE, NL, TYPE, CALL;
+terminal      IDEN, PAP, PCIERRE, ASIG, COMA, MAS, MENOS, POR, DIV, EVAL, GT,
+              GE, LT, LE, EQ, NE, PYC, LLAP, LLCIERRE, SEP, E, LITERALENTERO, 
+              LITERALREAL,TRUE, FALSE, AND, OR, NOT, BOOL,ENT, REAL,MOD, CAP, CCIERRE, PUNTO, 
+              CIRCUNFLEJO, AMP, LITERALCADENA, STRING, NULL, PROC, IF, ELSE, WHILE, STRUCT, NEW, 
+              DELETE, READ, WRITE, NL, TYPE, CALL;
 
-
-non terminal
-programa, bloque, declaraciones_opt, instrucciones_opt, tipo1, tipo2, tipo3, tipoBasico, typeDeclaracion, declaraciones, declaracion, header, variable, parametrosFormales_opt, parametrosFormales, parametroFormal, referencia_opt, instrucciones, instruccion,IFR,  parametrosReales_opt, parametrosReales,RparametrosReales, E0, FE1, E1, RE1, OP1, E2, RE2, FE3, E3, FE4, E4, RE4, OP4, E5,OP5, E6,RE6, OP6,E7;
+non terminal	programa, bloque, declaraciones_opt, instrucciones_opt, tipo1, tipo2, tipo3, tipoBasico, 
+				typeDeclaracion, declaraciones, declaracion, header, variable, parametrosFormales_opt, 
+				parametrosFormales,	parametroFormal, referencia_opt, instrucciones, instruccion,IFR,  
+				parametrosReales_opt, parametrosReales,RparametrosReales, E0, FE1, E1, RE1, OP1, E2, 
+				RE2, FE3, E3, FE4, E4, RE4, OP4, E5,OP5, E6,RE6, OP6,E7;
 
 
 programa  ::= bloque ;
@@ -59,21 +67,24 @@ typeDeclaracion ::= variable COMA typeDeclaracion ;
 typeDeclaracion ::=  variable ;
 
 declaraciones  ::= declaraciones PYC declaracion;
+declaraciones  ::= declaracion;
 declaracion  ::= variable
                              | TYPE variable
                              | header bloque ;
 
+
+header ::= PROC IDEN PAP parametrosFormales_opt PCIERRE;
 variable  ::= tipo1 IDEN;
-header ::= PROC IDEN PAP parametrosFormales PCIERRE;
 parametrosFormales_opt  ::= parametrosFormales ;
 parametrosFormales_opt  ::= ;
 parametrosFormales  ::= parametroFormal COMA  parametrosFormales ;
-parametrosFormales ::= ;
+parametrosFormales ::= parametroFormal;
 parametroFormal  ::= tipo1 referencia_opt IDEN ;
 referencia_opt  ::= AMP ;
 referencia_opt  ::= ;
 
 instrucciones ::= instrucciones PYC instruccion;
+instrucciones ::= instruccion;
 instruccion   ::=  EVAL  E0
                               | IF E0 bloque IFR
                               | WHILE E0 bloque

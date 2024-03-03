@@ -31,8 +31,10 @@ public String getImage() {
 
 package alex;
 
-public enum ClaseLexica {
-	IDEN, LITERALCADENA, LITERALENTERO, LITERALREAL, 
+public class ClaseLexica {
+	
+	
+	/*IDEN, LITERALCADENA, LITERALENTERO, LITERALREAL, 
 	
 	
 	MAS("+"), MENOS("-"), POR("*"), DIV("/"), 
@@ -50,17 +52,19 @@ public enum ClaseLexica {
 	EOF("<EOF>"),
 	TRUE("<true>"), FALSE("<false>"), AND("<and>"), OR("<or>"), NOT("<not>"), BOOL("<bool>"), ENT("<int>"), REAL("<real>"),
 	STRING("<string>"), NULL("<null>"), PROC("<proc>"), IF("<if>"), ELSE("<else>"), WHILE("<while>"), STRUCT("<struct>"), NEW("<new>"),
-	DELETE("<delete>"), READ("<read>"), WRITE("<write>"), NL("<nl>"), TYPE("<type>"), CALL("<call>");
-	private String image;
+	DELETE("<delete>"), READ("<read>"), WRITE("<write>"), NL("<nl>"), TYPE("<type>"), CALL("<call>");*/
+	
+	private String image;	
 	
 	public String getImage() {
-	     return image;
-	 }
-	 private ClaseLexica() {
-	     image = toString();
-	 }
-	 private ClaseLexica(String image) {
-	    this.image = image;  
-	 }
+		return image;
 	}
+	private ClaseLexica() {
+		image = toString();
+	}
+	private ClaseLexica(String image) {
+		this.image = image;  
+	}
+	
+}
 
