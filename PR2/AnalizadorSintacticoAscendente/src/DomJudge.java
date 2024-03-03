@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import alex.ALexOperations.ECaracterInesperado;
 import alex.AnalizadorLexicoTiny;
 
 public class DomJudge{
@@ -22,11 +23,14 @@ public class DomJudge{
 		try {    
 			asint.debug_parse();
 		}
-			catch(ErrorLexico e) {
+			catch(ECaracterInesperado e) {
 			System.out.println("ERROR_LEXICO"); 
 		}
 		catch(ErrorSintactico e) {
 			System.out.println("ERROR_SINTACTICO"); 
+		}
+		catch(ClassCastException e) {
+			
 		}
 	}
 }

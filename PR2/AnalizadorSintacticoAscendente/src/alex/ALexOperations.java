@@ -90,9 +90,6 @@ public class ALexOperations {
 		return new UnidadLexica(alex.fila(),alex.columna(),sym.EQ,alex.lexema());
 	}
 	
-	public UnidadLexica unidadE() {
-		return new UnidadLexica(alex.fila(),alex.columna(),sym.E,alex.lexema());     
-	}
 
 	// Nuevo y palabras reservadas
 
