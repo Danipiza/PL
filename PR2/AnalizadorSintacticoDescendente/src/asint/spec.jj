@@ -79,9 +79,11 @@ PARSER_END(AnalizadorSintacticoTiny)
   void bloque()  : {} { <llaveApertura> declaraciones_opt() instrucciones_opt() <llaveCierre>}
   void declaraciones_opt()  : {} { declaraciones() <separador>|{}}
   void instrucciones_opt()  : {} { instrucciones() | {}}
-  void tipo1()  : {} {<circunflejo> tipo1() | tipo2()}
-  void tipo2()  : {} { tipo3() rtipo2() }
-  void rtipo2()  : {} { <corcheteApertura> <literalEntero> <corcheteCierre> rtipo2() |{} }
+  
+  void tipo1()  : {} { tipo2() rtipo1() }
+  void rtipo1()  : {} { <corcheteApertura> <literalEntero> <corcheteCierre> rtipo1() |{} }
+  void tipo2()  : {} {<circunflejo> tipo2() | tipo3()}
+  
   void tipo3()  : {} { tipoBasico() | <struct> <llaveApertura> typeDeclaracion() <llaveCierre> | <identificador>}
   void tipoBasico()  : {} { <INT> | <real> | <bool> | <string>}
   void typeDeclaracion()  : {} { variable() FtypeDeclaracion() }

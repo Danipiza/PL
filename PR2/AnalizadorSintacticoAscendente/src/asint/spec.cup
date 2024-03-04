@@ -47,10 +47,11 @@ instrucciones_opt   ::=  instrucciones ;
 instrucciones_opt   ::=  ;
 
 
-tipo1 ::=  CIRCUNFLEJO tipo1;
+
+tipo1 ::= tipo1 CAP LITERALENTERO CCIERRE ;
 tipo1 ::= tipo2 ;
 
-tipo2 ::= tipo2 CAP LITERALENTERO CCIERRE ;
+tipo2 ::=  CIRCUNFLEJO tipo2;
 tipo2 ::= tipo3 ;
 
 
