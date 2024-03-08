@@ -6,6 +6,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="asint/cup.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Usuario/Desktop/GITHUB/PL/PR2/AnalizadorSintacticoAscendente/src/asint/cup.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

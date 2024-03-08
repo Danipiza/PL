@@ -2,9 +2,9 @@
 type
  ^^struct{
  int x,
- bool y,
+ BOol y,
  real z,
- struct {
+ sTruct {
  ^int[20][30] x,
 int y
  } k

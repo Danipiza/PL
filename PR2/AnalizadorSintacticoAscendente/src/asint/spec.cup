@@ -78,7 +78,7 @@ header ::= PROC IDEN PAP parametrosFormales_opt PCIERRE;
 variable  ::= tipo1 IDEN;
 parametrosFormales_opt  ::= parametrosFormales ;
 parametrosFormales_opt  ::= ;
-parametrosFormales  ::= parametroFormal COMA  parametrosFormales ;
+parametrosFormales  ::= parametrosFormales COMA  parametroFormal ;
 parametrosFormales ::= parametroFormal;
 parametroFormal  ::= tipo1 referencia_opt IDEN ;
 referencia_opt  ::= AMP ;
@@ -102,9 +102,8 @@ IFR ::= ;
 
 parametrosReales_opt  ::= parametrosReales ;
 parametrosReales_opt  ::= ;
-parametrosReales  ::= E0 RparametrosReales ;
-RparametrosReales  ::= COMA E0 RparametrosReales ;
-RparametrosReales  ::= ;
+parametrosReales  ::= parametrosReales COMA E0 ;
+parametrosReales  ::= E0 ;
 
 
 E0 ::= E1 FE1 ;
