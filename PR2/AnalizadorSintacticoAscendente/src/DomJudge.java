@@ -15,8 +15,8 @@ public class DomJudge{
 	
 	public static void main(String[] args) throws Exception {
 		
-		//Reader input = new InputStreamReader(new FileInputStream("input.txt"));
-		Reader input = new InputStreamReader(System.in);		
+		Reader input = new InputStreamReader(new FileInputStream("input.txt"));
+		//Reader input = new InputStreamReader(System.in);		
 		AnalizadorLexicoTiny alex = new AnalizadorLexicoTiny(input);
 		AnalizadorSintacticoTiny asint = new AnalizadorSintacticoTinyDJ(alex);
 		//asint.setScanner(alex);

@@ -2,57 +2,59 @@
 ## los analizadores de Tiny 
 {
 type
- ^^struct{
- int x,
- bool y,
- real z,
- struct {
- ^int[20][30] x,
-int y
- } k
- }[20] tRaro;
-type ^^ tRaro[5][10] tRarito;
-^^^tRarito[10][10] x;
-proc subprog(int x, ^^tRarito y, struct{int x,
-^tRarito y} z) {
- ^^tRarito k;
- proc u(int v, int[98] z) {}
+ ^^^^^^struct{
+ int caballos,
+ bool peso,
+ real x,
+ ^^struct {
+ int[20][20][30] caballos,
+int peso
+ } motor
+ }[20] tCoche;
+type ^^ tCoche[5][10] tRarito;
+^^^tRarito[10][10] caballos;
+proc subprog(int caballos, ^^tRarito peso, struct{int caballos,
+^tRarito peso} x) {
+ ^^tRarito motor;
+ proc bmw(int v, int[98] x) {}
  &&
- @ k.c^.x[e+e[x.c]].y^[r] % 2;
- call u(5, 5
+ @ motor.x.x.x.x^^.x.x.c^.caballos[e+e[caballos.c]].peso^[r] % 2;
+ call bmw(5, 5
 - 5)
 }
 &&
-if(x == 34) {
- if(x < 56) {
- @ x = x + 1;
-while (x < 20) {
- int x
+if(caballos == 34) {
+ if(caballos < 56) {
+ @ caballos = caballos + 1;
+while (caballos < 20) {
+ int caballos
  &&
- @ x = 2*x;
- @ x = 5 }
+ @ caballos = 2*caballos;
+ @ caballos = 5 }
 
 }
  else {
- proc y() {}
+ proc peso() {}
 &&
- @ x = 2 * y;
-call y(2*x + 80, 45
-- x)
+ @ caballos = 2 * peso;
+call peso(2*caballos + 80, 45
+- caballos)
 
 }
 };{
-int x
+int caballos
 &&
- @ x;
- read x.x;
- write x + 67;
- delete x.x[x];
- new u.v[x];
+ @ caballos;
+ read caballos.caballos;
+ write caballos + 67;
+ delete caballos.caballos[caballos];
+ new bmw.v[caballos];
  nl
 };
-@ "una cadena!!!" + null;
-if 5 {};
+@ "Un motor pequeño
+y
+potente" + null;
+if 5 {@ x=33};
 if 5 {} else {};
 while 5 {} 
 }
