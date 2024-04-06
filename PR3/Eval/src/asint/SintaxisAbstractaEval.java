@@ -3,7 +3,8 @@ package asint;
 
 
 public class SintaxisAbstractaEval {
-
+	
+	// Default (No hay que tocar)
     public static abstract class Nodo  {
        public Nodo() {
 		   fila=col=-1;
@@ -26,7 +27,7 @@ public class SintaxisAbstractaEval {
 	   }
     }
     
-
+    // Expresiones
     public static abstract class Exp  extends  Nodo {
        public Exp() {
 		   super();
@@ -36,8 +37,6 @@ public class SintaxisAbstractaEval {
        public Exp opnd0() {throw new UnsupportedOperationException();}
        public Exp opnd1() {throw new UnsupportedOperationException();}
     }
-   
-    
     private static abstract class ExpBin extends Exp {
         protected Exp opnd0;
         protected Exp opnd1;
@@ -51,6 +50,97 @@ public class SintaxisAbstractaEval {
 
     }
             
+    //
+    public static class Prog extends Nodo {
+	   private Exp exp;
+	   private Decs decs;
+       public Prog(Exp exp, Decs decs) {
+		   super();
+		   this.exp = exp;
+		   this.decs = decs;
+       }   
+       public Decs decs() {return decs;}
+       public Exp exp() {return exp;}
+       public String toString() {
+            return "prog("+exp+","+decs+")";
+        } 
+    }
+    public static class Si_decs extends Decs {
+        private LDecs decs; 
+        public Si_decs(LDecs decs) {
+           super();
+           this.decs = decs;
+        }   
+         public String toString() {
+             return "si_decs("+decs+")";
+         } 
+         public LDecs ldecs() {return decs;}
+  
+     }
+    public static class No_decs extends Decs {
+        public No_decs() {
+           super();
+        }   
+        public String toString() {
+             return "no_decs()";
+         } 
+     }
+    public static class Muchas_decs extends LDecs {
+        private LDecs decs;
+        private Dec dec;
+        public Muchas_decs(LDecs decs, Dec dec) {
+           super();
+           this.dec = dec;
+           this.decs = decs;
+        }
+        public LDecs ldecs() {return decs;}
+        public Dec dec() {return dec;}
+        public String toString() {
+             return "muchas_decs("+decs+","+dec+")";
+         } 
+     }
+    public static class Una_dec extends LDecs {
+        private Dec dec;
+        public Una_dec(Dec dec) {
+           super();
+           this.dec = dec;
+        }
+        public Dec dec() {return dec;}
+        public String toString() {
+             return "una_dec("+dec+")";
+         } 
+     }    
+	public static class Dec extends Nodo {
+        private String id;
+        private Exp exp;
+        public Dec(String id, Exp exp) {
+            this.id = id;
+            this.exp = exp;
+        }
+        public String iden() {return id;}
+        public Exp exp() {return exp;}
+        public String toString() {
+            return "dec("+id+"["+leeFila()+","+leeCol()+"],"+exp+")";
+        } 
+    }
+    
+	public static abstract class Decs extends Nodo {
+       public Decs() {
+       }
+       public LDecs ldecs() {throw new UnsupportedOperationException();}
+
+    }
+    
+    public static abstract class LDecs extends Nodo {
+       public LDecs() {
+		   super();
+       }
+       public Dec dec() {throw new UnsupportedOperationException();}
+       public LDecs ldecs() {throw new UnsupportedOperationException();}
+    }
+    	
+    
+    
     public static class Suma extends ExpBin {
         public Suma(Exp opnd0, Exp opnd1) {
             super(opnd0,opnd1);
@@ -84,6 +174,17 @@ public class SintaxisAbstractaEval {
         } 
     }
     
+    public static class Iden extends Exp {
+        private String id;
+        public Iden(String id) {
+            super();
+            this.id = id;
+        }
+        public String iden() {return id;}
+        public String toString() {
+            return "iden("+id+"["+leeFila()+","+leeCol()+"])";
+        } 
+    }
     public static class Lit_ent extends Exp {
         private String num;
         public Lit_ent(String num) {
@@ -95,7 +196,6 @@ public class SintaxisAbstractaEval {
             return "lit_ent("+num+"["+leeFila()+","+leeCol()+"])";
         } 
     }
-
     public static class Lit_real extends Exp {
         private String num;
         public Lit_real(String num) {
@@ -108,136 +208,11 @@ public class SintaxisAbstractaEval {
         } 
     }
 	
-	
-    public static class Iden extends Exp {
-        private String id;
-        public Iden(String id) {
-            super();
-            this.id = id;
-        }
-        public String iden() {return id;}
-        public String toString() {
-            return "iden("+id+"["+leeFila()+","+leeCol()+"])";
-        } 
-    }
-    public static class Dec extends Nodo {
-        private String id;
-        private Exp exp;
-        public Dec(String id, Exp exp) {
-            this.id = id;
-            this.exp = exp;
-        }
-        public String iden() {return id;}
-        public Exp exp() {return exp;}
-        public String toString() {
-            return "dec("+id+"["+leeFila()+","+leeCol()+"],"+exp+")";
-        } 
-    }
-    public static abstract class Decs extends Nodo {
-       public Decs() {
-       }
-       public LDecs ldecs() {throw new UnsupportedOperationException();}
-
-    }
-    public static class Si_decs extends Decs {
-       private LDecs decs; 
-       public Si_decs(LDecs decs) {
-          super();
-          this.decs = decs;
-       }   
-        public String toString() {
-            return "si_decs("+decs+")";
-        } 
-        public LDecs ldecs() {return decs;}
- 
-    }
-    public static class No_decs extends Decs {
-       public No_decs() {
-          super();
-       }   
-       public String toString() {
-            return "no_decs()";
-        } 
-    }
-
-    public static abstract class LDecs extends Nodo {
-       public LDecs() {
-		   super();
-       }
-       public Dec dec() {throw new UnsupportedOperationException();}
-       public LDecs ldecs() {throw new UnsupportedOperationException();}
-    }
-    	
-    public static class Muchas_decs extends LDecs {
-       private LDecs decs;
-       private Dec dec;
-       public Muchas_decs(LDecs decs, Dec dec) {
-          super();
-          this.dec = dec;
-          this.decs = decs;
-       }
-       public LDecs ldecs() {return decs;}
-       public Dec dec() {return dec;}
-       public String toString() {
-            return "muchas_decs("+decs+","+dec+")";
-        } 
-    }
-
-    public static class Una_dec extends LDecs {
-       private Dec dec;
-       public Una_dec(Dec dec) {
-          super();
-          this.dec = dec;
-       }
-       public Dec dec() {return dec;}
-       public String toString() {
-            return "una_dec("+dec+")";
-        } 
-    }
-
-    public static class Prog extends Nodo {
-	   private Exp exp;
-	   private Decs decs;
-       public Prog(Exp exp, Decs decs) {
-		   super();
-		   this.exp = exp;
-		   this.decs = decs;
-       }   
-       public Decs decs() {return decs;}
-       public Exp exp() {return exp;}
-       public String toString() {
-            return "prog("+exp+","+decs+")";
-        } 
-    }
 
      // Constructoras    
     public Prog prog(Exp exp, Decs decs) {
         return new Prog(exp,decs);
-    }
-    public Exp suma(Exp opnd0, Exp opnd1) {
-        return new Suma(opnd0,opnd1);
-    }
-    public Exp resta(Exp opnd0, Exp opnd1) {
-        return new Resta(opnd0,opnd1);
-    }
-    public Exp mul(Exp opnd0, Exp opnd1) {
-        return new Mul(opnd0,opnd1);
-    }
-    public Exp div(Exp opnd0, Exp opnd1) {
-        return new Div(opnd0,opnd1);
-    }
-    public Exp lit_ent(String num) {
-        return new Lit_ent(num);
-    }
-    public Exp lit_real(String num) {
-        return new Lit_real(num);
-    }
-    public Exp iden(String num) {
-        return new Iden(num);
-    }
-    public Dec dec(String id, Exp exp) {
-        return new Dec(id,exp);
-    }
+    } 
     public Decs si_decs(LDecs decs) {
         return new Si_decs(decs);
     }
@@ -250,4 +225,32 @@ public class SintaxisAbstractaEval {
     public LDecs una_dec(Dec dec) {
         return new Una_dec(dec);
     }
-}
+    public Dec dec(String id, Exp exp) {
+        return new Dec(id,exp);
+    }
+    
+    
+    public Exp suma(Exp opnd0, Exp opnd1) {
+        return new Suma(opnd0,opnd1);
+    }
+    public Exp resta(Exp opnd0, Exp opnd1) {
+        return new Resta(opnd0,opnd1);
+    }
+    public Exp mul(Exp opnd0, Exp opnd1) {
+        return new Mul(opnd0,opnd1);
+    }
+    public Exp div(Exp opnd0, Exp opnd1) {
+        return new Div(opnd0,opnd1);
+    }
+    
+    public Exp iden(String num) {
+        return new Iden(num);
+    }
+    public Exp lit_ent(String num) {
+        return new Lit_ent(num);
+    }
+    public Exp lit_real(String num) {
+        return new Lit_real(num);
+    }
+    
+    }
