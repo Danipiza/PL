@@ -23,111 +23,107 @@ public interface AnalizadorSintacticoTinyConstants {
   /** RegularExpression Id. */
   int parteExponencial = 6;
   /** RegularExpression Id. */
-  int donde = 9;
+  int TRUE = 9;
   /** RegularExpression Id. */
-  int evalua = 10;
+  int FALSE = 10;
   /** RegularExpression Id. */
-  int TRUE = 11;
+  int and = 11;
   /** RegularExpression Id. */
-  int FALSE = 12;
+  int or = 12;
   /** RegularExpression Id. */
-  int and = 13;
+  int not = 13;
   /** RegularExpression Id. */
-  int or = 14;
+  int bool = 14;
   /** RegularExpression Id. */
-  int not = 15;
+  int real = 15;
   /** RegularExpression Id. */
-  int bool = 16;
+  int INT = 16;
   /** RegularExpression Id. */
-  int real = 17;
+  int string = 17;
   /** RegularExpression Id. */
-  int INT = 18;
+  int NULL = 18;
   /** RegularExpression Id. */
-  int string = 19;
+  int proc = 19;
   /** RegularExpression Id. */
-  int NULL = 20;
+  int IF = 20;
   /** RegularExpression Id. */
-  int proc = 21;
+  int ELSE = 21;
   /** RegularExpression Id. */
-  int IF = 22;
+  int WHILE = 22;
   /** RegularExpression Id. */
-  int ELSE = 23;
+  int struct = 23;
   /** RegularExpression Id. */
-  int WHILE = 24;
+  int NEW = 24;
   /** RegularExpression Id. */
-  int struct = 25;
+  int delete = 25;
   /** RegularExpression Id. */
-  int NEW = 26;
+  int read = 26;
   /** RegularExpression Id. */
-  int delete = 27;
+  int write = 27;
   /** RegularExpression Id. */
-  int read = 28;
+  int nl = 28;
   /** RegularExpression Id. */
-  int write = 29;
+  int type = 29;
   /** RegularExpression Id. */
-  int nl = 30;
+  int call = 30;
   /** RegularExpression Id. */
-  int type = 31;
+  int identificador = 31;
   /** RegularExpression Id. */
-  int call = 32;
+  int literalEntero = 32;
   /** RegularExpression Id. */
-  int identificador = 33;
+  int literalReal = 33;
   /** RegularExpression Id. */
-  int literalEntero = 34;
+  int literalCadena = 34;
   /** RegularExpression Id. */
-  int literalReal = 35;
+  int suma = 35;
   /** RegularExpression Id. */
-  int literalCadena = 36;
+  int resta = 36;
   /** RegularExpression Id. */
-  int suma = 37;
+  int mul = 37;
   /** RegularExpression Id. */
-  int resta = 38;
+  int div = 38;
   /** RegularExpression Id. */
-  int mul = 39;
+  int mayor = 39;
   /** RegularExpression Id. */
-  int div = 40;
+  int mayorIgual = 40;
   /** RegularExpression Id. */
-  int mayor = 41;
+  int menor = 41;
   /** RegularExpression Id. */
-  int mayorIgual = 42;
+  int menorIgual = 42;
   /** RegularExpression Id. */
-  int menor = 43;
+  int igual = 43;
   /** RegularExpression Id. */
-  int menorIgual = 44;
+  int distinto = 44;
   /** RegularExpression Id. */
-  int igual = 45;
+  int asignar = 45;
   /** RegularExpression Id. */
-  int distinto = 46;
+  int puntoycoma = 46;
   /** RegularExpression Id. */
-  int asignar = 47;
+  int parentesisApertura = 47;
   /** RegularExpression Id. */
-  int puntoycoma = 48;
+  int parentesisCierre = 48;
   /** RegularExpression Id. */
-  int parentesisApertura = 49;
+  int llaveApertura = 49;
   /** RegularExpression Id. */
-  int parentesisCierre = 50;
+  int llaveCierre = 50;
   /** RegularExpression Id. */
-  int llaveApertura = 51;
+  int eval = 51;
   /** RegularExpression Id. */
-  int llaveCierre = 52;
+  int modulo = 52;
   /** RegularExpression Id. */
-  int eval = 53;
+  int corcheteApertura = 53;
   /** RegularExpression Id. */
-  int modulo = 54;
+  int corcheteCierre = 54;
   /** RegularExpression Id. */
-  int corcheteApertura = 55;
+  int punto = 55;
   /** RegularExpression Id. */
-  int corcheteCierre = 56;
+  int coma = 56;
   /** RegularExpression Id. */
-  int punto = 57;
+  int circunflejo = 57;
   /** RegularExpression Id. */
-  int coma = 58;
+  int ampersand = 58;
   /** RegularExpression Id. */
-  int circunflejo = 59;
-  /** RegularExpression Id. */
-  int ampersand = 60;
-  /** RegularExpression Id. */
-  int separador = 61;
+  int separador = 59;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -143,8 +139,6 @@ public interface AnalizadorSintacticoTinyConstants {
     "<parteExponencial>",
     "<token of kind 7>",
     "<token of kind 8>",
-    "\"donde\"",
-    "\"evalua\"",
     "\"true\"",
     "\"false\"",
     "\"and\"",
