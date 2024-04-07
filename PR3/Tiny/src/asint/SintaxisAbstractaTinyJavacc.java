@@ -3,7 +3,7 @@ package asint;
 
 import c_ast_descendente.Token;
 
-public class SintaxisAbstractaTiny {
+public class SintaxisAbstractaTinyJavacc {
 	
 	// Default (No hay que tocar)
     public static abstract class Nodo  {
@@ -61,14 +61,16 @@ public class SintaxisAbstractaTiny {
 
     }
     // acceso
-    private static abstract class ExpBin2 extends Nodo {
+    private static abstract class ExpBin2 extends Exp {
         protected Exp opnd0;
-        protected Token opnd1;
-        public ExpBin2(Exp opnd0, Token opnd1) {
+        protected String opnd1;
+        public ExpBin2(Exp opnd0, String opnd1) {
             super();
+            this.opnd0=opnd0;
+            this.opnd1=opnd1;
         }
         public Exp opnd0() {return opnd0;}
-        public Token opnd1() {return opnd1;}
+        //public Exp opnd1() {return opnd1;}
 
     }
     //
@@ -948,7 +950,7 @@ public class SintaxisAbstractaTiny {
         } 
     }
     public static class Acceso extends ExpBin2 {
-        public Acceso(Exp opnd0, Token opnd1) {
+        public Acceso(Exp opnd0, String opnd1) {
             super(opnd0,opnd1);
         }
         public String toString() {
@@ -1143,7 +1145,7 @@ public class SintaxisAbstractaTiny {
     public Exp menosUnario(Exp opnd0) { return new MenosUnario(opnd0); }
     public Exp indexacion(Exp opnd0, Exp opnd1) { return new Indexacion(opnd0,opnd1); }
     // Exp x string por lo que necesita otra clase
-    public Nodo acceso(Exp opnd0, Token opnd1) { return new Acceso(opnd0,opnd1); }
+    public Nodo acceso(Exp opnd0, String opnd1) { return new Acceso(opnd0,opnd1); }
     public Exp indireccion(Exp opnd0) { return new Indireccion(opnd0); }
     //
     

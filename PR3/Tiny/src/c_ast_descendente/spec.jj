@@ -4,10 +4,10 @@ options  {
 }  
 PARSER_BEGIN(ConstructorASTsTiny)
 package c_ast_descendente;
-import asint.ClaseSemanticaTiny;
-import asint.SintaxisAbstractaTiny.*;
+import asint.ClaseSemanticaTinyJavacc;
+import asint.SintaxisAbstractaTinyJavacc.*;
 public class ConstructorASTsTiny {
-   private ClaseSemanticaTiny sem = new ClaseSemanticaTiny();   
+   private ClaseSemanticaTinyJavacc sem = new ClaseSemanticaTinyJavacc();   
 }
 
 
@@ -167,7 +167,7 @@ Tipo tipo3()  :
 }
 
 
-Tipo tipoBasico()  : // TODO COMPROBAR INT, real ...
+Tipo tipoBasico()  : 
 {Token t;} 
 {
   	t = <INT> 
@@ -199,7 +199,8 @@ Campos Campos () :
 Campos Rcampos (Campos camposh) : 
 {Campo campo; Campos campos;} 
 {	
-	"," campo = Campo() campos = Rcampos (sem.muchos_campos(camposh, campo))
+	<coma> campo = Campo() campos = Rcampos (sem.muchos_campos(camposh, campo))
+	//"," campo = Campo() campos = Rcampos (sem.muchos_campos(camposh, campo))
 	{return campos;}
 |
 	{return camposh;} 
@@ -232,17 +233,14 @@ Dec declaracion()  :
 {Tipo tipo; Token id; ParsFOp parsFOp; Bloq bloq;}
 {
 	tipo = tipo1() id = <identificador>
-	//{return (Dec)sem.dec_variable(tipo,id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
 	{return (Dec)sem.dec_variable(tipo,id).ponFila(id.beginLine).ponCol(id.beginColumn);} 
 |
-	"type" tipo = tipo1() id = <identificador>	
+	<type> tipo = tipo1() id = <identificador>	
 	{return (Dec)sem.dec_tipo(tipo,id);}
-	//{return (Dec)sem.dec_tipo(tipo,id.image);}
 | 
-	"proc" id = <identificador> "(" parsFOp = parametrosFormales_opt() ")"
+	<proc> id = <identificador> <parentesisApertura> parsFOp = parametrosFormales_opt() <parentesisCierre>
 	bloq = bloque()
-	{return (Dec)sem.dec_proc(id,parsFOp,bloq);}
-	//{return (Dec)sem.dec_proc(id.image,parsFOp,bloq);}  
+	{return (Dec)sem.dec_proc(id,parsFOp,bloq);} 
 }
 
 ParsFOp parametrosFormales_opt()  : 
@@ -268,7 +266,7 @@ ParsF parametrosFormales()  :
 ParsF RparametrosFormales(ParsF parsFh)  : 
 {ParF parF; ParsF parsF;} 
 {
-	parF = parametroFormal() parsF = RparametrosFormales(sem.muchos_parsF(parsFh, parF))
+	< coma > parF = parametroFormal() parsF = RparametrosFormales(sem.muchos_parsF(parsFh, parF))
 	{return parsF;}
 |
 	{return parsFh;}
@@ -303,41 +301,60 @@ Instrs IR(Instrs instrh)  :
 }
 
 Instr instruccion ()  : 
-{Exp e; Bloq bloq; Token id; ParsReOp parsReOp;}
+{Exp e; Bloq bloq; Token id; ParsReOp parsReOp; Instr i;}
 {
-	"@" e = E0()
+	<eval> e = E0()
+	//"@" e = E0()
 	{return sem.instr_eval(e);}
 |
-	"if" e = E0() bloq=bloque()//IFR // TODO IFELSE
-	{return sem.instr_if(e,bloq);} 
+	<IF> e = E0() bloq=bloque() i=IFR(e,bloq) // TODO IFELSE
+	//<IF> e = E0() bloq=bloque() //IFR // TODO IF
+
+	{return i;}
+	//{return sem.instr_if(e,bloq);} 
 |
-	"while" e = E0() bloq = bloque()
+	//"while" e = E0() bloq = bloque()
+	<WHILE> e = E0() bloq = bloque()
 	{return sem.instr_while(e, bloq);}
 |
-	"read" e = E0()
+	//"read" e = E0()
+	<read> e = E0()
 	{return sem.instr_read(e);}
 |
-	"write" e = E0()
+	//"write" e = E0()
+	<write> e = E0()
 	{return sem.instr_write(e);}
 |
-	"nl"
+	//"nl"
+	<nl>
 	{return sem.instr_nl();}
 |
-	"new"  e = E0()
+	//"new"  e = E0()
+	<NEW>  e = E0()
 	{return sem.instr_new(e);}
 |
-	"delete"  e = E0()
+	//"delete"  e = E0()
+	<delete> e = E0()
+	
 	{return sem.instr_del(e);}
 |
-	"call" id = <identificador> "(" parsReOp= parametrosReales_opt() ")"
+	//"call" id = <identificador> "(" parsReOp= parametrosReales_opt() ")"
+	<call> id = <identificador> <parentesisApertura> parsReOp= parametrosReales_opt() <parentesisCierre>
+	
 	{return sem.instr_call(id,parsReOp); }
 |
 	bloq = bloque()
 	{return sem.instr_bloque(bloq);}
 }
 
-/*?? IFR ()  : 
-{} { }*/
+Instr IFR(Exp eh, Bloq bloqh):
+{Bloq bloq;}
+{
+	<ELSE> bloq=bloque() 
+	{return sem.instr_ifelse(eh,bloqh,bloq);}
+|
+	{return sem.instr_if(eh,bloqh);}
+}
 
 ParsReOp parametrosReales_opt() :
 {ParsRe parsRe;} 
@@ -568,7 +585,7 @@ Exp FE6(Exp eh)  :
 	{return sem.indexacion(eh, e1);}
 |
 	<punto> iden = <identificador>//"." <identificador>
-	{return (Exp) sem.acceso(eh, iden);} // cambiar en SintaxisAbstractaTiny
+	{return (Exp) sem.acceso(eh, iden.image);} // cambiar en SintaxisAbstractaTiny
 |
 	<circunflejo> //"^"
 	{return sem.indireccion(eh);}
