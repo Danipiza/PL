@@ -49,7 +49,8 @@ PARSER_END(ConstructorASTsTiny)
   
   
   TOKEN:{<identificador:<letra>(<letra>|<digito>)*>}
-  TOKEN:{<literalEntero:(["+","-"])?<parteEntera>>}  TOKEN:{<literalReal:<literalEntero>(<parteExponencial>|("."<parteDecimal>)|("."<parteDecimal><parteExponencial>))>}
+  TOKEN:{<literalEntero:(["+","-"])?<parteEntera>>}
+  TOKEN:{<literalReal:<literalEntero>(<parteExponencial>|("."<parteDecimal>)|("."<parteDecimal><parteExponencial>))>}
   TOKEN:{<literalCadena:"\"" (~["\""])* "\"">}
   TOKEN:{<suma:"+">}
   TOKEN:{<resta:"-">}
@@ -78,7 +79,7 @@ PARSER_END(ConstructorASTsTiny)
   TOKEN:{<separador:"&&">}
 
   
-  Prog inicial()  : 
+Prog inicial()  : 
 {Prog prog;} 
 { 
 prog = programa() <EOF>
@@ -309,22 +310,22 @@ ParsFOp parametrosFormales_opt()  :
 // 	RparametrosFormales.ah = Un_parF(parametroFormal.a)
 // 	parametrosFormales0.a = RparametrosFormales.a
 ParsF parametrosFormales()  : 
-{ParF parF; ParsF parsF;} 
+{ParsF parsF; ParF parF;} 
 {
 	parF = parametroFormal() parsF = RparametrosFormales(sem.un_parF(parF)) 
-campo = Campo() campos = Rcampos (sem.un_campo(campo))
+//campo = Campo() campos = Rcampos (sem.un_campo(campo))
 // Si unParF es de tipo parF da error
 
 {return parsF;}
 }
 
-ParsF RparametrosFormales(ParF parFh)  : 
+ParsF RparametrosFormales(ParsF parsFh)  : 
 {ParF parF; ParsF parsF;} 
 {
-	parF = parametroFormal() parsF = RparametrosFormales(sem.muchos_parsF(parFh, parF))
+	parF = parametroFormal() parsF = RparametrosFormales(sem.muchos_parsF(parsFh, parF))
 {return parsF;}
 |
-{return parFh;}
+{return parsFh;}
 }
 
 // parametroFormal → tipo1 & identificador
@@ -335,9 +336,9 @@ ParF parametroFormal ()  :
 {Tipo tipo; Token id;}
 {
 	//tipo = tipo1() "&" id = <identificador>
-tipo = tipo1() <ampersand> id = <identificador>
+/*tipo = tipo1() <ampersand> id = <identificador>
 {return (ParF)sem.paramF(id.image,tipo); } 
-|
+|*/
 tipo = tipo1() id = <identificador>
 {return (ParF)sem.param(id.image,tipo); } 
 }
@@ -349,7 +350,7 @@ Instrs instrucciones ()  :
 {return instrs;}
 }
 
-Instrs IR(Instr instrh)  : 
+Instrs IR(Instrs instrh)  : 
 {Instr instr; Instrs instrs;} 
 {
 	instr = instruccion() instrs = IR(sem.muchas_instrs(instrh, instr))
@@ -359,13 +360,13 @@ Instrs IR(Instr instrh)  :
 }
 
 Instr instruccion ()  : 
-{Exp e; Bloq bloq; String id; ParsReOpt parsReOpt;}
+{Exp e; Bloq bloq; Token id; ParsReOp parsReOp;}
 {
 	"@" e = E0()
 	{return sem.instr_eval(e);}
 |
-"if" e = E0() //IFR // TODO IFELSE
-	{return sem.instr_if(e);} 
+"if" e = E0() bloq=bloque()//IFR // TODO IFELSE
+	{return sem.instr_if(e,bloq);} 
 |
 "while" e = E0() bloq = bloque()
 	{return sem.instr_while(e, bloq);}
@@ -385,8 +386,8 @@ Instr instruccion ()  :
 "delete"  e = E0()
 	{return sem.instr_del(e);}
 |
-"call" id = <identificador> "(" parsReOpt= parametrosReales_opt() ")"
-{return sem.instr_call(id,parsReOpt); }
+"call" id = <identificador> "(" parsReOp= parametrosReales_opt() ")"
+{return sem.instr_call(id,parsReOp); }
 |
 bloq = bloque()
 {return sem.instr_bloque(bloq);}
@@ -405,10 +406,28 @@ ParsReOp parametrosReales_opt() :
 }
 
 ParsRe parametrosReales()  : 
+{Exp exp; ParsRe parsRe;} 
+{
+	exp = E0() parsRe = RparametrosReales(sem.un_parRe(exp)) 
+{return parsRe;}
+}
+
+
+ParsRe RparametrosReales(ParsRe parsReh)  : 
+{Exp exp; ParsRe parsRe;} 
+{
+	<coma> exp = E0() parsRe = RparametrosReales(sem.muchos_parsRe(parsReh, exp))
+{return parsRe;}
+|
+{return parsReh;}
+}
+
+/*
+ParsRe parametrosReales()  : 
 {ParRe parRe; ParsRe parsRe;} 
 {
-	parRe= parametroReal() ParsRe = RparametrosReales(parF) 
-{return ParsRe;}
+	parRe= parametroReal() parsRe = RparametrosReales(sem.un_parRe(parRe)) 
+{return parsRe;}
 }
 
 
@@ -420,7 +439,7 @@ ParsRe RparametrosReales(ParsRe parsReh)  :
 |
 {return parsReh;}
 }
- 
+
 ParRe parametroReal ()  : //FALTA EN LA ESPECIFICACIÓN
 {Tipo tipo; Token id;}
 {
@@ -429,7 +448,9 @@ ParRe parametroReal ()  : //FALTA EN LA ESPECIFICACIÓN
 |
 tipo = tipo1()  id = <identificador>
 {return (ParRe)sem.param(id.image,tipo); } 
-}
+}*/
+
+
 Exp E0 ()  : 
 {Exp e1,e2;} 
 {

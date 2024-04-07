@@ -1,5 +1,6 @@
 package asint;
 
+
 import c_ast_descendente.Token;
 
 public class SintaxisAbstractaTiny {
@@ -428,7 +429,7 @@ public class SintaxisAbstractaTiny {
              return "muchos_parsF("+parsF+","+parF+")";
          } 
     }
-    public static class Un_parF extends ParF { // Una_dec, Un_parRe 
+    public static class Un_parF extends ParsF { // Una_dec, Un_parRe 
     	private ParF parF;
         public Un_parF(ParF parF) {
            super();
@@ -487,7 +488,7 @@ public class SintaxisAbstractaTiny {
              return "muchas_instrs("+instrs+","+instr+")";
          } 
     }
-    public static class Una_instr extends Instr { // Una_dec
+    public static class Una_instr extends Instrs { // Una_dec
     	private Instr instr;
         public Una_instr(Instr instr) {
            super();
@@ -676,7 +677,7 @@ public class SintaxisAbstractaTiny {
              return "muchos_parsRe("+parsRe+","+exp+")";
          } 
     }
-    public static class Un_parRe extends ParRe { // Una_dec, Un_parF
+    public static class Un_parRe extends ParsRe { // Una_dec, Un_parF
     	private Exp exp;
         public Un_parRe(Exp exp) {
            super();
