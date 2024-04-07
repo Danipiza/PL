@@ -6,6 +6,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Usuario/Desktop/GITHUB/PL/PR3/Eval_asc/src/c_ast_ascendente/cup.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Usuario/Desktop/GITHUB/PL/PR3/Tiny/src/c_ast_ascendenteEval/cup.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

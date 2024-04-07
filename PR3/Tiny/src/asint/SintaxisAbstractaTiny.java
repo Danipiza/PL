@@ -988,7 +988,7 @@ public class SintaxisAbstractaTiny {
             return "lit_ent("+num+"["+leeFila()+","+leeCol()+"])";
         } 
     }
-    public static class Lit_real extends Exp {
+    public static class Lit_real extends Nodo {
         private String num;
         public Lit_real(String num) {
             super();
@@ -1044,14 +1044,6 @@ public class SintaxisAbstractaTiny {
         public String valor() {return id;}
         public String toString() {
             return "lit_cadena("+id+"["+leeFila()+","+leeCol()+"])";
-        } 
-    }
-    public static class Null extends Exp {
-        public Null() {
-            super();
-        }
-        public String toString() {
-            return "null";
         } 
     }
     //
@@ -1160,7 +1152,7 @@ public class SintaxisAbstractaTiny {
     // TODO Cambiar por otros nombres int, real...?
     public Exp iden(String num) { return new Iden(num); }
     public Exp lit_ent(String num) { return new Lit_ent(num); }
-    public Exp lit_real(String num) { return new Lit_real(num); }
+    public Nodo lit_real(String num) { return new Lit_real(num); }
     public Exp lit_bool(String num) { return new Lit_bool(num); }
     // Nuevo
     public Exp lit_true() { return new TRUE(); }
