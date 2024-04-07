@@ -1,9 +1,8 @@
 package asint;
 
+import c_ast_descendenteI.Token;
 
-import c_ast_descendente.Token;
-
-public class SintaxisAbstractaTinyJavacc {
+public class SintaxisAbstractaTinyJavaccI {
 	
 	// Default (No hay que tocar)
     public static abstract class Nodo  {
@@ -33,6 +32,10 @@ public class SintaxisAbstractaTinyJavacc {
        public Exp() {
 		   super();
        }   
+       public void imprime() {
+    	   System.out.println(this);
+       }
+       protected abstract int prioridad(); 
        public String iden() {throw new UnsupportedOperationException();}
        public String valor() {throw new UnsupportedOperationException();}
        public Exp opnd0() {throw new UnsupportedOperationException();}
@@ -60,7 +63,7 @@ public class SintaxisAbstractaTinyJavacc {
         public Exp opnd0() {return opnd0;}
 
     }
-    // acceso
+    
     private static abstract class ExpBin2 extends Exp {
         protected Exp opnd0;
         protected String opnd1;
@@ -82,12 +85,15 @@ public class SintaxisAbstractaTinyJavacc {
 		   super();
 		   this.bloq = bloq;
        }   
-       public Bloq decs() {return bloq;}
+       public Bloq bloq() {return bloq;}
        public String toString() {
             return "prog("+bloq+")";
-        } 
+        }
+		public void imprime() {
+			bloq.imprime();
+		}
     }    
-    public static class Bloq extends Nodo { // TODO extends Prog?
+    public static class Bloq extends Nodo { 
  	   	private DecsOp decsOp;
  	   	private InstrsOp instrsOp;
         public Bloq(DecsOp decsOp, InstrsOp instrsOp) {
@@ -98,8 +104,15 @@ public class SintaxisAbstractaTinyJavacc {
         public DecsOp decsOp() {return decsOp;}
         public InstrsOp instrsOp() {return instrsOp;}
         public String toString() {
-             return "bloq("+decsOp+","+instrsOp+")";
-         } 
+           return "bloq("+decsOp+","+instrsOp+")";
+       }
+	   
+	   public void imprime() {
+			System.out.println("{");
+			decsOp.imprime();
+			instrsOp.imprime();
+			System.out.println("}");
+		}
     }
     public static class Si_decs extends DecsOp {
     	private Decs decs; 
@@ -110,7 +123,11 @@ public class SintaxisAbstractaTinyJavacc {
         public Decs decs() {return decs;}
         public String toString() {
              return "si_decs("+decs+")";
-         } 
+         }
+
+		public void imprime() {
+			decs.imprime();
+		}
     }    
     public static class No_decs extends DecsOp {
         public No_decs() {
@@ -118,7 +135,10 @@ public class SintaxisAbstractaTinyJavacc {
         }   
         public String toString() {
              return "no_decs()";
-         } 
+         }
+		 public void imprime() {
+			
+		}
     }
     public static class Si_instrs extends InstrsOp {
     	private Instrs instrs; 
@@ -129,7 +149,11 @@ public class SintaxisAbstractaTinyJavacc {
         public Instrs instrs() {return instrs;}
         public String toString() {
              return "si_intrs("+instrs+")";
-         } 
+         }
+		
+		public void imprime() {
+			instrs.imprime();
+		}
     }    
     public static class No_instrs extends InstrsOp {
         public No_instrs() {
@@ -137,9 +161,14 @@ public class SintaxisAbstractaTinyJavacc {
         }   
         public String toString() {
              return "no_intrs()";
-         } 
+         }
+		 
+		public void imprime() {
+			
+		}
     }
     
+	
     public static class Si_tipo extends Tipo { // TODO extends ?
  	   	private Tipo tipo;
  	   	
@@ -150,7 +179,11 @@ public class SintaxisAbstractaTinyJavacc {
         public Tipo tipo() {return tipo;}
         public String toString() {
              return "si_tipo("+tipo+")";
-         } 
+         }
+		public void imprime() {
+			
+		}
+		 
     }
     public static class No_tipo extends Tipo { // TODO extends ?
         public No_tipo() {
@@ -158,8 +191,15 @@ public class SintaxisAbstractaTinyJavacc {
         }   
         public String toString() {
              return "no_tipo()";
-         } 
+         }
+		@Override
+		protected void imprime() {
+			// TODO Auto-generated method stub
+			
+		} 
     }
+	
+	
     public static class Tipo_lista extends Tipo { // TODO extends Tipo?
  	   	private Tipo tipo;
  	    private Token literalEntero;
@@ -172,7 +212,12 @@ public class SintaxisAbstractaTinyJavacc {
         public Token literalEntero() {return literalEntero;}
         public String toString() {
              return "tipo_lista("+tipo+","+literalEntero+")";
-         } 
+         }
+		 
+		 public void imprime() {
+			tipo.imprime();
+			System.out.print(" [" + literalEntero + "]");
+		}
     }
     public static class Tipo_circum extends Tipo { // TODO extends Tipo?
  	   	private Tipo tipo;
@@ -183,7 +228,12 @@ public class SintaxisAbstractaTinyJavacc {
         public Tipo tipo() {return tipo;}
         public String toString() {
              return "tipo_circum("+tipo+")";
-         } 
+         }
+		 
+		public void imprime() {
+			System.out.print("^");
+			tipo.imprime();
+		}
     }
     public static class Tipo_struct extends Tipo { // TODO extends Tipo?
  	   	private Campos campos;
@@ -195,6 +245,13 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
              return "tipo_struct("+campos+")";
          } 
+		 
+		 public void imprime() {
+			System.out.print("struct {");
+			System.out.println("");
+			campos.imprime();
+			System.out.print("}");
+		}
     }
     public static class Tipo_iden extends Tipo { // TODO extends Tipo? 	   	
  	    private Token identificador;
@@ -206,6 +263,10 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
              return "tipo_iden("+identificador+")";
          } 
+		 
+		 public void imprime() {
+			System.out.print(identificador);
+		}
     }
     public static class Tipo_int extends Tipo { // TODO extends Tipo? 	   	
         public Tipo_int() {
@@ -214,6 +275,10 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() { // TODO
              return "tipo_int";
         } 
+		
+		public void imprime() {
+			System.out.print("int");
+		}
     }
     public static class Tipo_real extends Tipo { // TODO extends Tipo?
  	   	public Tipo_real() {
@@ -222,6 +287,10 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() { // TODO
              return "tipo_real";
         }
+		
+		public void imprime() {
+			System.out.print("real");
+		}
     }
     public static class Tipo_bool extends Tipo { // TODO extends Tipo?
  	    public Tipo_bool() {
@@ -230,6 +299,9 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() { 
              return "tipo_bool";
         } 
+		public void imprime() {
+			System.out.print("bool");
+		}
     }
     public static class Tipo_string extends Tipo { // TODO extends Tipo?
  	   	public Tipo_string() {
@@ -238,47 +310,10 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() { // TODO
              return "tipo_string";
         } 
+		public void imprime() {
+			System.out.print("string");
+		}
     }
-	
-    /* Use "Campos"
-    public static class Type_dec extends FTypeDec { 
- 	   	private Tipo tipo;
- 	   	private Token identificador;
- 	   	private TypeDec typedec;
-        public Type_dec(Tipo tipo, Token identificador, TypeDec typedec) {
- 		   super();
- 		   this.tipo = tipo;
- 		   this.identificador = identificador;
- 		   this.typedec = typedec;
-        }   
-        public Tipo tipo() {return tipo;}
-        public Token identificador() {return identificador;}
-        public TypeDec typedec() {return typedec;}
-        public String toString() { // TODO ?
-             return "typedec("+tipo+", "+identificador+", "+typedec+")";
-         } 
-    }
-    public static class Si_FtypeDec extends FTypeDec  { // Si_decs, Si_parsRe
-    	private TypeDec typedec; 
-        public Si_FtypeDec(TypeDec typedec) {
- 		   super();
- 		   this.typedec = typedec;
-        }   
-        public TypeDec parsf() {return typedec;}
-        public String toString() {
-             return "si_FtypeDec("+typedec+")";
-         } 
-    }    
-    public static class No_FtypeDec extends FTypeDec  { // No_decs, No_parsRe
-        public No_FtypeDec() {
-           super();
-        }   
-        public String toString() {
-             return "no_FtypeDec()";
-         } 
-    }
-    */
-    
 
     public static class Muchos_campos extends Campos { // TODO extends ?
  	   	private Campos campos;
@@ -288,11 +323,17 @@ public class SintaxisAbstractaTinyJavacc {
  		   this.campos = campos;
  		   this.campo = campo;
         }   
-        public Campos decsOp() {return campos;}
-        public Campo  instrsOp() {return campo;}
+        public Campos campos() {return campos;}
+        public Campo  campo() {return campo;}
         public String toString() {
              return "muchos_campos("+campos+","+campo+")";
-         } 
+         }
+
+		public void imprime() {
+			campos.imprime();
+			System.out.print(",");
+			campo.imprime();
+		}		 
     }
     public static class Un_campo extends Campos { // TODO extends ?
  	   	private Campo campo;
@@ -300,10 +341,15 @@ public class SintaxisAbstractaTinyJavacc {
  		   super();
  		   this.campo = campo;
         }   
-        public Campo  instrsOp() {return campo;}
+        public Campo campo() {return campo;}
         public String toString() {
              return "un_campo("+campo+")";
-         } 
+         }
+		public void imprime() {
+			campo.imprime();
+			System.out.println("");
+		}	
+		 
     }
     public static class Crea_campo extends Campo { // TODO extends ?
  	   	private Tipo tipo;
@@ -317,7 +363,11 @@ public class SintaxisAbstractaTinyJavacc {
         public Token indentificador() {return identificador;}
         public String toString() {
         	return "crea_campo("+tipo+","+identificador+")";
-         } 
+         }
+		public void imprime() {
+			tipo.imprime();
+			System.out.print(identificador);
+		}
     }
     
     public static class Muchas_decs extends Decs {
@@ -332,7 +382,11 @@ public class SintaxisAbstractaTinyJavacc {
         public Dec dec() {return dec;}
         public String toString() {
              return "muchas_decs("+decs+","+dec+")";
-         } 
+         }
+		public void imprime() {
+			decs.imprime();
+			dec.imprime();
+		}
     }
     public static class Una_dec extends Decs {
         private Dec dec;
@@ -344,6 +398,10 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
              return "una_dec("+dec+")";
          } 
+		 public void imprime() {
+			dec.imprime();
+			System.out.println(";");
+		}
     }
     public static class Dec_variable extends Dec { // TODO Nodo en vez de Dec?
     	private Tipo tipo;
@@ -360,6 +418,11 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "dec_variable("+id+"["+leeFila()+","+leeCol()+"],"+tipo+")";
         } 
+		
+		public void imprime() {
+			tipo.imprime();
+			System.out.println(id);
+		}
     }
     public static class Dec_tipo extends Dec {// TODO Nodo en vez de Dec?
     	private Tipo tipo;
@@ -376,6 +439,12 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "dec_tipo("+id+"["+leeFila()+","+leeCol()+"],"+tipo+")";
         } 
+		
+		public void imprime() {
+			System.out.print("type");
+			tipo.imprime();
+			System.out.println(id +";");			
+		}
     }
     public static class Dec_proc extends Dec { // TODO Nodo en vez de Dec?
     	
@@ -396,6 +465,15 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "dec_proc("+id+"["+leeFila()+","+leeCol()+"],"+parsfop + bloq +")";
         } 
+		
+		public void imprime() {
+			System.out.print("proc");
+			System.out.print(id);
+			System.out.print("(");
+			parsfop.imprime();
+			System.out.print(")");
+			bloq.imprime();
+		}
     }
     
     public static class Si_parsF extends ParsFOp { // Si_decs, Si_parsRe
@@ -407,7 +485,11 @@ public class SintaxisAbstractaTinyJavacc {
         public ParsF parsf() {return parsf;}
         public String toString() {
              return "si_parsF("+parsf+")";
-         } 
+         }
+		 
+		 public void imprime() {
+			parsf.imprime();
+		}
     }    
     public static class No_parsF extends ParsFOp { // No_decs, No_parsRe
         public No_parsF() {
@@ -415,7 +497,10 @@ public class SintaxisAbstractaTinyJavacc {
         }   
         public String toString() {
              return "no_parsF()";
-         } 
+         }
+		public void imprime() {
+			
+		}
     }
     public static class Muchos_parsF extends ParsF { // Muchas_decs
         private ParsF parsF;
@@ -429,7 +514,12 @@ public class SintaxisAbstractaTinyJavacc {
         public ParF parF() {return parF;}
         public String toString() {
              return "muchos_parsF("+parsF+","+parF+")";
-         } 
+         }
+		 public void imprime() {
+			parsF.imprime();
+			System.out.print(",");
+			parF.imprime();
+		}
     }
     public static class Un_parF extends ParsF { // Una_dec, Un_parRe 
     	private ParF parF;
@@ -440,7 +530,10 @@ public class SintaxisAbstractaTinyJavacc {
         public ParF parF() {return parF;}
         public String toString() {
              return "un_parF("+parF+")";
-         } 
+         }
+		public void imprime() {
+			parF.imprime();
+		}
     }
     public static class ParamF extends ParF { // TODO Param?
     	private String id;
@@ -457,7 +550,12 @@ public class SintaxisAbstractaTinyJavacc {
         
         public String toString() {
             return "paramF("+id+"["+leeFila()+","+leeCol()+"],"+tipo+")";
-        } 
+        }
+		
+		public void imprime() {
+			tipo.imprime();
+			System.out.print(id);
+		}
     }
     public static class Param extends ParF {
     	private String id;
@@ -473,9 +571,14 @@ public class SintaxisAbstractaTinyJavacc {
         
         public String toString() {
             return "param("+id+"["+leeFila()+","+leeCol()+"],"+tipo+")";
-        } 
+        }
+		@Override
+		protected void imprime() {
+			tipo.imprime();
+			System.out.print(id);
+		} 
     }
-    
+	
     public static class Muchas_instrs extends Instrs { // Muchas_decs
         private Instrs instrs;
         private Instr instr;
@@ -488,7 +591,13 @@ public class SintaxisAbstractaTinyJavacc {
         public Instr instr() {return instr;}
         public String toString() {
              return "muchas_instrs("+instrs+","+instr+")";
-         } 
+         }
+		 
+		public void imprime() {
+			instrs.imprime();
+			System.out.println(";");
+			instr.imprime();
+		}
     }
     public static class Una_instr extends Instrs { // Una_dec
     	private Instr instr;
@@ -499,7 +608,10 @@ public class SintaxisAbstractaTinyJavacc {
         public Instr instr() {return instr;}
         public String toString() {
              return "una_instr("+instr+")";
-         } 
+         }
+		public void imprime() {
+			instr.imprime();
+		}
     }
     public static class Instr_eval extends Instr { // TODO Nodo en vez de Instr?
     	private Exp exp;
@@ -511,7 +623,12 @@ public class SintaxisAbstractaTinyJavacc {
         
         public String toString() {
             return "instr_eval("+exp+"["+leeFila()+","+leeCol()+"])";
-        } 
+        }
+		
+		public void imprime() {
+			System.out.print("@");
+			exp.imprime();
+		}
     }
     public static class Instr_if extends Instr { // TODO Nodo en vez de Instr?
     	
@@ -528,6 +645,12 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "instr_if("+exp+"["+leeFila()+","+leeCol()+"]" + bloq +")";
         } 
+		
+		public void imprime() {
+			System.out.print("if");
+			exp.imprime();
+			bloq.imprime();
+		}
     }
     public static class Instr_ifelse extends Instr { // TODO Nodo en vez de Instr?
     	private Exp exp;
@@ -544,7 +667,16 @@ public class SintaxisAbstractaTinyJavacc {
         
         public String toString() {
             return "instr_ifelse("+exp+"["+leeFila()+","+leeCol()+"]" + bloq1 + "," + bloq2 +")";
-        }  
+        }
+
+		public void imprime() {
+			System.out.print("if (");
+			exp.imprime();
+			System.out.print(") ");
+			bloq1.imprime();			
+			System.out.println("else ");
+			bloq2.imprime();
+		}
     }
     public static class Instr_while extends Instr { // TODO Nodo en vez de Instr?
     	private Exp exp;
@@ -560,6 +692,13 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "instr_while("+exp+"["+leeFila()+","+leeCol()+"]" + bloq +")";
         }
+		
+		public void imprime() {
+			System.out.print("while (");
+			exp.imprime();
+			System.out.print(") ");
+			bloq.imprime();
+		}
     }
     public static class Instr_read extends Instr { // TODO Nodo en vez de Instr?
 		private Exp exp;
@@ -571,7 +710,12 @@ public class SintaxisAbstractaTinyJavacc {
         
         public String toString() {
             return "instr_read("+exp+"["+leeFila()+","+leeCol()+"])";
-        } 
+        }
+		
+		public void imprime() {
+			System.out.print("read ");
+			exp.imprime();
+		}
     }
     public static class Instr_write extends Instr { // TODO Nodo en vez de Instr?
     	private Exp exp;
@@ -583,7 +727,12 @@ public class SintaxisAbstractaTinyJavacc {
         
         public String toString() {
             return "instr_write("+exp+"["+leeFila()+","+leeCol()+"])";
-        } 
+        }
+		
+		public void imprime() {
+			System.out.print("write ");
+			exp.imprime();
+		}
     }
     public static class Instr_nl extends Instr { // TODO Nodo en vez de Instr?    	    	
         
@@ -592,7 +741,10 @@ public class SintaxisAbstractaTinyJavacc {
         
         public String toString() {
             return "instr_nl()";
-        } 
+        }
+		public void imprime() {
+			System.out.print("nl");
+		}
     }
     public static class Instr_new extends Instr { // TODO Nodo en vez de Instr?
 		private Exp exp;
@@ -605,6 +757,10 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "instr_new("+exp+"["+leeFila()+","+leeCol()+"])";
         } 
+		public void imprime() {
+			System.out.print("new ");
+			exp.imprime();
+		}
     }
     public static class Instr_del extends Instr { // TODO Nodo en vez de Instr?
     	private Exp exp;
@@ -617,6 +773,11 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "instr_del("+exp+"["+leeFila()+","+leeCol()+"])";
         }
+		
+		public void imprime() {
+			System.out.print("del ");
+			exp.imprime();
+		}
     }
     public static class Instr_call extends Instr { // TODO Nodo en vez de Instr?
     	private Token identificador;
@@ -626,12 +787,17 @@ public class SintaxisAbstractaTinyJavacc {
             this.identificador = identificador;
         	this.parsreop = parsreop ;        	            
         }
-        public Token identificador() {return identificador;}
+        public Token id() {return identificador;}
         public ParsReOp parsreop () {return parsreop ;}
         
         public String toString() {
             return "instr_call("+identificador +"["+leeFila()+","+leeCol()+"] ,"+parsreop+")";
-        } 
+        }
+		public void imprime() {
+			System.out.print("call " + identificador + "(");
+			parsreop.imprime();
+			System.out.print(")");
+		}
     }
     public static class Instr_bloque extends Instr { // TODO Nodo en vez de Instr?
     	private Bloq bloq;    	
@@ -643,7 +809,11 @@ public class SintaxisAbstractaTinyJavacc {
         
         public String toString() {
             return "instr_bloque("+bloq+"["+leeFila()+","+leeCol()+"])";
-        } 
+        }
+
+		public void imprime() {
+			bloq.imprime();
+		}		
     }
     
     public static class Si_parsRe extends ParsReOp { // Si_decs, Si_parsF
@@ -655,7 +825,10 @@ public class SintaxisAbstractaTinyJavacc {
         public ParsRe parsre() {return parsre;}
         public String toString() {
              return "si_parsRE("+parsre+")";
-         } 
+         }
+		public void imprime() {
+			parsre.imprime();
+		}
     }    
     public static class No_parsRe extends ParsReOp { // No_decs, No_parsF
         public No_parsRe() {
@@ -663,7 +836,11 @@ public class SintaxisAbstractaTinyJavacc {
         }   
         public String toString() {
              return "no_parsRe()";
-         } 
+         }
+		@Override
+		protected void imprime() {			
+			
+		} 
     }
     public static class Muchos_parsRe extends ParsRe { // Muchas_decs
         private ParsRe parsRe;
@@ -677,7 +854,18 @@ public class SintaxisAbstractaTinyJavacc {
         public Exp parF() {return exp;}
         public String toString() {
              return "muchos_parsRe("+parsRe+","+exp+")";
-         } 
+         }
+		 
+		 public void imprime() {
+			parsRe.imprimir();
+			System.out.print(",");
+			exp.imprime();
+		}
+		@Override
+		protected void imprimir() {
+			// TODO Auto-generated method stub
+			
+		}
     }
     public static class Un_parRe extends ParsRe { // Una_dec, Un_parF
     	private Exp exp;
@@ -688,7 +876,15 @@ public class SintaxisAbstractaTinyJavacc {
         public Exp parsre() {return exp;}
         public String toString() {
              return "un_parRe("+exp+")";
-         } 
+         }
+		 public void imprime() {
+			exp.imprime();
+		}
+		@Override
+		protected void imprimir() {
+			// TODO Auto-generated method stub
+			
+		}
     }
     
     
@@ -697,6 +893,8 @@ public class SintaxisAbstractaTinyJavacc {
        public Decs() {
     	   super();
        }
+       protected abstract void imprime();
+       
        public Dec dec() {throw new UnsupportedOperationException();}
 	   public Decs ldecs() {throw new UnsupportedOperationException();}
     }
@@ -704,7 +902,8 @@ public class SintaxisAbstractaTinyJavacc {
        public Instrs() {
     	   super();
        }
-       public Instr instr() {throw new UnsupportedOperationException();}
+       protected abstract void imprime();
+	public Instr instr() {throw new UnsupportedOperationException();}
 	   public Instrs instrs() {throw new UnsupportedOperationException();}
 
     }	
@@ -712,14 +911,17 @@ public class SintaxisAbstractaTinyJavacc {
         public ParsF() {
         	super();
         }
-        public ParF parf() {throw new UnsupportedOperationException();}
+        protected abstract void imprime();
+		public ParF parf() {throw new UnsupportedOperationException();}
  	   	public ParsF parsf() {throw new UnsupportedOperationException();}
     }
     public static abstract class ParsRe extends Nodo { // Decs, Instrs, ParsF
         public ParsRe() {
         	super();
         }
-        public ParRe parf() {throw new UnsupportedOperationException();}
+        protected abstract void imprimir();
+		protected abstract void imprime();
+		public ParRe parf() {throw new UnsupportedOperationException();}
  	   	public ParsRe parsf() {throw new UnsupportedOperationException();}
     }
 
@@ -728,23 +930,26 @@ public class SintaxisAbstractaTinyJavacc {
     public static abstract class DecsOp extends Nodo {
         public DecsOp() {
         }        
-        //public DecsOp decsop() {throw new UnsupportedOperationException();}
+        protected abstract void imprime();
+		//public DecsOp decsop() {throw new UnsupportedOperationException();}
         public Decs decs() {throw new UnsupportedOperationException();}
     }
     public static abstract class InstrsOp extends Nodo {
         public InstrsOp() {
         }   
-    	
+        protected abstract void imprime();
         public Instrs instrs() {throw new UnsupportedOperationException();}
     }
     public static abstract class ParsFOp extends Nodo {
         public ParsFOp() {
         }
+        protected abstract void imprime();
         public ParsF parsf() {throw new UnsupportedOperationException();}
     }
     public static abstract class ParsReOp extends Nodo { // ParsFOp 
         public ParsReOp() {
         }
+        protected abstract void imprime();
         public ParsRe parsre() {throw new UnsupportedOperationException();}
     }
     
@@ -752,6 +957,7 @@ public class SintaxisAbstractaTinyJavacc {
     public static abstract class Tipo extends Nodo {
         public Tipo() {
         }
+        protected abstract void imprime();
         // TODO
         //public LDecs ldecs() {throw new UnsupportedOperationException();}
 
@@ -760,6 +966,7 @@ public class SintaxisAbstractaTinyJavacc {
     public static abstract class Campos extends Nodo {
         public Campos() {
         }
+        protected abstract void imprime();
         // TODO
         //public LDecs ldecs() {throw new UnsupportedOperationException();}
 
@@ -767,6 +974,7 @@ public class SintaxisAbstractaTinyJavacc {
     public static abstract class Campo extends Nodo {
         public Campo() {
         }
+        protected abstract void imprime();
         // TODO
         //public LDecs ldecs() {throw new UnsupportedOperationException();}
 
@@ -775,41 +983,60 @@ public class SintaxisAbstractaTinyJavacc {
     public static abstract class Dec extends Nodo { // ParF
         public Dec() {
         }
+        protected abstract void imprime();
         // TODO
         //public LDecs ldecs() {throw new UnsupportedOperationException();}
     }
     public static abstract class Instr extends Nodo { // Dec, ParF 
         public Instr() {
         }
+        protected abstract void imprime();
         // TODO
         //public LDecs ldecs() {throw new UnsupportedOperationException();}
     }       
     public static abstract class ParF extends Nodo { // Dec, Instr, ParRe
         public ParF() {
         }
+        protected abstract void imprime();
         public Tipo tipo() {throw new UnsupportedOperationException();}
         public String string() {throw new UnsupportedOperationException();}
     }           
     public static abstract class ParRe extends Nodo { // Dec, Instr, ParF
         public ParRe() {
         }
+        protected abstract void imprime();
         // TODO
         //public LDecs ldecs() {throw new UnsupportedOperationException();}
     }
     
-    /* Use "Campos"
-    public static abstract class FTypeDec extends Nodo { // Dec, Instr, ParF?
-        public FTypeDec () {
+    
+    public static abstract class FtypeDeclaracion extends Nodo { // Dec, Instr, ParF?
+        public FtypeDeclaracion () {
         }
+        protected abstract void imprime();
+        // TODO
         //public LDecs ldecs() {throw new UnsupportedOperationException();}
     }
     public static abstract class TypeDec extends Nodo { // Decs, Instrs, ParsRe
         public TypeDec() {
         }
+        protected abstract void imprime();
+        // TODO
         //public LDecs ldecs() {throw new UnsupportedOperationException();}
-    }*/
+    }
     
     //
+	
+	private static void imprimeOpnd(Exp opnd, int np) {
+		if(opnd.prioridad() < np) {System.out.print("(");};
+		opnd.imprime();
+		if(opnd.prioridad() < np) {System.out.print(")");};
+	}
+	private static void imprimeExpBin(Exp opnd0, String op, Exp opnd1, int np0, int np1) {
+		imprimeOpnd(opnd0,np0);
+		System.out.print(" "+op+" ");
+		imprimeOpnd(opnd1,np1);
+	}
     
     // Operadores
     public static class Suma extends ExpBin {
@@ -818,7 +1045,11 @@ public class SintaxisAbstractaTinyJavacc {
         }
         public String toString() {
             return "suma("+opnd0+","+opnd1+")";
-        } 
+        }
+		public void imprime() {
+			imprimeExpBin(opnd0,"+",opnd1,2,3);
+		}
+		public int prioridad() {return 2;}
     }
     public static class Resta extends ExpBin {
         public Resta(Exp opnd0, Exp opnd1) {
@@ -826,7 +1057,11 @@ public class SintaxisAbstractaTinyJavacc {
         }
         public String toString() {
             return "resta("+opnd0+","+opnd1+")";
-        } 
+        }
+		public void imprime() {
+			imprimeExpBin(opnd0,"-",opnd1,3,3);
+		}
+		public int prioridad() {return 2;}
     }
     public static class Mul extends ExpBin {
         public Mul(Exp opnd0, Exp opnd1) {
@@ -834,7 +1069,11 @@ public class SintaxisAbstractaTinyJavacc {
         }
         public String toString() {
             return "mul("+opnd0+","+opnd1+")";
-        } 
+        }
+		public void imprime() {
+			imprimeExpBin(opnd0,"*",opnd1,4,5);
+		}
+		public int prioridad() {return 4;}
     }
     public static class Div extends ExpBin {
         public Div(Exp opnd0, Exp opnd1) {
@@ -842,7 +1081,23 @@ public class SintaxisAbstractaTinyJavacc {
         }
         public String toString() {
             return "div("+opnd0+","+opnd1+")";
-        } 
+        }
+		public void imprime() {
+			imprimeExpBin(opnd0,"/",opnd1,4,5);
+		}
+		public int prioridad() {return 4;}
+    }
+	public static class Mod extends ExpBin {
+        public Mod(Exp opnd0, Exp opnd1) {
+            super(opnd0,opnd1);
+        }
+        public String toString() {
+            return "mod("+opnd0+","+opnd1+")";
+        }
+		public void imprime() {
+			imprimeExpBin(opnd0,"%",opnd1,4,5);
+		}
+		public int prioridad() {return 4;}
     }
     // Nuevo (operadores binarios y unarios)
     public static class Asig extends ExpBin {
@@ -851,7 +1106,11 @@ public class SintaxisAbstractaTinyJavacc {
         }
         public String toString() {
             return "asig("+opnd0+","+opnd1+")";
-        } 
+        }
+		public void imprime() {
+			imprimeExpBin(opnd0,"=",opnd1,0,1);
+		}
+		public int prioridad() {return 0;}
     }
     public static class MenorI extends ExpBin {
         public MenorI(Exp opnd0, Exp opnd1) {
@@ -859,7 +1118,11 @@ public class SintaxisAbstractaTinyJavacc {
         }
         public String toString() {
             return "menorI("+opnd0+","+opnd1+")";
-        } 
+        }
+		public void imprime() {
+			imprimeExpBin(opnd0,"<=",opnd1,1,2);
+		}
+		public int prioridad() {return 1;}
     }
     public static class Menor extends ExpBin {
         public Menor(Exp opnd0, Exp opnd1) {
@@ -867,7 +1130,11 @@ public class SintaxisAbstractaTinyJavacc {
         }
         public String toString() {
             return "menor("+opnd0+","+opnd1+")";
-        } 
+        }
+		public void imprime() {
+			imprimeExpBin(opnd0,"<",opnd1,1,2);
+		}
+		public int prioridad() {return 1;}
     }
     public static class MayorI extends ExpBin {
         public MayorI(Exp opnd0, Exp opnd1) {
@@ -875,7 +1142,12 @@ public class SintaxisAbstractaTinyJavacc {
         }
         public String toString() {
             return "mayorI("+opnd0+","+opnd1+")";
-        } 
+        }
+		public void imprime() {
+			imprimeExpBin(opnd0,">=",opnd1,1,2);
+		}
+		public int prioridad() {return 1;}
+		
     }
     public static class Mayor extends ExpBin {
         public Mayor(Exp opnd0, Exp opnd1) {
@@ -884,6 +1156,10 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "mayor("+opnd0+","+opnd1+")";
         } 
+		public void imprime() {
+			imprimeExpBin(opnd0,">",opnd1,1,2);
+		}
+		public int prioridad() {return 1;}
     }
     public static class Igual extends ExpBin {
         public Igual(Exp opnd0, Exp opnd1) {
@@ -892,6 +1168,10 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "igual("+opnd0+","+opnd1+")";
         } 
+		public void imprime() {
+			imprimeExpBin(opnd0,"==",opnd1,1,2);
+		}
+		public int prioridad() {return 1;}
     }
     public static class Distint extends ExpBin {
         public Distint(Exp opnd0, Exp opnd1) {
@@ -900,14 +1180,10 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "distint("+opnd0+","+opnd1+")";
         } 
-    }
-    public static class Mod extends ExpBin {
-        public Mod(Exp opnd0, Exp opnd1) {
-            super(opnd0,opnd1);
-        }
-        public String toString() {
-            return "mod("+opnd0+","+opnd1+")";
-        } 
+		public void imprime() {
+			imprimeExpBin(opnd0,"!=",opnd1,1,2);
+		}
+		public int prioridad() {return 1;}
     }
     public static class And extends ExpBin {
         public And(Exp opnd0, Exp opnd1) {
@@ -916,6 +1192,10 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "and("+opnd0+","+opnd1+")";
         } 
+		public void imprime() {
+			imprimeExpBin(opnd0,"and",opnd1,4,3);
+		}
+		public int prioridad() {return 3;}
     }
     public static class Or extends ExpBin {
         public Or(Exp opnd0, Exp opnd1) {
@@ -924,6 +1204,10 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "or("+opnd0+","+opnd1+")";
         } 
+		public void imprime() {
+			imprimeExpBin(opnd0,"or",opnd1,4,4);
+		}
+		public int prioridad() {return 3;}
     }
     public static class Negacion extends ExpUna {
         public Negacion(Exp opnd0) {
@@ -932,6 +1216,10 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "negacion("+opnd0+")";
         } 
+		public void imprime() {
+			imprimeOpnd(opnd0,5);
+		}
+		public int prioridad() {return 5;}
     }
     public static class MenosUnario extends ExpUna {
         public MenosUnario(Exp opnd0) {
@@ -939,7 +1227,11 @@ public class SintaxisAbstractaTinyJavacc {
         }
         public String toString() {
             return "menosUnario("+opnd0+")";
-        } 
+        }
+		public void imprime() {
+			imprimeOpnd(opnd0,5);
+		}
+		public int prioridad() {return 5;}
     }
     public static class Indexacion extends ExpBin {
         public Indexacion(Exp opnd0, Exp opnd1) {
@@ -948,7 +1240,12 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "indexacion("+opnd0+","+opnd1+")";
         } 
+		public void imprime() {
+			
+		}
+		public int prioridad() {return 6;}
     }
+	// TODO creo que este es string
     public static class Acceso extends ExpBin2 {
         public Acceso(Exp opnd0, String opnd1) {
             super(opnd0,opnd1);
@@ -956,6 +1253,10 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "acceso("+opnd0+","+opnd1+")";
         } 
+		public void imprime() {
+			
+		}
+		public int prioridad() {return 6;}
     }
     public static class Indireccion extends ExpUna {
         public Indireccion(Exp opnd0) {
@@ -964,6 +1265,10 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "indireccion("+opnd0+")";
         } 
+		public void imprime() {
+			
+		}
+		public int prioridad() {return 6;}
     }   
     //
     
@@ -974,10 +1279,18 @@ public class SintaxisAbstractaTinyJavacc {
             super();
             this.id = id;
         }
-        public String iden() {return id;}
+        public String id() {return id;}
         public String toString() {
             return "iden("+id+"["+leeFila()+","+leeCol()+"])";
         } 
+		public void imprime() {
+			System.out.print(id);
+		}
+		@Override
+		protected int prioridad() {
+			// TODO Auto-generated method stub
+			return 7;
+		}
     }
     public static class Lit_ent extends Exp {
         private String num;
@@ -989,6 +1302,14 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "lit_ent("+num+"["+leeFila()+","+leeCol()+"])";
         } 
+		public void imprime() {
+			System.out.print(num);
+		}
+		@Override
+		protected int prioridad() {
+			// TODO Auto-generated method stub
+			return 7;
+		}
     }
     public static class Lit_real extends Exp {
         private String num;
@@ -1000,17 +1321,14 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "lit_real("+num+"["+leeFila()+","+leeCol()+"])";
         } 
-    }
-    public static class Lit_bool extends Exp {
-        private String num;
-        public Lit_bool(String num) {
-            super();
-            this.num = num;
-        }
-        public String valor() {return num;}
-        public String toString() {
-            return "lit_bool("+num+"["+leeFila()+","+leeCol()+"])";
-        } 
+		public void imprime() {
+			System.out.print(num);
+		}
+		@Override
+		protected int prioridad() {
+			// TODO Auto-generated method stub
+			return 7;
+		}
     }
     // Nuevo TODO null?
     public static class TRUE extends Exp {        
@@ -1020,6 +1338,14 @@ public class SintaxisAbstractaTinyJavacc {
         public String toString() {
             return "true";
         } 
+		public void imprime() {
+			System.out.print("true");
+		}
+		@Override
+		protected int prioridad() {
+			// TODO Auto-generated method stub
+			return 7;
+		}
     }
     public static class FALSE extends Exp {
         public FALSE() {
@@ -1027,15 +1353,16 @@ public class SintaxisAbstractaTinyJavacc {
         }
         public String toString() {
             return "false";
-        } 
-    }
-    public static class NULL extends Exp {
-        public NULL() {
-            super();
         }
-        public String toString() {
-            return "null";
-        } 
+		public void imprime() {
+			System.out.print("false");
+		}
+		@Override
+		protected int prioridad() {
+			// TODO Auto-generated method stub
+			return 7;
+		}
+		
     }
     public static class Lit_cadena extends Exp {
         private String id;
@@ -1043,10 +1370,30 @@ public class SintaxisAbstractaTinyJavacc {
             super();
             this.id = id;
         }
-        public String valor() {return id;}
+        public String id() {return id;}
         public String toString() {
             return "lit_cadena("+id+"["+leeFila()+","+leeCol()+"])";
         } 
+		public void imprime() {
+			System.out.print(id);
+		}
+		@Override
+		protected int prioridad() {
+			// TODO Auto-generated method stub
+			return 7;
+		}
+    }
+    public static class NULL extends Exp {
+        public NULL() {
+            super();
+        }
+        public String toString() {
+            return "null";
+        }
+		@Override
+		protected int prioridad() {
+			return 7;
+		} 
     }
     //
     
@@ -1074,12 +1421,7 @@ public class SintaxisAbstractaTinyJavacc {
     public Tipo_bool tipo_bool() { return new Tipo_bool(); }
     public Tipo_string tipo_string() { return new Tipo_string(); }
     
-    /* Use "Campos"
-     * public Type_dec type_dec(Tipo tipo, Token identificador, TypeDec typedec) { 
-    	return new Type_dec(tipo, identificador, typedec); }
-    public Si_FtypeDec si_FtypeDec(TypeDec typedec) { return new Si_FtypeDec(typedec); }
-    public No_FtypeDec no_FtypeDec() { return new No_FtypeDec(); }
-    */
+    
     public Muchos_campos muchos_campos(Campos campos, Campo campo) { 
     	return new Muchos_campos(campos, campo); }
     public Un_campo un_campo(Campo campo) { return new Un_campo(campo); }
@@ -1131,6 +1473,7 @@ public class SintaxisAbstractaTinyJavacc {
     public Exp mul(Exp opnd0, Exp opnd1) { return new Mul(opnd0,opnd1); }
     public Exp div(Exp opnd0, Exp opnd1) { return new Div(opnd0,opnd1); }
     // Nuevo
+    public Exp mod(Exp opnd0, Exp opnd1) { return new Mod(opnd0,opnd1); }
     public Exp asig(Exp opnd0, Exp opnd1) { return new Asig(opnd0,opnd1); }
     public Exp menorI(Exp opnd0, Exp opnd1) { return new MenorI(opnd0,opnd1); }
     public Exp menor(Exp opnd0, Exp opnd1) { return new Menor(opnd0,opnd1); }
@@ -1138,13 +1481,11 @@ public class SintaxisAbstractaTinyJavacc {
     public Exp mayor(Exp opnd0, Exp opnd1) { return new Mayor(opnd0,opnd1); }
     public Exp igual(Exp opnd0, Exp opnd1) { return new Igual(opnd0,opnd1); }
     public Exp distint(Exp opnd0, Exp opnd1) { return new Distint(opnd0,opnd1); }
-    public Exp mod(Exp opnd0, Exp opnd1) { return new Mod(opnd0,opnd1); }
     public Exp and(Exp opnd0, Exp opnd1) { return new And(opnd0,opnd1); }
     public Exp or(Exp opnd0, Exp opnd1) { return new Or(opnd0,opnd1); }
     public Exp negacion(Exp opnd0) { return new Negacion(opnd0); }
     public Exp menosUnario(Exp opnd0) { return new MenosUnario(opnd0); }
     public Exp indexacion(Exp opnd0, Exp opnd1) { return new Indexacion(opnd0,opnd1); }
-    // Exp x string por lo que necesita otra clase
     public Nodo acceso(Exp opnd0, String opnd1) { return new Acceso(opnd0,opnd1); }
     public Exp indireccion(Exp opnd0) { return new Indireccion(opnd0); }
     //
@@ -1155,11 +1496,9 @@ public class SintaxisAbstractaTinyJavacc {
     public Exp iden(String num) { return new Iden(num); }
     public Exp lit_ent(String num) { return new Lit_ent(num); }
     public Exp lit_real(String num) { return new Lit_real(num); }
-    public Exp lit_bool(String num) { return new Lit_bool(num); }
     // Nuevo
     public Exp lit_true() { return new TRUE(); }
     public Exp lit_false() { return new FALSE(); }
     public Exp lit_cadena(String num) { return new Lit_cadena(num);}
     public Exp lit_null() { return new NULL(); }
-    
 }

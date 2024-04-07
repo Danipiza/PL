@@ -2,16 +2,16 @@ options  {
   STATIC=false;
   DEBUG_PARSER=true;
 }  
-PARSER_BEGIN(ConstructorASTsTiny)
-package c_ast_descendente;
-import asint.ClaseSemanticaTinyJavacc;
-import asint.SintaxisAbstractaTinyJavacc.*;
-public class ConstructorASTsTiny {
-   private ClaseSemanticaTinyJavacc sem = new ClaseSemanticaTinyJavacc();   
+PARSER_BEGIN(ConstructorASTsTinyJavaccI)
+package c_ast_descendenteI;
+import asint.ClaseSemanticaTinyJavaccI;
+import asint.SintaxisAbstractaTinyJavaccI.*;
+public class ConstructorASTsTinyJavaccI {
+   private ClaseSemanticaTinyJavaccI sem = new ClaseSemanticaTinyJavaccI();   
 }
 
 
-PARSER_END(ConstructorASTsTiny)
+PARSER_END(ConstructorASTsTinyJavaccI)
 
   TOKEN:{<#letra:["a"-"z","A"-"Z","_"]>}
   TOKEN:{<#digitoPositivo:["1"-"9"]>}

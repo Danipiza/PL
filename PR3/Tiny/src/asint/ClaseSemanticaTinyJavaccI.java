@@ -1,9 +1,9 @@
 package asint;
 
-import asint.SintaxisAbstractaTinyJavacc.Exp;
+import asint.SintaxisAbstractaTinyJavaccI.Exp;
 
-public class ClaseSemanticaTinyJavacc extends SintaxisAbstractaTinyJavacc {
-    public ClaseSemanticaTinyJavacc() {
+public class ClaseSemanticaTinyJavaccI extends SintaxisAbstractaTinyJavaccI {
+    public ClaseSemanticaTinyJavaccI() {
         super();
     }
     
