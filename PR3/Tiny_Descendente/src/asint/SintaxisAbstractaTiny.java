@@ -1,6 +1,6 @@
 package asint;
 
-
+import c_ast_descendente.Token;
 
 public class SintaxisAbstractaTiny {
 	
@@ -57,6 +57,17 @@ public class SintaxisAbstractaTiny {
             this.opnd0 = opnd0;
         }
         public Exp opnd0() {return opnd0;}
+
+    }
+    // acceso
+    private static abstract class ExpBin2 extends Nodo {
+        protected Exp opnd0;
+        protected Token opnd1;
+        public ExpBin2(Exp opnd0, Token opnd1) {
+            super();
+        }
+        public Exp opnd0() {return opnd0;}
+        public Token opnd1() {return opnd1;}
 
     }
     //
@@ -148,14 +159,14 @@ public class SintaxisAbstractaTiny {
     }
     public static class Tipo_lista extends Tipo { // TODO extends Tipo?
  	   	private Tipo tipo;
- 	    private String literalEntero;
-        public Tipo_lista(Tipo tipo, String literalEntero) {
+ 	    private Token literalEntero;
+        public Tipo_lista(Tipo tipo, Token literalEntero) {
  		   super();
  		   this.tipo = tipo;
  		   this.literalEntero = literalEntero;
         }   
         public Tipo tipo() {return tipo;}
-        public String literalEntero() {return literalEntero;}
+        public Token literalEntero() {return literalEntero;}
         public String toString() {
              return "tipo_lista("+tipo+","+literalEntero+")";
          } 
@@ -183,12 +194,12 @@ public class SintaxisAbstractaTiny {
          } 
     }
     public static class Tipo_iden extends Tipo { // TODO extends Tipo? 	   	
- 	    private String identificador;
-        public Tipo_iden(String identificador) {
+ 	    private Token identificador;
+        public Tipo_iden(Token identificador) {
  		   super();
  		   this.identificador = identificador;
         }   
-        public String identificador() {return identificador;}
+        public Token identificador() {return identificador;}
         public String toString() {
              return "tipo_iden("+identificador+")";
          } 
@@ -226,25 +237,25 @@ public class SintaxisAbstractaTiny {
         } 
     }
 	
-    
-    public static class Type_dec extends FtypeDeclaracion { 
+    /* Use "Campos"
+    public static class Type_dec extends FTypeDec { 
  	   	private Tipo tipo;
- 	   	private String identificador;
+ 	   	private Token identificador;
  	   	private TypeDec typedec;
-        public Type_dec(Tipo tipo, String identificador, TypeDec typedec) {
+        public Type_dec(Tipo tipo, Token identificador, TypeDec typedec) {
  		   super();
  		   this.tipo = tipo;
  		   this.identificador = identificador;
  		   this.typedec = typedec;
         }   
         public Tipo tipo() {return tipo;}
-        public String identificador() {return identificador;}
+        public Token identificador() {return identificador;}
         public TypeDec typedec() {return typedec;}
         public String toString() { // TODO ?
              return "typedec("+tipo+", "+identificador+", "+typedec+")";
          } 
     }
-    public static class Si_FtypeDec extends FtypeDeclaracion  { // Si_decs, Si_parsRe
+    public static class Si_FtypeDec extends FTypeDec  { // Si_decs, Si_parsRe
     	private TypeDec typedec; 
         public Si_FtypeDec(TypeDec typedec) {
  		   super();
@@ -255,7 +266,7 @@ public class SintaxisAbstractaTiny {
              return "si_FtypeDec("+typedec+")";
          } 
     }    
-    public static class No_FtypeDec extends FtypeDeclaracion  { // No_decs, No_parsRe
+    public static class No_FtypeDec extends FTypeDec  { // No_decs, No_parsRe
         public No_FtypeDec() {
            super();
         }   
@@ -263,7 +274,7 @@ public class SintaxisAbstractaTiny {
              return "no_FtypeDec()";
          } 
     }
-    
+    */
     
 
     public static class Muchos_campos extends Campos { // TODO extends ?
@@ -293,14 +304,14 @@ public class SintaxisAbstractaTiny {
     }
     public static class Crea_campo extends Campo { // TODO extends ?
  	   	private Tipo tipo;
-    	private String identificador;
-        public Crea_campo(Tipo tipo, String identificador) {
+    	private Token identificador;
+        public Crea_campo(Tipo tipo, Token identificador) {
  		   super();
  		   this.tipo = tipo;
  		   this.identificador = identificador;
         }   
         public Tipo tipo() {return tipo;}
-        public String indentificador() {return identificador;}
+        public Token indentificador() {return identificador;}
         public String toString() {
         	return "crea_campo("+tipo+","+identificador+")";
          } 
@@ -417,7 +428,7 @@ public class SintaxisAbstractaTiny {
              return "muchos_parsF("+parsF+","+parF+")";
          } 
     }
-    public static class Un_parF extends ParsF { // Una_dec, Un_parRe 
+    public static class Un_parF extends ParF { // Una_dec, Un_parRe 
     	private ParF parF;
         public Un_parF(ParF parF) {
            super();
@@ -476,7 +487,7 @@ public class SintaxisAbstractaTiny {
              return "muchas_instrs("+instrs+","+instr+")";
          } 
     }
-    public static class Una_instr extends Instrs { // Una_dec
+    public static class Una_instr extends Instr { // Una_dec
     	private Instr instr;
         public Una_instr(Instr instr) {
            super();
@@ -605,14 +616,14 @@ public class SintaxisAbstractaTiny {
         }
     }
     public static class Instr_call extends Instr { // TODO Nodo en vez de Instr?
-    	private String identificador;
+    	private Token identificador;
     	private ParsReOp parsreop ;    	
         
-        public Instr_call(String identificador, ParsReOp parsreop ) {
+        public Instr_call(Token identificador, ParsReOp parsreop ) {
             this.identificador = identificador;
         	this.parsreop = parsreop ;        	            
         }
-        public String identificador() {return identificador;}
+        public Token identificador() {return identificador;}
         public ParsReOp parsreop () {return parsreop ;}
         
         public String toString() {
@@ -665,7 +676,7 @@ public class SintaxisAbstractaTiny {
              return "muchos_parsRe("+parsRe+","+exp+")";
          } 
     }
-    public static class Un_parRe extends ParsRe { // Una_dec, Un_parF
+    public static class Un_parRe extends ParRe { // Una_dec, Un_parF
     	private Exp exp;
         public Un_parRe(Exp exp) {
            super();
@@ -783,19 +794,17 @@ public class SintaxisAbstractaTiny {
         //public LDecs ldecs() {throw new UnsupportedOperationException();}
     }
     
-    
-    public static abstract class FtypeDeclaracion extends Nodo { // Dec, Instr, ParF?
-        public FtypeDeclaracion () {
+    /* Use "Campos"
+    public static abstract class FTypeDec extends Nodo { // Dec, Instr, ParF?
+        public FTypeDec () {
         }
-        // TODO
         //public LDecs ldecs() {throw new UnsupportedOperationException();}
     }
     public static abstract class TypeDec extends Nodo { // Decs, Instrs, ParsRe
         public TypeDec() {
         }
-        // TODO
         //public LDecs ldecs() {throw new UnsupportedOperationException();}
-    }
+    }*/
     
     //
     
@@ -889,6 +898,14 @@ public class SintaxisAbstractaTiny {
             return "distint("+opnd0+","+opnd1+")";
         } 
     }
+    public static class Mod extends ExpBin {
+        public Mod(Exp opnd0, Exp opnd1) {
+            super(opnd0,opnd1);
+        }
+        public String toString() {
+            return "mod("+opnd0+","+opnd1+")";
+        } 
+    }
     public static class And extends ExpBin {
         public And(Exp opnd0, Exp opnd1) {
             super(opnd0,opnd1);
@@ -929,8 +946,8 @@ public class SintaxisAbstractaTiny {
             return "indexacion("+opnd0+","+opnd1+")";
         } 
     }
-    public static class Acceso extends ExpBin {
-        public Acceso(Exp opnd0, Exp opnd1) {
+    public static class Acceso extends ExpBin2 {
+        public Acceso(Exp opnd0, Token opnd1) {
             super(opnd0,opnd1);
         }
         public String toString() {
@@ -981,6 +998,17 @@ public class SintaxisAbstractaTiny {
             return "lit_real("+num+"["+leeFila()+","+leeCol()+"])";
         } 
     }
+    public static class Lit_bool extends Exp {
+        private String num;
+        public Lit_bool(String num) {
+            super();
+            this.num = num;
+        }
+        public String valor() {return num;}
+        public String toString() {
+            return "lit_bool("+num+"["+leeFila()+","+leeCol()+"])";
+        } 
+    }
     // Nuevo TODO null?
     public static class TRUE extends Exp {        
         public TRUE() {
@@ -996,6 +1024,14 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             return "false";
+        } 
+    }
+    public static class NULL extends Exp {
+        public NULL() {
+            super();
+        }
+        public String toString() {
+            return "null";
         } 
     }
     public static class Lit_cadena extends Exp {
@@ -1032,26 +1068,27 @@ public class SintaxisAbstractaTiny {
     
     public Si_tipo si_tipo(Tipo tipo) { return new Si_tipo(tipo); }
     public No_tipo no_tipo() { return new No_tipo(); }
-    public Tipo_lista tipo_lista(Tipo tipo, String literalEntero) { 
+    public Tipo_lista tipo_lista(Tipo tipo, Token literalEntero) { 
     	return new Tipo_lista(tipo, literalEntero); 
 	}
     public Tipo_circum tipo_circum(Tipo tipo) { return new Tipo_circum(tipo); }
     public Tipo_struct tipo_struct(Campos campos) { return new Tipo_struct(campos); }
-    public Tipo_iden tipo_iden(String id) { return new Tipo_iden(id); }
+    public Tipo_iden tipo_iden(Token id) { return new Tipo_iden(id); }
     public Tipo_int tipo_int() { return new Tipo_int(); }
     public Tipo_real tipo_real() { return new Tipo_real(); }
     public Tipo_bool tipo_bool() { return new Tipo_bool(); }
     public Tipo_string tipo_string() { return new Tipo_string(); }
     
-    public Type_dec type_dec(Tipo tipo, String identificador, TypeDec typedec) { 
+    /* Use "Campos"
+     * public Type_dec type_dec(Tipo tipo, Token identificador, TypeDec typedec) { 
     	return new Type_dec(tipo, identificador, typedec); }
     public Si_FtypeDec si_FtypeDec(TypeDec typedec) { return new Si_FtypeDec(typedec); }
     public No_FtypeDec no_FtypeDec() { return new No_FtypeDec(); }
-    
+    */
     public Muchos_campos muchos_campos(Campos campos, Campo campo) { 
     	return new Muchos_campos(campos, campo); }
     public Un_campo un_campo(Campo campo) { return new Un_campo(campo); }
-    public Crea_campo crea_campo(Tipo tipo, String id) { return new Crea_campo(tipo, id); }
+    public Crea_campo crea_campo(Tipo tipo, Token id) { return new Crea_campo(tipo, id); }
     
     public Muchas_decs muchas_decs(Decs decs, Dec dec) { return new Muchas_decs(decs, dec); }
     public Una_dec una_dec(Dec dec) { return new Una_dec(dec); }
@@ -1083,7 +1120,7 @@ public class SintaxisAbstractaTiny {
     public Instr_nl instr_nl() { return new Instr_nl(); }
     public Instr_new instr_new(Exp exp){ return new Instr_new(exp); }
     public Instr_del instr_del(Exp exp) { return new Instr_del(exp); }
-    public Instr_call instr_call(String id, ParsReOp parsreop) { return new Instr_call(id, parsreop); }
+    public Instr_call instr_call(Token id, ParsReOp parsreop) { return new Instr_call(id, parsreop); }
     public Instr_bloque instr_bloque(Bloq bloq) { return new Instr_bloque(bloq); }
     
     public Si_parsRe si_parsRe(ParsRe parsre) { return new Si_parsRe(parsre); }
@@ -1106,12 +1143,14 @@ public class SintaxisAbstractaTiny {
     public Exp mayor(Exp opnd0, Exp opnd1) { return new Mayor(opnd0,opnd1); }
     public Exp igual(Exp opnd0, Exp opnd1) { return new Igual(opnd0,opnd1); }
     public Exp distint(Exp opnd0, Exp opnd1) { return new Distint(opnd0,opnd1); }
+    public Exp mod(Exp opnd0, Exp opnd1) { return new Mod(opnd0,opnd1); }
     public Exp and(Exp opnd0, Exp opnd1) { return new And(opnd0,opnd1); }
     public Exp or(Exp opnd0, Exp opnd1) { return new Or(opnd0,opnd1); }
     public Exp negacion(Exp opnd0) { return new Negacion(opnd0); }
     public Exp menosUnario(Exp opnd0) { return new MenosUnario(opnd0); }
     public Exp indexacion(Exp opnd0, Exp opnd1) { return new Indexacion(opnd0,opnd1); }
-    public Exp acceso(Exp opnd0, Exp opnd1) { return new Acceso(opnd0,opnd1); }
+    // Exp x string por lo que necesita otra clase
+    public Nodo acceso(Exp opnd0, Token opnd1) { return new Acceso(opnd0,opnd1); }
     public Exp indireccion(Exp opnd0) { return new Indireccion(opnd0); }
     //
     
@@ -1121,9 +1160,11 @@ public class SintaxisAbstractaTiny {
     public Exp iden(String num) { return new Iden(num); }
     public Exp lit_ent(String num) { return new Lit_ent(num); }
     public Exp lit_real(String num) { return new Lit_real(num); }
+    public Exp lit_bool(String num) { return new Lit_bool(num); }
     // Nuevo
     public Exp lit_true() { return new TRUE(); }
     public Exp lit_false() { return new FALSE(); }
     public Exp lit_cadena(String num) { return new Lit_cadena(num);}
+    public Exp lit_null() { return new NULL(); }
     
 }

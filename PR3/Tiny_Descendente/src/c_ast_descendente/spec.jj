@@ -6,7 +6,6 @@ PARSER_BEGIN(ConstructorASTsTiny)
 package c_ast_descendente;
 import asint.ClaseSemanticaTiny;
 import asint.SintaxisAbstractaTiny.*;
-import c_ast_ascendente.UnidadLexica.StringLocalizado;
 public class ConstructorASTsTiny {
    private ClaseSemanticaTiny sem = new ClaseSemanticaTiny();   
 }
@@ -105,14 +104,14 @@ Bloq bloque()  :
 }
 
 // declaraciones_opt → declaraciones && 
-// declaraciones_opt.a = si_Decs(declaraciones.a)
+// declaraciones_opt.a = si_decs(declaraciones.a)
 // declaraciones_opt → ε
 // declaraciones_opt.a = no_decs()
 DecsOp declaraciones_opt()  : 
 {Decs decs;} 
 {  
 decs = declaraciones() <separador>
-{return sem.si_Decs(decs);} 
+{return sem.si_decs(decs);} 
 | 
 {return sem.no_decs();}  
 }
@@ -144,10 +143,10 @@ t2 = tipo2() rt1 = rtipo1(t2)
 //	rtipo10.t = rtipo11.t
 //rtipo1 →  ε
 //	rtipo1.t = rtipo1.th
-Tipo rtipo1(tipo th)  : //rtipo10.th
+Tipo rtipo1(Tipo th)  : //rtipo10.th
 {Token t; Tipo t1;} 
 { 	
-<corcheteApertura> t = <literalEntero> <corcheteCierre> t1 = rtipo1() 
+<corcheteApertura> t = <literalEntero> <corcheteCierre> t1 = rtipo1(th) 
 	{return sem.tipo_lista(th,t);} 
 |
 {return th;} 
@@ -171,20 +170,20 @@ t= tipo3()
 
 // tipo3 → tipoBasico() 
 // tipo3 → struct { campos } 
-// tipo3.t = Tipo_struct(campos.a)
+// tipo3.t = tipo_struct(campos.a)
 // tipo3 → identificador
 // tipo3.t = tipoIden(identificador.lex)
 Tipo tipo3()  : 
-{Tipo t; Campos c; } 
+{Tipo t; Campos c; Token id; } 
 { 	
 t= tipoBasico() 
 	{return t;} 
 | 
 <struct> <llaveApertura> c = Campos() <llaveCierre>
-{return sem.Tipo_struct(c);} 
+{return sem.tipo_struct(c);} 
 | 
-t= <identificador>
-	{return t;} 
+id= <identificador>
+	{return sem.tipo_iden(id);} 
 }
 // tipo3 → int 
 // tipo3 .t = tipoInt()
@@ -195,42 +194,27 @@ t= <identificador>
 // tipo3 → string
 // tipo3 .t =tipoString()
 Tipo tipoBasico()  : // TODO COMPROBAR INT, real ...
-{Tipo t;} 
+{Token t;} 
 { 	t = <INT> 
 // {return sem.int(t);}
-{return (Exp)sem.INT(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
+{return (Tipo)sem.lit_ent(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
 |  
 t = <real> 
 //{return sem.real(t);}
-{return (Exp)sem.real(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
+{return (Tipo)sem.lit_real(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
 | 
 t = <bool> 
 // {return sem.bool(t);}
-{return (Exp)sem.bool(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
+{return (Tipo)sem.lit_bool(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
 | 
 t =<string>
 // {return sem.string(t);}
-{return (Exp)sem.string(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
+{return (Tipo)sem.lit_cadena(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
 }
 
-//falta
-TypeDec typeDeclaracion()  : 
-{Tipo t; String id; FTypeDec ftd;} 
-{ 
-t = tipo1() id = <identificador> ftd = FtypeDeclaracion() 
-	{return sem.type_dec(t, id, ftd);}
-}
 
-FTypeDec FtypeDeclaracion()  : 
-{TypeDec td;}
- {
-<coma>td =  typeDeclaracion() 
-	{return sem.si_FtypeDec(td);}
-| 
-{return sem.no_FtypeDec();}
-}
 
-// campos → campo Rcampos
+// campos → campo rcampos
 //	Rcampos.ah = unCampo(campo.a)
 // 	campos.a = Rcampos.a
 Campos Campos () : 
@@ -245,7 +229,7 @@ campo = Campo() campos = Rcampos (sem.un_campo(campo))
 //	Rcampos0.a = Rcampos1.a
 // Rcampos →  ε
 //	Rcampos.a = Rcampos.ah
-Camp0s Rcampos (Campos camposh) : 
+Campos Rcampos (Campos camposh) : 
 {Campo campo; Campos campos;} 
 {	
 "," campo = Campo() campos = Rcampos (sem.muchos_campos(camposh, campo))
@@ -257,7 +241,7 @@ Camp0s Rcampos (Campos camposh) :
 // campo → tipo1 identificador
 // campo.a =   Crea_campo(tipo1.a, identificador.a)
 Campo Campo() : 
-{Tipo t; String id;} 
+{Tipo t; Token id;} 
 {	
 t = tipo1() id = <identificador>
 {return sem.crea_campo(t,id);}  //{return creaCampo(t,id);} ANTES
@@ -267,8 +251,9 @@ t = tipo1() id = <identificador>
 //	DR.ah = Una_dec(declaración.a)
 //	declaraciones.a = DR.a
 Decs declaraciones()  : 
-{Dec dec; Decs decs;} 
-{	dec = declaracion() decs = DR(sem.una_dec(dec))
+{Decs decs; Dec dec; } 
+{
+dec = declaracion() decs = DR(sem.una_dec(dec))
 {return decs;} 
 }
 
@@ -277,9 +262,9 @@ Decs declaraciones()  :
 // 	DR0.a = DR1.a
 // DR → ε
 // 	DR .a = DR .ah
-Decs DR(Dec dech)  : 
+Decs DR(Decs dech)  : 
 {Dec dec; Decs decs;} 
-{	dec = declaracion() decs = declaraciones(sem.muchas_decs(dech,dec))
+{	dec = declaracion() decs = DR(sem.muchas_decs(dech,dec))
 	{return decs;}
 | 
 	{return dech;}
@@ -351,10 +336,10 @@ ParF parametroFormal ()  :
 {
 	//tipo = tipo1() "&" id = <identificador>
 tipo = tipo1() <ampersand> id = <identificador>
-{return (Dec)sem.paramF(tipo,id.image); } 
+{return (ParF)sem.paramF(id.image,tipo); } 
 |
 tipo = tipo1() id = <identificador>
-{return (Dec)sem.param(tipo,id.image); } 
+{return (ParF)sem.param(id.image,tipo); } 
 }
 
 Instrs instrucciones ()  : 
@@ -401,7 +386,7 @@ Instr instruccion ()  :
 	{return sem.instr_del(e);}
 |
 "call" id = <identificador> "(" parsReOpt= parametrosReales_opt() ")"
-{return sem.instr_call(id.lex,parsReOpt); }
+{return sem.instr_call(id,parsReOpt); }
 |
 bloq = bloque()
 {return sem.instr_bloque(bloq);}
@@ -414,7 +399,7 @@ ParsReOp parametrosReales_opt() :
 {ParsRe parsRe;} 
 {
 	parsRe = parametrosReales() 
-{return sem.si_parsRe(paparsRrsF);} 
+{return sem.si_parsRe(parsRe);} 
 | 
 {return sem.no_parsRe();}  
 }
@@ -436,14 +421,14 @@ ParsRe RparametrosReales(ParsRe parsReh)  :
 {return parsReh;}
 }
  
-ParF parametroReal ()  : //FALTA EN LA ESPECIFICACIÓN
+ParRe parametroReal ()  : //FALTA EN LA ESPECIFICACIÓN
 {Tipo tipo; Token id;}
 {
 	tipo = tipo1() "&" id = <identificador>
-{return (Dec)sem.param(tipo,id.image); } 
+{return (ParRe)sem.param(id.image,tipo); } 
 |
 tipo = tipo1()  id = <identificador>
-{return (Dec)sem.param(tipo,id.image); } 
+{return (ParRe)sem.param(id.image,tipo); } 
 }
 Exp E0 ()  : 
 {Exp e1,e2;} 
@@ -471,13 +456,13 @@ e1 = E2() e2 = Re1(e1)
 Exp Re1(Exp eh)  : 
 {String op; Exp e1,e2;} 
 {
-op = OP1() e1 = E2() e2 =  Re1(sem.mkop(op1,eh,e1))
+op = OP1() e1 = E2() e2 =  Re1(sem.mkop(op,eh,e1))
 {return e2;}
 |
 {return eh;}
 }
 
-void OP1()  : 
+String OP1()  : // TODO CLASES?
 {} 
 {
 "<" 
@@ -503,7 +488,7 @@ void OP1()  :
 Exp E2 ()  : 
 {Exp e1,e2,e3;} 
 {
-e1 = E3() e2 = FE3(e1) E3 = Re2(e2)
+e1 = E3() e2 = FE3(e1) e3 = Re2(e2)
 { return e2;}
 }
 
@@ -559,7 +544,8 @@ op = OP4() e1 = E5() e2 = Re4(sem.mkop(op,eh,e1))
 {return eh;}
 }
 
-Exp OP4()  : 
+//Exp OP4()  :
+String OP4()  :  
 {} 
 {
 	"*" 
@@ -579,7 +565,8 @@ op = OP5() e1 = E5()
 {return sem.mkopUn(op, e1);}	
 }
 
-Exp OP5()  : 
+//Exp OP5()  :
+String OP5()  :  
 {} 
 {
 	"not"	
@@ -606,16 +593,16 @@ Exp RFE6(Exp eh)  :
 }
 
 Exp FE6(Exp eh)  : 
-{String iden; Exp e1;} 
+{Token iden; Exp e1;} 
 {
 	<corcheteApertura> e1 = E0() <corcheteCierre> // "[" e1 = E0()"]"
 {return sem.indexacion(eh, e1);}
 |
 	<punto> iden = <identificador>//"." <identificador>
-{return sem.acceso(eh, iden);} // cambiar en SintaxisAbstractaTiny
+{return (Exp) sem.acceso(eh, iden);} // cambiar en SintaxisAbstractaTiny
 |
 <circunflejo> //"^"
-{return indireccion(eh);}
+{return sem.indireccion(eh);}
 
 }
 
@@ -634,10 +621,10 @@ t = <literalReal>
 {return (Exp)sem.lit_real(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);} 
 | 
 t = <TRUE> //"true"
-{return (Exp)sem.lit_true(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);} 
+{return (Exp)sem.lit_true().ponFila(t.beginLine).ponCol(t.beginColumn);} 
 | 
 t = <FALSE> //"false"
-{return (Exp)sem.lit_false(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
+{return (Exp)sem.lit_false().ponFila(t.beginLine).ponCol(t.beginColumn);}
 | 
 t = <literalCadena>
 {return (Exp)sem.lit_cadena(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);} 
@@ -647,5 +634,5 @@ t = <literalCadena>
 {return e;}
 | 
 t = <NULL> // "null"
-{return (Exp)NULL;} 
+{return (Exp)sem.lit_null().ponFila(t.beginLine).ponCol(t.beginColumn);}
 }
