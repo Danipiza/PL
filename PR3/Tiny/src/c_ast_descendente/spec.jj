@@ -172,19 +172,19 @@ Tipo tipoBasico()  : // TODO COMPROBAR INT, real ...
 {
   	t = <INT> 
 	// {return sem.int(t);}
-	{return (Tipo)sem.lit_ent(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
+	{return (Tipo)sem.tipo_int().ponFila(t.beginLine).ponCol(t.beginColumn);}
 |  
 	t = <real> 
 	//{return sem.real(t);}
-	{return (Tipo)sem.lit_real(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
+	{return (Tipo)sem.tipo_real().ponFila(t.beginLine).ponCol(t.beginColumn);}
 | 
 	t = <bool> 
 	// {return sem.bool(t);}
-	{return (Tipo)sem.lit_bool(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
+	{return (Tipo)sem.tipo_bool().ponFila(t.beginLine).ponCol(t.beginColumn);}
 | 
 	t =<string>
 	// {return sem.string(t);}
-	{return (Tipo)sem.lit_cadena(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
+	{return (Tipo)sem.tipo_string().ponFila(t.beginLine).ponCol(t.beginColumn);}
 }
 
 
@@ -222,7 +222,7 @@ Decs declaraciones()  :
 Decs DR(Decs dech)  : 
 {Dec dec; Decs decs;} 
 {
-  	dec = declaracion() decs = DR(sem.muchas_decs(dech,dec))
+  	<puntoycoma> dec = declaracion() decs = DR(sem.muchas_decs(dech,dec))
 	{return decs;}
 | 
 	{return dech;}
@@ -232,15 +232,17 @@ Dec declaracion()  :
 {Tipo tipo; Token id; ParsFOp parsFOp; Bloq bloq;}
 {
 	tipo = tipo1() id = <identificador>
-	{return (Dec)sem.dec_variable(tipo,id.image).ponFila(id.beginLine).ponCol(id.beginColumn);} 
+	//{return (Dec)sem.dec_variable(tipo,id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
+	{return (Dec)sem.dec_variable(tipo,id).ponFila(id.beginLine).ponCol(id.beginColumn);} 
 |
-	"type" tipo = tipo1() id = <identificador>
-	//{return (Dec)sem.decTipo(tipo,id.image);}
-	{return (Dec)sem.dec_tipo(tipo,id.image);}
+	"type" tipo = tipo1() id = <identificador>	
+	{return (Dec)sem.dec_tipo(tipo,id);}
+	//{return (Dec)sem.dec_tipo(tipo,id.image);}
 | 
 	"proc" id = <identificador> "(" parsFOp = parametrosFormales_opt() ")"
 	bloq = bloque()
-	{return (Dec)sem.dec_proc(id.image,parsFOp,bloq);} 
+	{return (Dec)sem.dec_proc(id,parsFOp,bloq);}
+	//{return (Dec)sem.dec_proc(id.image,parsFOp,bloq);}  
 }
 
 ParsFOp parametrosFormales_opt()  : 
@@ -294,7 +296,7 @@ Instrs instrucciones ()  :
 Instrs IR(Instrs instrh)  : 
 {Instr instr; Instrs instrs;} 
 {
-	instr = instruccion() instrs = IR(sem.muchas_instrs(instrh, instr))
+	<puntoycoma> instr = instruccion() instrs = IR(sem.muchas_instrs(instrh, instr))
 	{return instrs;}
 |
 	{return instrh;}
@@ -597,7 +599,6 @@ Exp E7()  :
 	{return (Exp)sem.lit_cadena(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);} 
 | 
 	<parentesisApertura> e = E0() <parentesisCierre>  
-	// "(" e = E0() ")" // Codigo del profe es asi
 	{return e;}
 | 
 	t = <NULL> // "null"

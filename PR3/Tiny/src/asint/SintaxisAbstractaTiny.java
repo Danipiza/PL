@@ -345,15 +345,15 @@ public class SintaxisAbstractaTiny {
     }
     public static class Dec_variable extends Dec { // TODO Nodo en vez de Dec?
     	private Tipo tipo;
-    	private String id;
+    	private Token id;
         
-        public Dec_variable(Tipo tipo, String id) {
+        public Dec_variable(Tipo tipo, Token id) {
             this.tipo=tipo;
         	this.id = id;
             
         }
         public Tipo tipo() {return tipo;}
-        public String iden() {return id;}        
+        public Token iden() {return id;}        
         
         public String toString() {
             return "dec_variable("+id+"["+leeFila()+","+leeCol()+"],"+tipo+")";
@@ -361,15 +361,15 @@ public class SintaxisAbstractaTiny {
     }
     public static class Dec_tipo extends Dec {// TODO Nodo en vez de Dec?
     	private Tipo tipo;
-    	private String id;
+    	private Token id;
         
-        public Dec_tipo(Tipo tipo, String id) {
+        public Dec_tipo(Tipo tipo, Token id) {
             this.tipo=tipo;
         	this.id = id;
             
         }
         public Tipo tipo() {return tipo;}
-        public String iden() {return id;}        
+        public Token iden() {return id;}        
         
         public String toString() {
             return "dec_tipo("+id+"["+leeFila()+","+leeCol()+"],"+tipo+")";
@@ -377,17 +377,17 @@ public class SintaxisAbstractaTiny {
     }
     public static class Dec_proc extends Dec { // TODO Nodo en vez de Dec?
     	
-    	private String id;
+    	private Token id;
     	private ParsFOp parsfop;
     	private Bloq bloq;
         
-        public Dec_proc(String id, ParsFOp parsfop, Bloq bloq) {            
+        public Dec_proc(Token id, ParsFOp parsfop, Bloq bloq) {            
         	this.id = id;
         	this.parsfop=parsfop;
         	this.bloq=bloq;            
         }
         
-        public String iden() {return id;}
+        public Token iden() {return id;}
         public ParsFOp parsfop() {return parsfop;}
         public Bloq bloq() {return bloq;}
         
@@ -988,7 +988,7 @@ public class SintaxisAbstractaTiny {
             return "lit_ent("+num+"["+leeFila()+","+leeCol()+"])";
         } 
     }
-    public static class Lit_real extends Nodo {
+    public static class Lit_real extends Exp {
         private String num;
         public Lit_real(String num) {
             super();
@@ -1085,9 +1085,9 @@ public class SintaxisAbstractaTiny {
     
     public Muchas_decs muchas_decs(Decs decs, Dec dec) { return new Muchas_decs(decs, dec); }
     public Una_dec una_dec(Dec dec) { return new Una_dec(dec); }
-    public Dec_variable dec_variable(Tipo tipo, String id) { return new Dec_variable(tipo, id); }
-    public Dec_tipo dec_tipo(Tipo tipo, String id) { return new Dec_tipo(tipo, id); }
-    public Dec_proc dec_proc(String id, ParsFOp parsfop, Bloq bloq) { 
+    public Dec_variable dec_variable(Tipo tipo, Token id) { return new Dec_variable(tipo, id); }
+    public Dec_tipo dec_tipo(Tipo tipo, Token id) { return new Dec_tipo(tipo, id); }
+    public Dec_proc dec_proc(Token id, ParsFOp parsfop, Bloq bloq) { 
     	return new Dec_proc(id,parsfop,bloq); 
 	}
     
@@ -1152,7 +1152,7 @@ public class SintaxisAbstractaTiny {
     // TODO Cambiar por otros nombres int, real...?
     public Exp iden(String num) { return new Iden(num); }
     public Exp lit_ent(String num) { return new Lit_ent(num); }
-    public Nodo lit_real(String num) { return new Lit_real(num); }
+    public Exp lit_real(String num) { return new Lit_real(num); }
     public Exp lit_bool(String num) { return new Lit_bool(num); }
     // Nuevo
     public Exp lit_true() { return new TRUE(); }
