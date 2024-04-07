@@ -402,7 +402,7 @@ Exp E0 ()  :
 Exp FE0(Exp eh)  : 
 {Exp e1,e2;} 
 {
-	e1 = E2() e2 =  FE0(sem.mkop("=",eh,e1)) // op1?
+	<asignar> e1 = E1() e2 = FE0(sem.mkop("=",eh,e1)) // op1?
 	{return e2;}
 |
 	{return eh;}
@@ -424,26 +424,27 @@ Exp Re1(Exp eh)  :
 	{return eh;}
 }
 
-String OP1()  : // TODO CLASES?
+
+String OP1()  : 
 {} 
 {
-	"<" 
+	<menor>
 	{return "<";} 
 | 
-	">" 
-	{return ">";}
+	<mayor>
+	{return ">";} 
 | 
-	"<=" 
-	{return "<=";}
+	<menorIgual>  
+	{return "<=";} 
 | 
-	">=" 
-	{return ">=";}
+	<mayorIgual > 
+	{return ">=";} 
 | 
-	"==" 
-	{return "==";}
+	<igual>
+	{return "==";} 
 | 
-	"!=" 
-	{return "!=";}
+	<distinto>  
+	{return "!=";} 
 
 }
 
@@ -457,7 +458,7 @@ Exp E2 ()  :
 Exp Re2(Exp eh)  : 
 {Exp e1,e2;} 
 {
-	"+" e1 = E3() e2 =  Re2(sem.mkop("+",eh,e1))
+	<suma> e1 = E3() e2 =  Re2(sem.mkop("+",eh,e1))
 	{return e2;}
 |
 	{return eh;}
@@ -466,7 +467,7 @@ Exp Re2(Exp eh)  :
 Exp FE3(Exp eh)  : 
 {Exp e1;} 
 {
-	"-" e1 = E3()
+	<resta> e1 = E3()
 	{return sem.mkop("-", eh,e1);}
 |
 	{return eh;}
@@ -482,10 +483,10 @@ Exp E3 ()  :
 Exp Fe4(Exp eh)  : 
 {Exp e1;} 
 {
-	"and" e1 = E3()
+	<and> e1 = E3()
 	{return sem.mkop("and",eh,e1);}
 |
-	"or" e1 = E4()
+	<or> e1 = E4()
 	{return sem.mkop("or",eh,e1);}
 |
 	{return eh;}
@@ -511,13 +512,13 @@ Exp Re4(Exp eh)  :
 String OP4()  :  
 {} 
 {
-	"*" 
+	<mul>
 	{return "*";}
 | 
-	"/" 
+	<div>
 	{return "/";}
 | 
-	"%" 
+	<modulo>
 	{return "%";}
 }
 
@@ -525,17 +526,20 @@ Exp E5()  :
 {String op; Exp e1;} 
 {
 	op = OP5() e1 = E5() 
-	{return sem.mkopUn(op, e1);}	
+	{return sem.mkopUn(op, e1);}
+|
+	e1=E6()
+	{return e1;}	
 }
 
 //Exp OP5()  :
 String OP5()  :  
 {} 
 {
-	"not"	
+	<not>	
 	{return "not";}
 | 
-	"-" 
+	<resta> 
 	{return "-";}
 }
 
