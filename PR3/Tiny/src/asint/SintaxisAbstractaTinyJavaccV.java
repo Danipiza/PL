@@ -7,7 +7,7 @@ public class SintaxisAbstractaTinyJavaccV {
 	// Default (No hay que tocar)
     public static abstract class Nodo  {
        public Nodo() {
-		   fila=col=-1;
+		   fila=col=-2;
        }   
 	   private int fila;
 	   private int col;
@@ -75,6 +75,7 @@ public class SintaxisAbstractaTinyJavaccV {
             this.opnd1=opnd1;
         }
         public Exp opnd0() {return opnd0;}
+        public String opnd1String() {return opnd1;}
         //public Exp opnd1() {return opnd1;}
 
     }
