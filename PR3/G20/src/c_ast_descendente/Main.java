@@ -12,15 +12,13 @@ public class Main{
       asint.disable_tracing();
       
       // RECURSIVO
-      //System.out.println(asint.inicial());
+      // System.out.println(asint.inicial());
       
       // INTERPRETE
       asint.inicial().imprime();
       
       // VISITANTE
       //asint.inicial().procesa(new Impresion());
-      
-      
       
       
    }

@@ -134,8 +134,6 @@ Tipo tipo1()  :
 Tipo rtipo1(Tipo th0)  : 
 {Token t; Tipo th1;} 
 { 	
-	//<corcheteApertura> t = <literalEntero> <corcheteCierre> t1 = rtipo1(th) 
-	//{return (Tipo) sem.tipo_lista(th,t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
 	<corcheteApertura> t = <literalEntero> <corcheteCierre> th1 = rtipo1((Tipo)sem.tipo_lista(th0, t.image).ponFila(t.beginLine).ponCol(t.beginColumn))
 	{return th1;}
 |
@@ -426,9 +424,9 @@ Exp E0 ()  :
 }
 
 Exp FE0(Exp eh)  : 
-{Exp e1,e2;} 
+{Exp e1,e2; Token op;} 
 {
-	<asignar> e1 = E1() e2 = FE0(sem.mkop("=",eh,e1)) // op1?
+	op = <asignar> e1 = E1() e2 = FE0((Exp)sem.mkop("=",eh,e1).ponFila(op.beginLine).ponCol(op.beginColumn))
 	{return e2;}
 |
 	{return eh;}
@@ -442,35 +440,35 @@ Exp E1 ()  :
 }
 
 Exp Re1(Exp eh)  : 
-{String op; Exp e1,e2;} 
+{Token op; Exp e1,e2;} 
 {
-	op = OP1() e1 = E2() e2 =  Re1(sem.mkop(op,eh,e1))
+	op = OP1() e1 = E2() e2 =  Re1((Exp)sem.mkop(op.image,eh,e1).ponFila(op.beginLine).ponCol(op.beginColumn))
 	{return e2;}
 |
 	{return eh;}
 }
 
 
-String OP1()  : 
-{} 
+Token OP1()  : 
+{Token op;} 
 {
-	<menor>
-	{return "<";} 
+	op = <menor>
+	{return op;} 
 | 
-	<mayor>
-	{return ">";} 
+	op = <mayor>
+	{return op;} 
 | 
-	<menorIgual>  
-	{return "<=";} 
+	op = <menorIgual>  
+	{return op;} 
 | 
-	<mayorIgual > 
-	{return ">=";} 
+	op = <mayorIgual > 
+	{return op;} 
 | 
-	<igual>
-	{return "==";} 
+	op = <igual>
+	{return op;} 
 | 
-	<distinto>  
-	{return "!=";} 
+	op = <distinto>  
+	{return op;} 
 
 }
 
@@ -483,19 +481,19 @@ Exp E2 ()  :
 }
 
 Exp Re2(Exp eh)  : 
-{Exp e1,e2;} 
+{Exp e1,e2; Token op;} 
 {
-	<suma> e1 = E3() e2 =  Re2(sem.mkop("+",eh,e1))
+	op = <suma> e1 = E3() e2 =  Re2((Exp)sem.mkop("+",eh,e1).ponFila(op.beginLine).ponCol(op.beginColumn))
 	{return e2;}
 |
 	{return eh;}
 }
 
 Exp FE3(Exp eh)  : 
-{Exp e1;} 
+{Exp e1; Token op;} 
 {
-	<resta> e1 = E3()
-	{return sem.mkop("-", eh,e1);}
+	op = <resta> e1 = E3()
+	{return (Exp)sem.mkop("-", eh,e1).ponFila(op.beginLine).ponCol(op.beginColumn);}
 |
 	{return eh;}
 }
@@ -508,13 +506,13 @@ Exp E3 ()  :
 }
 
 Exp Fe4(Exp eh)  : 
-{Exp e1;} 
+{Exp e1; Token op;} 
 {
-	<and> e1 = E3()
-	{return sem.mkop("and",eh,e1);}
+	op = <and> e1 = E3()
+	{return (Exp)sem.mkop("and",eh,e1).ponFila(op.beginLine).ponCol(op.beginColumn);}
 |
-	<or> e1 = E4()
-	{return sem.mkop("or",eh,e1);}
+	op = <or> e1 = E4()
+	{return (Exp)sem.mkop("or",eh,e1).ponFila(op.beginLine).ponCol(op.beginColumn);}
 |
 	{return eh;}
 }
@@ -527,48 +525,47 @@ Exp E4()  :
 }
 
 Exp Re4(Exp eh)  : 
-{String op; Exp e1,e2;} 
+{Token op; Exp e1,e2;} 
 {
-	op = OP4() e1 = E5() e2 = Re4(sem.mkop(op,eh,e1))
-	//{return sem.mkop("and",eh,e1);}
-	{return sem.mkop(op,eh,e1);}
+	op = OP4() e1 = E5() e2 = Re4((Exp)sem.mkop(op.image,eh,e1).ponFila(op.beginLine).ponCol(op.beginColumn))
+	{return e2;}
 |
 	{return eh;}
 }
 
 //Exp OP4()  :
-String OP4()  :  
-{} 
+Token OP4()  :  
+{Token op;} 
 {
-	<mul>
-	{return "*";}
+	op = <mul>
+	{return op;}
 | 
-	<div>
-	{return "/";}
+	op = <div>
+	{return op;}
 | 
-	<modulo>
-	{return "%";}
+	op = <modulo>
+	{return op;}
 }
 
 Exp E5()  : 
-{String op; Exp e1;} 
+{Token op; Exp e1;} 
 {
 	op = OP5() e1 = E5() 
-	{return sem.mkopUn(op, e1);}
+	{return (Exp)sem.mkopUn(op.image, e1).ponFila(op.beginLine).ponCol(op.beginColumn);}
 |
 	e1=E6()
 	{return e1;}	
 }
 
 //Exp OP5()  :
-String OP5()  :  
-{} 
+Token OP5()  :  
+{Token op;} 
 {
-	<not>	
-	{return "not";}
+	op = <not>	
+	{return op;}
 | 
-	<resta> 
-	{return "-";}
+	op = <resta> 
+	{return op;}
 }
 
 Exp E6()  : 
