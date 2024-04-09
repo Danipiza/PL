@@ -131,13 +131,13 @@ Tipo tipo1()  :
 
 
 
-Tipo rtipo1(Tipo th)  : 
-{Token t; Tipo t1;} 
+Tipo rtipo1(Tipo th0)  : 
+{Token t; Tipo th1;} 
 { 	
-	<corcheteApertura> t = <literalEntero> <corcheteCierre> t1 = rtipo1(th) 
-	{return (Tipo) sem.tipo_lista(th,t).ponFila(t.beginLine).ponCol(t.beginColumn);}
+	<corcheteApertura> t = <literalEntero> <corcheteCierre> th1 = rtipo1((Tipo)sem.tipo_lista(th0, t).ponFila(t.beginLine).ponCol(t.beginColumn))
+	{return th1;}
 |
-	{return th;} 
+	{return th0;} 
 }
 
 
@@ -475,7 +475,7 @@ Exp E2 ()  :
 {Exp e1,e2,e3;} 
 {
 	e1 = E3() e2 = FE3(e1) e3 = Re2(e2)
-	{ return e2;}
+	{ return e3;}
 }
 
 Exp Re2(Exp eh)  : 
@@ -526,7 +526,7 @@ Exp Re4(Exp eh)  :
 {String op; Exp e1,e2;} 
 {
 	op = OP4() e1 = E5() e2 = Re4(sem.mkop(op,eh,e1))
-	{return sem.mkop("and",eh,e1);}
+	{return sem.mkop(op,eh,e1);}
 |
 	{return eh;}
 }

@@ -117,22 +117,22 @@ Tipo t2, rt1;
     }
 }
 
-  final public Tipo rtipo1(Tipo th) throws ParseException {
+  final public Tipo rtipo1(Tipo th0) throws ParseException {
     trace_call("rtipo1");
     try {
-Token t; Tipo t1;
+Token t; Tipo th1;
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case corcheteApertura:{
         jj_consume_token(corcheteApertura);
         t = jj_consume_token(literalEntero);
         jj_consume_token(corcheteCierre);
-        t1 = rtipo1(th);
-{if ("" != null) return (Tipo) sem.tipo_lista(th,t).ponFila(t.beginLine).ponCol(t.beginColumn);}
+        th1 = rtipo1((Tipo)sem.tipo_lista(th0, t).ponFila(t.beginLine).ponCol(t.beginColumn));
+{if ("" != null) return th1;}
         break;
         }
       default:
         jj_la1[2] = jj_gen;
-{if ("" != null) return th;}
+{if ("" != null) return th0;}
       }
     throw new Error("Missing return statement in function");
     } finally {
@@ -813,7 +813,7 @@ Exp e1,e2,e3;
       e1 = E3();
       e2 = FE3(e1);
       e3 = Re2(e2);
-{if ("" != null) return e2;}
+{if ("" != null) return e3;}
     throw new Error("Missing return statement in function");
     } finally {
       trace_return("E2");
@@ -927,7 +927,7 @@ String op; Exp e1,e2;
         op = OP4();
         e1 = E5();
         e2 = Re4(sem.mkop(op,eh,e1));
-{if ("" != null) return sem.mkop("and",eh,e1);}
+{if ("" != null) return sem.mkop(op,eh,e1);}
         break;
         }
       default:

@@ -935,9 +935,9 @@ public class SintaxisAbstractaTiny {
 			bloq2.imprime();*/
 			
 			System.out.println("<if>");
-			System.out.println("(");
+			// System.out.println("(");
 			exp.imprime();
-			System.out.println(")");
+			// System.out.println(")");
 			bloq1.imprime();	
 			System.out.println("<else>");
 			bloq2.imprime();	
@@ -1082,7 +1082,7 @@ public class SintaxisAbstractaTiny {
         }
         
         public void imprime() {
-			System.out.println("<del>");
+			System.out.println("<delete>");
 			exp.imprime();
 		}
 		
