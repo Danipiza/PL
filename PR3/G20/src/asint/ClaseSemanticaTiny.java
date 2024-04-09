@@ -1,6 +1,6 @@
 package asint;
 
-import asint.SintaxisAbstractaTiny.Exp;
+//import asint.SintaxisAbstractaTiny.Exp;
 
 public class ClaseSemanticaTiny extends SintaxisAbstractaTiny{
     public ClaseSemanticaTiny() {

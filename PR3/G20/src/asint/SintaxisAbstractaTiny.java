@@ -1,6 +1,6 @@
 package asint;
 
-//import c_ast_descendente.Token;
+//import c_ast_descendente.String;
 
 public class SintaxisAbstractaTiny {
 	
@@ -1469,19 +1469,19 @@ public class SintaxisAbstractaTiny {
  		 opnd.imprime();
  		 if(opnd.prioridad() < np) {System.out.print(")");};*/
  		
- 		 if(opnd.prioridad() < np) { System.out.println("("); };
- 		 opnd.imprime();
- 		 if(opnd.prioridad() < np) { System.out.println(")"); };
- 	 }
- 	 private static void imprimeExpBinInterprete(Exp opnd0, String op, Exp opnd1, int np0, int np1) {
- 		 /*imprimeOpndInterprete(opnd0,np0);
- 		 System.out.print(" "+op+" ");
- 		 imprimeOpndInterprete(opnd1,np1);*/
+ 		if(opnd.prioridad() < np) { System.out.println("("); };
+ 		opnd.imprime();
+ 		if(opnd.prioridad() < np) { System.out.println(")"); };
+ 	}
+ 	private static void imprimeExpBinInterprete(Exp opnd0, String op, Exp opnd1, int np0, int np1, int opFila, int opCol) {
+ 		/*imprimeOpndInterprete(opnd0,np0);
+ 		System.out.print(" "+op+" ");
+ 		imprimeOpndInterprete(opnd1,np1);*/
  		
- 		 imprimeOpndInterprete(opnd0,np0);
- 		 System.out.println(op + "$f:" + opnd0.leeFila() + ",c:" + opnd0.leeCol()+"$");
- 		 imprimeOpndInterprete(opnd1,np1);
- 	 }
+ 		imprimeOpndInterprete(opnd0,np0);
+ 		System.out.println(op + "$f:" + opFila + ",c:" + opCol + "$");
+ 		imprimeOpndInterprete(opnd1,np1);
+ 	}
 	
 	 private static void imprimeOpnd(Exp opnd, int np) {
 		 if(opnd.prioridad() < np) {System.out.print("(");};
@@ -1504,7 +1504,7 @@ public class SintaxisAbstractaTiny {
         	return imprimeExpBinRecursivo(opnd0,"+",opnd1,2,3);
         }
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,"+",opnd1,2,3);
+			imprimeExpBinInterprete(opnd0,"+",opnd1,2,3, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1521,7 +1521,7 @@ public class SintaxisAbstractaTiny {
         	return imprimeExpBinRecursivo(opnd0,"-",opnd1,3,3);
         }
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,"-",opnd1,3,3);
+			imprimeExpBinInterprete(opnd0,"-",opnd1,3,3, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1538,7 +1538,7 @@ public class SintaxisAbstractaTiny {
         	return imprimeExpBinRecursivo(opnd0,"*",opnd1,4,5);
         }
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,"*",opnd1,4,5);
+			imprimeExpBinInterprete(opnd0,"*",opnd1,4,5, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1555,7 +1555,7 @@ public class SintaxisAbstractaTiny {
         	return imprimeExpBinRecursivo(opnd0,"/",opnd1,4,5);
         }
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,"/",opnd1,4,5);
+			imprimeExpBinInterprete(opnd0,"/",opnd1,4,5, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1572,7 +1572,7 @@ public class SintaxisAbstractaTiny {
         	return imprimeExpBinRecursivo(opnd0,"%",opnd1,4,5);
         }
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,"%",opnd1,4,5);
+			imprimeExpBinInterprete(opnd0,"%",opnd1,4,5, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1590,7 +1590,7 @@ public class SintaxisAbstractaTiny {
         	return imprimeExpBinRecursivo(opnd0,"=",opnd1,0,1);
         }
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,"=",opnd1,0,1);
+			imprimeExpBinInterprete(opnd0,"=",opnd1,0,1, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1607,7 +1607,7 @@ public class SintaxisAbstractaTiny {
         	return imprimeExpBinRecursivo(opnd0,"<=",opnd1,1,2);
         }
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,"<=",opnd1,1,2);
+			imprimeExpBinInterprete(opnd0,"<=",opnd1,1,2, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1624,7 +1624,7 @@ public class SintaxisAbstractaTiny {
         	return imprimeExpBinRecursivo(opnd0,"<",opnd1,1,2);
         }
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,"<",opnd1,1,2);
+			imprimeExpBinInterprete(opnd0,"<",opnd1,1,2, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1641,7 +1641,7 @@ public class SintaxisAbstractaTiny {
         	return imprimeExpBinRecursivo(opnd0,">=",opnd1,1,2);
         }
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,">=",opnd1,1,2);
+			imprimeExpBinInterprete(opnd0,">=",opnd1,1,2, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1659,7 +1659,7 @@ public class SintaxisAbstractaTiny {
         	return imprimeExpBinRecursivo(opnd0,">",opnd1,1,2);
         } 
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,">",opnd1,1,2);
+			imprimeExpBinInterprete(opnd0,">",opnd1,1,2, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1676,7 +1676,7 @@ public class SintaxisAbstractaTiny {
         	return imprimeExpBinRecursivo(opnd0,"==",opnd1,1,2);
         } 
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,"==",opnd1,1,2);
+			imprimeExpBinInterprete(opnd0,"==",opnd1,1,2, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1693,7 +1693,7 @@ public class SintaxisAbstractaTiny {
         	return imprimeExpBinRecursivo(opnd0,"!=",opnd1,1,2);
         } 
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,"!=",opnd1,1,2);
+			imprimeExpBinInterprete(opnd0,"!=",opnd1,1,2, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1710,7 +1710,7 @@ public class SintaxisAbstractaTiny {
         	return imprimeExpBinRecursivo(opnd0,"and",opnd1,4,3);
         } 
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,"and",opnd1,4,3);
+			imprimeExpBinInterprete(opnd0,"and",opnd1,4,3, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1727,7 +1727,7 @@ public class SintaxisAbstractaTiny {
         	return imprimeExpBinRecursivo(opnd0,"and",opnd1,4,4);
         } 
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,"or",opnd1,4,4);
+			imprimeExpBinInterprete(opnd0,"or",opnd1,4,4, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
