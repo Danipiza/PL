@@ -3,7 +3,7 @@ options  {
   DEBUG_PARSER=true;
 }  
 PARSER_BEGIN(ConstructorASTsTiny)
-package c_ast_descendenteV;
+package c_ast_descendente;
 import asint.ClaseSemanticaTiny;
 import asint.SintaxisAbstractaTiny.*;
 public class ConstructorASTsTiny {
@@ -135,13 +135,13 @@ Tipo rtipo1(Tipo th)  :
 {Token t; Tipo t1;} 
 { 	
 	<corcheteApertura> t = <literalEntero> <corcheteCierre> t1 = rtipo1(th) 
-	{return sem.tipo_lista(th,t);} 
+	{return (Tipo) sem.tipo_lista(th,t).ponFila(t.beginLine).ponCol(t.beginColumn);}
 |
 	{return th;} 
 }
 
 
-
+// TODO .ponFila(t.beginLine).ponCol(t.beginColumn);}?
 Tipo tipo2()  : 
 {Tipo t;} 
 {	
@@ -154,16 +154,16 @@ Tipo tipo2()  :
 }
 
 Tipo tipo3()  : 
-{Tipo t; Campos c; Token id; } 
+{Tipo tipo; Campos c; Token t; } 
 { 	
-	t= tipoBasico() 
-	{return t;} 
+	tipo = tipoBasico() 
+	{return tipo;} 
 | 
-	<struct> <llaveApertura> c = Campos() <llaveCierre>
-	{return sem.tipo_struct(c);} 
+	t = <struct> <llaveApertura> c = Campos() <llaveCierre>
+	{return (Tipo) sem.tipo_struct(c).ponFila(t.beginLine).ponCol(t.beginColumn);}
 | 
-	id= <identificador>
-	{return sem.tipo_iden(id);} 
+	t = <identificador>
+	{return (Tipo) sem.tipo_iden(t).ponFila(t.beginLine).ponCol(t.beginColumn);}
 }
 
 
@@ -207,10 +207,10 @@ Campos Rcampos (Campos camposh) :
 }
  
 Campo Campo() : 
-{Tipo t; Token id;} 
+{Tipo tipo; Token t;} 
 {	
-	t = tipo1() id = <identificador>
-	{return sem.crea_campo(t,id);}  //{return creaCampo(t,id);} ANTES
+	tipo = tipo1() t = <identificador>
+	{return (Campo) sem.crea_campo(tipo,t).ponFila(t.beginLine).ponCol(t.beginColumn);}  //{return creaCampo(tipo,t);} ANTES
 }
  
 Decs declaraciones()  : 
@@ -230,19 +230,20 @@ Decs DR(Decs dech)  :
 }
  
 Dec declaracion()  : 
-{Tipo tipo; Token id; ParsFOp parsFOp; Bloq bloq;}
+{Tipo tipo; Token t; ParsFOp parsFOp; Bloq bloq;}
 {
-	tipo = tipo1() id = <identificador>
-	{return (Dec)sem.dec_variable(tipo,id).ponFila(id.beginLine).ponCol(id.beginColumn);} 
+	tipo = tipo1() t = <identificador>
+	{return (Dec)sem.dec_variable(tipo,t).ponFila(t.beginLine).ponCol(t.beginColumn);} 
 |
-	<type> tipo = tipo1() id = <identificador>	
-	{return (Dec)sem.dec_tipo(tipo,id);}
+	<type> tipo = tipo1() t = <identificador>	
+	{return (Dec)sem.dec_tipo(tipo,t).ponFila(t.beginLine).ponCol(t.beginColumn);}
 | 
-	<proc> id = <identificador> <parentesisApertura> parsFOp = parametrosFormales_opt() <parentesisCierre>
+	<proc> t = <identificador> <parentesisApertura> parsFOp = parametrosFormales_opt() <parentesisCierre>
 	bloq = bloque()
-	{return (Dec)sem.dec_proc(id,parsFOp,bloq);} 
+	{return (Dec)sem.dec_proc(t,parsFOp,bloq).ponFila(t.beginLine).ponCol(t.beginColumn);}
 }
 
+// TODO .ponFila(t.beginLine).ponCol(t.beginColumn);}?
 ParsFOp parametrosFormales_opt()  : 
 {ParsF parsF;} 
 {
@@ -273,15 +274,16 @@ ParsF RparametrosFormales(ParsF parsFh)  :
 }
 
 
+// TODO .ponFila(t.beginLine).ponCol(t.beginColumn);}?
 ParF parametroFormal ()  :
-{Tipo tipo; Token id;}
+{Tipo tipo; Token t;}
 {
-	//tipo = tipo1() "&" id = <identificador>
-	/*tipo = tipo1() <ampersand> id = <identificador>
-	{return (ParF)sem.paramF(id.image,tipo); } 
+	//tipo = tipo1() "&" t = <identificador>
+	/*tipo = tipo1() <ampersand> t = <identificador>
+	{return (ParF)sem.paramF(t.image,tipo).ponFila(t.beginLine).ponCol(t.beginColumn);}
 	|*/
-	tipo = tipo1() id = <identificador>
-	{return (ParF)sem.param(id.image,tipo); } 
+	tipo = tipo1() t = <identificador>
+	{return (ParF)sem.param(t.image,tipo).ponFila(t.beginLine).ponCol(t.beginColumn);}
 }
 
 Instrs instrucciones ()  : 
@@ -300,8 +302,9 @@ Instrs IR(Instrs instrh)  :
 	{return instrh;}
 }
 
+// TODO .ponFila(t.beginLine).ponCol(t.beginColumn);}?
 Instr instruccion ()  : 
-{Exp e; Bloq bloq; Token id; ParsReOp parsReOp; Instr i;}
+{Exp e; Bloq bloq; Token t; ParsReOp parsReOp; Instr i;}
 {
 	<eval> e = E0()
 	//"@" e = E0()
@@ -338,10 +341,10 @@ Instr instruccion ()  :
 	
 	{return sem.instr_del(e);}
 |
-	//"call" id = <identificador> "(" parsReOp= parametrosReales_opt() ")"
-	<call> id = <identificador> <parentesisApertura> parsReOp= parametrosReales_opt() <parentesisCierre>
+	//"call" t = <identificador> "(" parsReOp= parametrosReales_opt() ")"
+	<call> t = <identificador> <parentesisApertura> parsReOp= parametrosReales_opt() <parentesisCierre>
 	
-	{return sem.instr_call(id,parsReOp); }
+	{return (Instr) sem.instr_call(t,parsReOp).ponFila(t.beginLine).ponCol(t.beginColumn);}
 |
 	bloq = bloque()
 	{return sem.instr_bloque(bloq);}
@@ -356,6 +359,7 @@ Instr IFR(Exp eh, Bloq bloqh):
 	{return sem.instr_if(eh,bloqh);}
 }
 
+// TODO .ponFila(t.beginLine).ponCol(t.beginColumn);}?
 ParsReOp parametrosReales_opt() :
 {ParsRe parsRe;} 
 {
@@ -401,13 +405,13 @@ ParsRe RparametrosReales(ParsRe parsReh)  :
 }
 
 ParRe parametroReal ()  : //FALTA EN LA ESPECIFICACIÓN
-{Tipo tipo; Token id;}
+{Tipo tipo; Token t;}
 {
-	tipo = tipo1() "&" id = <identificador>
-{return (ParRe)sem.param(id.image,tipo); } 
+		tipo = tipo1() "&" t = <identificador>
+{return (ParRe)sem.param(t.image,tipo).ponFila(t.beginLine).ponCol(t.beginColumn);}
 |
-tipo = tipo1()  id = <identificador>
-{return (ParRe)sem.param(id.image,tipo); } 
+tipo = tipo1()  t = <identificador>
+{return (ParRe)sem.param(t.image,tipo).ponFila(t.beginLine).ponCol(t.beginColumn);}
 }*/
 
 
@@ -579,16 +583,16 @@ Exp RFE6(Exp eh)  :
 }
 
 Exp FE6(Exp eh)  : 
-{Token iden; Exp e1;} 
+{Token t; Exp e1;} 
 {
 	<corcheteApertura> e1 = E0() <corcheteCierre> // "[" e1 = E0()"]"
 	{return sem.indexacion(eh, e1);}
 |
-	<punto> iden = <identificador>//"." <identificador>
-	{return (Exp) sem.acceso(eh, iden.image);} // cambiar en SintaxisAbstractaTiny
+	<punto> t = <identificador>//"." <identificador>
+	{return (Exp) sem.acceso(eh, t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
 |
-	<circunflejo> //"^"
-	{return sem.indireccion(eh);}
+	t = <circunflejo> //"^"
+	{return (Exp) sem.indireccion(eh).ponFila(t.beginLine).ponCol(t.beginColumn);}
 
 }
 
