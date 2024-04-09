@@ -126,7 +126,7 @@ Token t; Tipo th1;
         jj_consume_token(corcheteApertura);
         t = jj_consume_token(literalEntero);
         jj_consume_token(corcheteCierre);
-        th1 = rtipo1((Tipo)sem.tipo_lista(th0, t).ponFila(t.beginLine).ponCol(t.beginColumn));
+        th1 = rtipo1((Tipo)sem.tipo_lista(th0, t.image).ponFila(t.beginLine).ponCol(t.beginColumn));
 {if ("" != null) return th1;}
         break;
         }
@@ -196,7 +196,7 @@ Tipo tipo; Campos c; Token t;
         }
       case identificador:{
         t = jj_consume_token(identificador);
-{if ("" != null) return (Tipo) sem.tipo_iden(t).ponFila(t.beginLine).ponCol(t.beginColumn);}
+{if ("" != null) return (Tipo) sem.tipo_iden(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
         break;
         }
       default:
@@ -287,7 +287,7 @@ Campo campo; Campos campos;
 Tipo tipo; Token t;
       tipo = tipo1();
       t = jj_consume_token(identificador);
-{if ("" != null) return (Campo) sem.crea_campo(tipo,t).ponFila(t.beginLine).ponCol(t.beginColumn);}
+{if ("" != null) return (Campo) sem.crea_campo(tipo,t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
     throw new Error("Missing return statement in function");
     } finally {
       trace_return("Campo");
@@ -343,14 +343,14 @@ Tipo tipo; Token t; ParsFOp parsFOp; Bloq bloq;
       case circunflejo:{
         tipo = tipo1();
         t = jj_consume_token(identificador);
-{if ("" != null) return (Dec)sem.dec_variable(tipo,t).ponFila(t.beginLine).ponCol(t.beginColumn);}
+{if ("" != null) return (Dec)sem.dec_variable(tipo,t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
         break;
         }
       case type:{
         jj_consume_token(type);
         tipo = tipo1();
         t = jj_consume_token(identificador);
-{if ("" != null) return (Dec)sem.dec_tipo(tipo,t).ponFila(t.beginLine).ponCol(t.beginColumn);}
+{if ("" != null) return (Dec)sem.dec_tipo(tipo,t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
         break;
         }
       case proc:{
@@ -360,7 +360,7 @@ Tipo tipo; Token t; ParsFOp parsFOp; Bloq bloq;
         parsFOp = parametrosFormales_opt();
         jj_consume_token(parentesisCierre);
         bloq = bloque();
-{if ("" != null) return (Dec)sem.dec_proc(t,parsFOp,bloq).ponFila(t.beginLine).ponCol(t.beginColumn);}
+{if ("" != null) return (Dec)sem.dec_proc(t.image,parsFOp,bloq).ponFila(t.beginLine).ponCol(t.beginColumn);}
         break;
         }
       default:
@@ -551,7 +551,7 @@ Exp e; Bloq bloq; Token t; ParsReOp parsReOp; Instr i;
         jj_consume_token(parentesisApertura);
         parsReOp = parametrosReales_opt();
         jj_consume_token(parentesisCierre);
-{if ("" != null) return (Instr) sem.instr_call(t,parsReOp).ponFila(t.beginLine).ponCol(t.beginColumn);}
+{if ("" != null) return (Instr) sem.instr_call(t.image,parsReOp).ponFila(t.beginLine).ponCol(t.beginColumn);}
         break;
         }
       case llaveApertura:{

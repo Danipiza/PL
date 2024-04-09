@@ -134,10 +134,13 @@ Tipo tipo1()  :
 Tipo rtipo1(Tipo th0)  : 
 {Token t; Tipo th1;} 
 { 	
-	<corcheteApertura> t = <literalEntero> <corcheteCierre> th1 = rtipo1((Tipo)sem.tipo_lista(th0, t).ponFila(t.beginLine).ponCol(t.beginColumn))
+	//<corcheteApertura> t = <literalEntero> <corcheteCierre> t1 = rtipo1(th) 
+	//{return (Tipo) sem.tipo_lista(th,t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
+	<corcheteApertura> t = <literalEntero> <corcheteCierre> th1 = rtipo1((Tipo)sem.tipo_lista(th0, t.image).ponFila(t.beginLine).ponCol(t.beginColumn))
 	{return th1;}
 |
-	{return th0;} 
+	//{return th;}
+	{return th0;}  
 }
 
 
@@ -163,7 +166,7 @@ Tipo tipo3()  :
 	{return (Tipo) sem.tipo_struct(c).ponFila(t.beginLine).ponCol(t.beginColumn);}
 | 
 	t = <identificador>
-	{return (Tipo) sem.tipo_iden(t).ponFila(t.beginLine).ponCol(t.beginColumn);}
+	{return (Tipo) sem.tipo_iden(t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
 }
 
 
@@ -210,7 +213,7 @@ Campo Campo() :
 {Tipo tipo; Token t;} 
 {	
 	tipo = tipo1() t = <identificador>
-	{return (Campo) sem.crea_campo(tipo,t).ponFila(t.beginLine).ponCol(t.beginColumn);}  //{return creaCampo(tipo,t);} ANTES
+	{return (Campo) sem.crea_campo(tipo,t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}  //{return creaCampo(tipo,t);} ANTES
 }
  
 Decs declaraciones()  : 
@@ -233,14 +236,14 @@ Dec declaracion()  :
 {Tipo tipo; Token t; ParsFOp parsFOp; Bloq bloq;}
 {
 	tipo = tipo1() t = <identificador>
-	{return (Dec)sem.dec_variable(tipo,t).ponFila(t.beginLine).ponCol(t.beginColumn);} 
+	{return (Dec)sem.dec_variable(tipo,t.image).ponFila(t.beginLine).ponCol(t.beginColumn);} 
 |
 	<type> tipo = tipo1() t = <identificador>	
-	{return (Dec)sem.dec_tipo(tipo,t).ponFila(t.beginLine).ponCol(t.beginColumn);}
+	{return (Dec)sem.dec_tipo(tipo,t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}
 | 
 	<proc> t = <identificador> <parentesisApertura> parsFOp = parametrosFormales_opt() <parentesisCierre>
 	bloq = bloque()
-	{return (Dec)sem.dec_proc(t,parsFOp,bloq).ponFila(t.beginLine).ponCol(t.beginColumn);}
+	{return (Dec)sem.dec_proc(t.image,parsFOp,bloq).ponFila(t.beginLine).ponCol(t.beginColumn);}
 }
 
 // TODO .ponFila(t.beginLine).ponCol(t.beginColumn);}?
@@ -344,7 +347,7 @@ Instr instruccion ()  :
 	//"call" t = <identificador> "(" parsReOp= parametrosReales_opt() ")"
 	<call> t = <identificador> <parentesisApertura> parsReOp= parametrosReales_opt() <parentesisCierre>
 	
-	{return (Instr) sem.instr_call(t,parsReOp).ponFila(t.beginLine).ponCol(t.beginColumn);}
+	{return (Instr) sem.instr_call(t.image,parsReOp).ponFila(t.beginLine).ponCol(t.beginColumn);}
 |
 	bloq = bloque()
 	{return sem.instr_bloque(bloq);}
@@ -475,6 +478,7 @@ Exp E2 ()  :
 {Exp e1,e2,e3;} 
 {
 	e1 = E3() e2 = FE3(e1) e3 = Re2(e2)
+	//{ return e2;}
 	{ return e3;}
 }
 
@@ -526,6 +530,7 @@ Exp Re4(Exp eh)  :
 {String op; Exp e1,e2;} 
 {
 	op = OP4() e1 = E5() e2 = Re4(sem.mkop(op,eh,e1))
+	//{return sem.mkop("and",eh,e1);}
 	{return sem.mkop(op,eh,e1);}
 |
 	{return eh;}

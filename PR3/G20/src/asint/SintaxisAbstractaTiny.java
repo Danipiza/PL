@@ -1,6 +1,6 @@
 package asint;
 
-import c_ast_descendente.Token;
+//import c_ast_descendente.Token;
 
 public class SintaxisAbstractaTiny {
 	
@@ -34,6 +34,11 @@ public class SintaxisAbstractaTiny {
        public Exp() {
 		   super();
        }   
+       
+       public String rec() {
+    	   return ""+this;
+       }
+       
        public void imprime() {
     	   System.out.println(this);
        }
@@ -92,7 +97,8 @@ public class SintaxisAbstractaTiny {
        
        
        public String toString() {
-            return "prog("+bloq+")";
+            //return "prog("+bloq+")";
+    	   return ""+bloq;
        }
        
        public void imprime() {
@@ -116,7 +122,8 @@ public class SintaxisAbstractaTiny {
         public InstrsOp instrsOp() {return instrsOp;}
         
         public String toString() {
-           return "bloq("+decsOp+","+instrsOp+")";
+           //return "bloq("+decsOp+","+instrsOp+")";
+        	return "{\n"+decsOp+instrsOp+"\n}\n";
         }
         
         public void imprime() {
@@ -140,12 +147,13 @@ public class SintaxisAbstractaTiny {
         public Decs decs() {return decs;}
         
         public String toString() {
-             return "si_decs("+decs+")";
+             //return "si_decs("+decs+")";
+        	return decs+"&&\n";
         }
     	
         public void imprime() {
 			decs.imprime();
-            System.out.println("&&");
+			System.out.println("&&");
 		}
         
         @Override
@@ -180,7 +188,8 @@ public class SintaxisAbstractaTiny {
         public Instrs instrs() {return instrs;}
         
         public String toString() {
-             return "si_intrs("+instrs+")";
+             //return "si_intrs("+instrs+")";
+        	return ""+instrs;
         }
         
         public void imprime() {
@@ -198,7 +207,8 @@ public class SintaxisAbstractaTiny {
         }   
         
         public String toString() {
-             return "no_intrs()";
+             //return "no_intrs()";
+        	return "";
         }
         public void imprime() {
 		
@@ -220,7 +230,8 @@ public class SintaxisAbstractaTiny {
         }   
         public Tipo tipo() {return tipo;}
         public String toString() {
-             return "si_tipo("+tipo+")";
+             //return "si_tipo("+tipo+")";
+        	return ""+tipo;
          }
         
         public void imprime() {
@@ -238,7 +249,8 @@ public class SintaxisAbstractaTiny {
            super();
         }   
         public String toString() {
-             return "no_tipo()";
+             //return "no_tipo()";
+        	return "";
         }
         
         public void imprime() {
@@ -254,17 +266,18 @@ public class SintaxisAbstractaTiny {
 	
     public static class Tipo_lista extends Tipo { // TODO extends Tipo?
  	   	private Tipo tipo;
- 	    private Token literalEntero;
-        public Tipo_lista(Tipo tipo, Token literalEntero) {
+ 	    private String literalEntero;
+        public Tipo_lista(Tipo tipo, String literalEntero) {
  		   super();
  		   this.tipo = tipo;
  		   this.literalEntero = literalEntero;
         }   
         public Tipo tipo() {return tipo;}
-        public Token literalEntero() {return literalEntero;}
+        public String literalEntero() {return literalEntero;}
         
         public String toString() {
-             return "tipo_lista("+tipo+","+literalEntero+")";
+             //return "tipo_lista("+tipo+","+literalEntero+")";
+        	return tipo+"[\n"+literalEntero()+"\n]$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         }
 		
         public void imprime() {
@@ -290,7 +303,8 @@ public class SintaxisAbstractaTiny {
         public Tipo tipo() {return tipo;}
         
         public String toString() {
-             return "tipo_circum("+tipo+")";
+             //return "tipo_circum("+tipo+")";
+             return "^\n"+tipo;
         }
 		
         public void imprime() {
@@ -312,7 +326,11 @@ public class SintaxisAbstractaTiny {
         public Campos campos() {return campos;}
         
         public String toString() {
-             return "tipo_struct("+campos+")";
+             //return "tipo_struct("+campos+")";
+        	return "<struct>\n"
+    			 + "{\n"
+    			 + campos
+    			 + "}\n";
         } 
 		
         public void imprime() {
@@ -333,15 +351,16 @@ public class SintaxisAbstractaTiny {
         }
     }
     public static class Tipo_iden extends Tipo { // TODO extends Tipo? 	   	
- 	    private Token identificador;
-        public Tipo_iden(Token identificador) {
+ 	    private String identificador;
+        public Tipo_iden(String identificador) {
  		   super();
  		   this.identificador = identificador;
         }   
-        public Token identificador() {return identificador;}
+        public String identificador() {return identificador;}
         
         public String toString() {
-             return "tipo_iden("+identificador+")";
+             //return "tipo_iden("+identificador+")";
+        	return identificador() + "$f:" + leeFila() + ",c:" + leeCol()+"$";
         }
         
         public void imprime() {
@@ -359,7 +378,7 @@ public class SintaxisAbstractaTiny {
  		   super();
         }   
         public String toString() { // TODO
-             return "tipo_int";
+             return "<int>\n";
         } 
 		
         public void imprime() {
@@ -376,7 +395,7 @@ public class SintaxisAbstractaTiny {
  		   super();
         }   
         public String toString() { // TODO
-             return "tipo_real";
+             return "<real>\n";
         }
 		
         public void imprime() {
@@ -393,7 +412,7 @@ public class SintaxisAbstractaTiny {
         	super();
         }   
         public String toString() { 
-             return "tipo_bool";
+             return "<bool>\n";
         } 
         
         public void imprime() {
@@ -410,7 +429,7 @@ public class SintaxisAbstractaTiny {
  		   super(); 		   
         }           
         public String toString() { // TODO
-             return "tipo_string";
+             return "<string>\n";
         } 
         
         public void imprime() {
@@ -435,7 +454,8 @@ public class SintaxisAbstractaTiny {
         public Campo  campo() {return campo;}
         
         public String toString() {
-             return "muchos_campos("+campos+","+campo+")";
+             //return "muchos_campos("+campos+","+campo+")";
+        	return ""+campos+",\n"+campo;
         }
         
         public void imprime() {
@@ -444,7 +464,7 @@ public class SintaxisAbstractaTiny {
 			campo.imprime();*/
 			
 			campos().imprime();
-            System.out.println(",");
+			System.out.println(",");
 			campo().imprime();
 		}	
         
@@ -462,11 +482,13 @@ public class SintaxisAbstractaTiny {
         public Campo campo() {return campo;}
         
         public String toString() {
-             return "un_campo("+campo+")";
+             //return "un_campo("+campo+")";
+        	return ""+campo;//+",\n";
         }
         
         public void imprime() {
-			campo.imprime();	
+			campo.imprime();
+			//System.out.println(",");			
 		}
         
         @Override
@@ -477,17 +499,18 @@ public class SintaxisAbstractaTiny {
     }
     public static class Crea_campo extends Campo { // TODO extends ?
  	   	private Tipo tipo;
-    	private Token identificador;
-        public Crea_campo(Tipo tipo, Token identificador) {
+    	private String identificador;
+        public Crea_campo(Tipo tipo, String identificador) {
  		   super();
  		   this.tipo = tipo;
  		   this.identificador = identificador;
         }   
         public Tipo tipo() {return tipo;}
-        public Token identificador() {return identificador;}
+        public String identificador() {return identificador;}
         
         public String toString() {
-        	return "crea_campo("+tipo+","+identificador+")";
+        	//return "crea_campo("+tipo+","+identificador+")";
+        	return tipo()+identificador + "$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         }
         
         public void imprime() {
@@ -515,7 +538,10 @@ public class SintaxisAbstractaTiny {
         public Dec dec() {return dec;}
         
         public String toString() {
-             return "muchas_decs("+decs+","+dec+")";
+             //return "muchas_decs("+decs+","+dec+")";
+        	return decs()
+        		 + ";\n"
+        		 + dec;
         }
         
         public void imprime() {
@@ -540,7 +566,8 @@ public class SintaxisAbstractaTiny {
         public Dec dec() {return dec;}
         
         public String toString() {
-             return "una_dec("+dec+")";
+             //return "una_dec("+dec+")";
+        	return ""+dec;
         }
         
         public void imprime() {
@@ -556,18 +583,19 @@ public class SintaxisAbstractaTiny {
     }
     public static class Dec_variable extends Dec { // TODO Nodo en vez de Dec?
     	private Tipo tipo;
-    	private Token id;
+    	private String id;
         
-        public Dec_variable(Tipo tipo, Token id) {
+        public Dec_variable(Tipo tipo, String id) {
             this.tipo=tipo;
         	this.id = id;
             
         }
         public Tipo tipo() {return tipo;}
-        public Token iden() {return id;}        
+        public String iden() {return id;}        
         
         public String toString() {
-            return "dec_variable("+id+"["+leeFila()+","+leeCol()+"],"+tipo+")";
+            //return "dec_variable("+id+"["+leeFila()+","+leeCol()+"],"+tipo+")";
+        	return tipo+id + "$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         } 
 		
         public void imprime() {
@@ -585,18 +613,19 @@ public class SintaxisAbstractaTiny {
     }
     public static class Dec_tipo extends Dec {// TODO Nodo en vez de Dec?
     	private Tipo tipo;
-    	private Token id;
+    	private String id;
         
-        public Dec_tipo(Tipo tipo, Token id) {
+        public Dec_tipo(Tipo tipo, String id) {
             this.tipo=tipo;
         	this.id = id;
             
         }
         public Tipo tipo() {return tipo;}
-        public Token iden() {return id;}        
+        public String iden() {return id;}        
         
         public String toString() {
-            return "dec_tipo("+id+"["+leeFila()+","+leeCol()+"],"+tipo+")";
+            //return "dec_tipo("+id+"["+leeFila()+","+leeCol()+"],"+tipo+")";
+        	return "<type>\n"+tipo+id  + "$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         } 
 		
         public void imprime() {
@@ -615,22 +644,28 @@ public class SintaxisAbstractaTiny {
     }
     public static class Dec_proc extends Dec { // TODO Nodo en vez de Dec?
     	
-    	private Token id;
+    	private String id;
     	private ParsFOp parsfop;
     	private Bloq bloq;
         
-        public Dec_proc(Token id, ParsFOp parsfop, Bloq bloq) {            
+        public Dec_proc(String id, ParsFOp parsfop, Bloq bloq) {            
         	this.id = id;
         	this.parsfop=parsfop;
         	this.bloq=bloq;            
         }
         
-        public Token iden() {return id;}
+        public String iden() {return id;}
         public ParsFOp parsfop() {return parsfop;}
         public Bloq bloq() {return bloq;}
         
         public String toString() {
-            return "dec_proc("+id+"["+leeFila()+","+leeCol()+"],"+parsfop + bloq +")";
+            //return "dec_proc("+id+"["+leeFila()+","+leeCol()+"],"+parsfop + bloq +")";
+        	return "<proc>\n"
+            	  + id  + "$f:" + leeFila() + ",c:" + leeCol()+"$"
+            	  + "\n(\n"
+            	  + parsfop
+            	  + ")\n"
+            	  + bloq;
         } 
         
         public void imprime() {
@@ -664,7 +699,8 @@ public class SintaxisAbstractaTiny {
         public ParsF parsf() {return parsf;}
         
         public String toString() {
-             return "si_parsF("+parsf+")";
+             //return "si_parsF("+parsf+")";
+        	return ""+parsf;
         }
         
         public void imprime() {
@@ -682,7 +718,8 @@ public class SintaxisAbstractaTiny {
         }   
         
         public String toString() {
-             return "no_parsF()";
+             //return "no_parsF()";
+        	return "";
         }
 
         public void imprime() {
@@ -706,7 +743,10 @@ public class SintaxisAbstractaTiny {
         public ParF parF() {return parF;}
         
         public String toString() {
-             return "muchos_parsF("+parsF+","+parF+")";
+             //return "muchos_parsF("+parsF+","+parF+")";
+        	return parsF 
+        		 + ",\n"
+        		 + parF;
         }
         
         public void imprime() {
@@ -732,7 +772,8 @@ public class SintaxisAbstractaTiny {
         public ParF parF() {return parF;}
         
         public String toString() {
-             return "un_parF("+parF+")";
+             //return "un_parF("+parF+")";
+        	return ""+parF;
         }
         
         public void imprime() {
@@ -758,7 +799,7 @@ public class SintaxisAbstractaTiny {
         public String iden() {return id;}        
         
         public String toString() {
-            return "paramF("+id+"["+leeFila()+","+leeCol()+"],"+tipo+")";
+            return tipo+id + "$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         }
 		
         public void imprime() {
@@ -786,7 +827,8 @@ public class SintaxisAbstractaTiny {
         public String iden() {return id;}        
         
         public String toString() {
-            return "param("+id+"["+leeFila()+","+leeCol()+"],"+tipo+")";
+            //return "param("+id+"["+leeFila()+","+leeCol()+"],"+tipo+")";
+        	return tipo+id + "$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         }
         
         
@@ -815,7 +857,10 @@ public class SintaxisAbstractaTiny {
         public Instrs instrs() {return instrs;}
         public Instr instr() {return instr;}
         public String toString() {
-             return "muchas_instrs("+instrs+","+instr+")";
+             //return "muchas_instrs("+instrs+","+instr+")";
+        	return instrs
+        		 + ";\n"
+        		 + instr;
         }
         
         public void imprime() {
@@ -841,7 +886,8 @@ public class SintaxisAbstractaTiny {
         }
         public Instr instr() {return instr;}
         public String toString() {
-             return "una_instr("+instr+")";
+             //return "una_instr("+instr+")";
+        	return ""+instr;
         }
         
         public void imprime() {
@@ -862,7 +908,8 @@ public class SintaxisAbstractaTiny {
         public Exp exp() {return exp;}       
         
         public String toString() {
-            return "instr_eval("+exp+"["+leeFila()+","+leeCol()+"])";
+            //return "instr_eval("+exp+"["+leeFila()+","+leeCol()+"])";
+        	return "@\n" +exp;
         }
         
         public void imprime() {
@@ -891,7 +938,8 @@ public class SintaxisAbstractaTiny {
         public Bloq bloq() {return bloq;} 
         
         public String toString() {
-            return "instr_if("+exp+"["+leeFila()+","+leeCol()+"]" + bloq +")";
+            //return "instr_if("+exp+"["+leeFila()+","+leeCol()+"]" + bloq +")";
+        	return "<if>\n"+exp+bloq;
         } 
         
         public void imprime() {
@@ -923,7 +971,14 @@ public class SintaxisAbstractaTiny {
         public Bloq bloq2() {return bloq2;} 
         
         public String toString() {
-            return "instr_ifelse("+exp+"["+leeFila()+","+leeCol()+"]" + bloq1 + "," + bloq2 +")";
+            //return "instr_ifelse("+exp+"["+leeFila()+","+leeCol()+"]" + bloq1 + "," + bloq2 +")";
+        	return "<if>\n"
+        		 + "(\n"
+        		 + exp
+        		 + ")\n"
+        		 + bloq1
+        		 + "<else>\n"
+        		 + bloq2;
         }
         
         public void imprime() {
@@ -934,7 +989,7 @@ public class SintaxisAbstractaTiny {
 			System.out.println("else ");
 			bloq2.imprime();*/
 			
-			System.out.println("<if>");
+        	System.out.println("<if>");
 			// System.out.println("(");
 			exp.imprime();
 			// System.out.println(")");
@@ -960,7 +1015,12 @@ public class SintaxisAbstractaTiny {
         public Bloq bloq() {return bloq;} 
         
         public String toString() {
-            return "instr_while("+exp+"["+leeFila()+","+leeCol()+"]" + bloq +")";
+            //return "instr_while("+exp+"["+leeFila()+","+leeCol()+"]" + bloq +")";
+        	return "<while>\n"
+        		 + "(\n"
+        		 + exp
+        		 + ")\n"
+        		 + bloq;        			
         }
         
         public void imprime() {
@@ -970,9 +1030,9 @@ public class SintaxisAbstractaTiny {
 			bloq.imprime();*/
 			
 			System.out.println("<while>");
-			// System.out.println("(");
+			//System.out.println("(");
 			exp.imprime();
-			// System.out.println(")");
+			//System.out.println(")");
 			bloq.imprime();
 		}
 		
@@ -990,7 +1050,8 @@ public class SintaxisAbstractaTiny {
         public Exp exp() {return exp;}       
         
         public String toString() {
-            return "instr_read("+exp+"["+leeFila()+","+leeCol()+"])";
+            //return "instr_read("+exp+"["+leeFila()+","+leeCol()+"])";
+        	return "<read>\n"+exp;
         }
         
         public void imprime() {
@@ -1014,7 +1075,8 @@ public class SintaxisAbstractaTiny {
         public Exp exp() {return exp;}       
         
         public String toString() {
-            return "instr_write("+exp+"["+leeFila()+","+leeCol()+"])";
+            //return "instr_write("+exp+"["+leeFila()+","+leeCol()+"])";
+        	return "<write>\n"+exp;
         }
         
         public void imprime() {
@@ -1035,7 +1097,7 @@ public class SintaxisAbstractaTiny {
         }     
         
         public String toString() {
-            return "instr_nl()";
+            return "<nl>";
         }
         
         public void imprime() {
@@ -1056,7 +1118,8 @@ public class SintaxisAbstractaTiny {
         public Exp exp() {return exp;}       
         
         public String toString() {
-            return "instr_new("+exp+"["+leeFila()+","+leeCol()+"])";
+            //return "instr_new("+exp+"["+leeFila()+","+leeCol()+"])";
+        	return "<new>\n"+exp;
         } 
         
         public void imprime() {
@@ -1078,7 +1141,8 @@ public class SintaxisAbstractaTiny {
         public Exp exp() {return exp;}       
         
         public String toString() {
-            return "instr_del("+exp+"["+leeFila()+","+leeCol()+"])";
+            //return "instr_del("+exp+"["+leeFila()+","+leeCol()+"])";
+        	return "<delete>\n"+exp;
         }
         
         public void imprime() {
@@ -1092,18 +1156,23 @@ public class SintaxisAbstractaTiny {
         }
     }
     public static class Instr_call extends Instr { // TODO Nodo en vez de Instr?
-    	private Token identificador;
+    	private String identificador;
     	private ParsReOp parsreop ;    	
         
-        public Instr_call(Token identificador, ParsReOp parsreop ) {
+        public Instr_call(String identificador, ParsReOp parsreop ) {
             this.identificador = identificador;
         	this.parsreop = parsreop ;        	            
         }
-        public Token id() {return identificador;}
+        public String id() {return identificador;}
         public ParsReOp parsreop () {return parsreop ;}
         
         public String toString() {
-            return "instr_call("+identificador +"["+leeFila()+","+leeCol()+"] ,"+parsreop+")";
+            //return "instr_call("+identificador +"["+leeFila()+","+leeCol()+"] ,"+parsreop+")";
+        	return "<call>\n"
+            	  + identificador + "$f:" + leeFila() + ",c:" + leeCol()+"$"
+            	  + "\n(\n"
+            	  + parsreop
+            	  + ")";
         }
         
         public void imprime() {
@@ -1131,7 +1200,8 @@ public class SintaxisAbstractaTiny {
         public Bloq bloq() {return bloq;}       
         
         public String toString() {
-            return "instr_bloque("+bloq+"["+leeFila()+","+leeCol()+"])";
+            //return "instr_bloque("+bloq+"["+leeFila()+","+leeCol()+"])";
+        	return ""+bloq;
         }
         
         public void imprime() {
@@ -1152,7 +1222,8 @@ public class SintaxisAbstractaTiny {
         }   
         public ParsRe parsre() {return parsre;}
         public String toString() {
-             return "si_parsRE("+parsre+")";
+             //return "si_parsRE("+parsre+")";
+        	return "" + parsre;
         }
         
         public void imprime() {
@@ -1169,7 +1240,8 @@ public class SintaxisAbstractaTiny {
            super();
         }   
         public String toString() {
-             return "no_parsRe()";
+             //return "no_parsRe()";
+        	return "";
         }
         
         public void imprime() {			
@@ -1191,8 +1263,10 @@ public class SintaxisAbstractaTiny {
         }
         public ParsRe parsF() {return parsRe;}
         public Exp parF() {return exp;}
+        
         public String toString() {
-             return "muchos_parsRe("+parsRe+","+exp+")";
+             //return "muchos_parsRe("+parsRe+","+exp+")";
+        	return parsRe+",\n"+exp;
         }
         
         public void imprime() {
@@ -1218,7 +1292,8 @@ public class SintaxisAbstractaTiny {
         }
         public Exp parsre() {return exp;}
         public String toString() {
-             return "un_parRe("+exp+")";
+             //return "un_parRe("+exp+")";
+        	return ""+exp;
          }
         @Override
         public void procesa(Procesamiento p) {
@@ -1367,36 +1442,57 @@ public class SintaxisAbstractaTiny {
          // TODO
          //public LDecs ldecs() {throw new UnsupportedOperationException();}
      }
- 	
- 	private static void imprimeOpndInterprete(Exp opnd, int np) {
- 		/*if(opnd.prioridad() < np) {System.out.print("(");};
- 		opnd.imprime();
- 		if(opnd.prioridad() < np) {System.out.print(")");};*/
+     
+     //
+     private static String imprimeOpndRecursivo(Exp opnd, int np) {    	 
+    	 String ret="";
+    	 
+    	 if(opnd.prioridad() < np) ret+="(\n";
+    	 ret+=opnd.rec();
+    	 if(opnd.prioridad() < np) ret+=")\n";
+    	 
+    	 return ret;
+     }
+  	 private static String imprimeExpBinRecursivo(Exp opnd0, String op, Exp opnd1, int np0, int np1) {  		
+  		 String ret="";
+  		 
+  		 ret+=imprimeOpndRecursivo(opnd0,np0);
+  		 ret+=op + "$f:" + opnd0.leeFila() + ",c:" + opnd0.leeCol()+"$\n";
+  		 ret+=imprimeOpndRecursivo(opnd1,np1);
+  		 
+  		 return ret;
+  	 }
+     
+     
+ 	 private static void imprimeOpndInterprete(Exp opnd, int np) {
+ 		 /*if(opnd.prioridad() < np) {System.out.print("(");};
+ 		 opnd.imprime();
+ 		 if(opnd.prioridad() < np) {System.out.print(")");};*/
  		
- 		if(opnd.prioridad() < np) { System.out.println("("); };
- 		opnd.imprime();
- 		if(opnd.prioridad() < np) { System.out.println(")"); };
- 	}
- 	private static void imprimeExpBinInterprete(Exp opnd0, String op, Exp opnd1, int np0, int np1) {
- 		/*imprimeOpndInterprete(opnd0,np0);
- 		System.out.print(" "+op+" ");
- 		imprimeOpndInterprete(opnd1,np1);*/
+ 		 if(opnd.prioridad() < np) { System.out.println("("); };
+ 		 opnd.imprime();
+ 		 if(opnd.prioridad() < np) { System.out.println(")"); };
+ 	 }
+ 	 private static void imprimeExpBinInterprete(Exp opnd0, String op, Exp opnd1, int np0, int np1) {
+ 		 /*imprimeOpndInterprete(opnd0,np0);
+ 		 System.out.print(" "+op+" ");
+ 		 imprimeOpndInterprete(opnd1,np1);*/
  		
- 		imprimeOpndInterprete(opnd0,np0);
- 		System.out.println(op + "$f:" + opnd0.leeFila() + ",c:" + opnd0.leeCol() + "$");
- 		imprimeOpndInterprete(opnd1,np1);
- 	}
+ 		 imprimeOpndInterprete(opnd0,np0);
+ 		 System.out.println(op + "$f:" + opnd0.leeFila() + ",c:" + opnd0.leeCol()+"$");
+ 		 imprimeOpndInterprete(opnd1,np1);
+ 	 }
 	
-	private static void imprimeOpnd(Exp opnd, int np) {
-		if(opnd.prioridad() < np) {System.out.print("(");};
-		opnd.imprime();
-		if(opnd.prioridad() < np) {System.out.print(")");};
-	}
-	private static void imprimeExpBin(Exp opnd0, String op, Exp opnd1, int np0, int np1) {
-		imprimeOpnd(opnd0,np0);
-		System.out.print(" "+op+" ");
-		imprimeOpnd(opnd1,np1);
-	}
+	 private static void imprimeOpnd(Exp opnd, int np) {
+		 if(opnd.prioridad() < np) {System.out.print("(");};
+		 opnd.imprime();
+		 if(opnd.prioridad() < np) {System.out.print(")");};
+	 }
+	 private static void imprimeExpBin(Exp opnd0, String op, Exp opnd1, int np0, int np1) {
+		 imprimeOpnd(opnd0,np0);
+		 System.out.print(" "+op+" ");
+		 imprimeOpnd(opnd1,np1);
+	 }
     
     // Operadores
     public static class Suma extends ExpBin {
@@ -1404,7 +1500,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "suma("+opnd0+","+opnd1+")";
+            //return "suma("+opnd0+","+opnd1+")";
+        	return imprimeExpBinRecursivo(opnd0,"+",opnd1,2,3);
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"+",opnd1,2,3);
@@ -1420,7 +1517,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "resta("+opnd0+","+opnd1+")";
+            //return "resta("+opnd0+","+opnd1+")";
+        	return imprimeExpBinRecursivo(opnd0,"-",opnd1,3,3);
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"-",opnd1,3,3);
@@ -1436,7 +1534,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "mul("+opnd0+","+opnd1+")";
+            //return "mul("+opnd0+","+opnd1+")";
+        	return imprimeExpBinRecursivo(opnd0,"*",opnd1,4,5);
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"*",opnd1,4,5);
@@ -1452,7 +1551,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "div("+opnd0+","+opnd1+")";
+            //return "div("+opnd0+","+opnd1+")";
+        	return imprimeExpBinRecursivo(opnd0,"/",opnd1,4,5);
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"/",opnd1,4,5);
@@ -1468,7 +1568,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "mod("+opnd0+","+opnd1+")";
+            //return "mod("+opnd0+","+opnd1+")";
+        	return imprimeExpBinRecursivo(opnd0,"%",opnd1,4,5);
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"%",opnd1,4,5);
@@ -1485,7 +1586,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "asig("+opnd0+","+opnd1+")";
+            //return "asig("+opnd0+","+opnd1+")";
+        	return imprimeExpBinRecursivo(opnd0,"=",opnd1,0,1);
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"=",opnd1,0,1);
@@ -1501,7 +1603,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "menorI("+opnd0+","+opnd1+")";
+            //return "menorI("+opnd0+","+opnd1+")";
+        	return imprimeExpBinRecursivo(opnd0,"<=",opnd1,1,2);
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"<=",opnd1,1,2);
@@ -1517,7 +1620,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "menor("+opnd0+","+opnd1+")";
+            //return "menor("+opnd0+","+opnd1+")";
+        	return imprimeExpBinRecursivo(opnd0,"<",opnd1,1,2);
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"<",opnd1,1,2);
@@ -1533,7 +1637,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "mayorI("+opnd0+","+opnd1+")";
+            //return "mayorI("+opnd0+","+opnd1+")";
+        	return imprimeExpBinRecursivo(opnd0,">=",opnd1,1,2);
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,">=",opnd1,1,2);
@@ -1550,7 +1655,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "mayor("+opnd0+","+opnd1+")";
+            //return "mayor("+opnd0+","+opnd1+")";
+        	return imprimeExpBinRecursivo(opnd0,">",opnd1,1,2);
         } 
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,">",opnd1,1,2);
@@ -1566,7 +1672,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "igual("+opnd0+","+opnd1+")";
+            //return "igual("+opnd0+","+opnd1+")";
+        	return imprimeExpBinRecursivo(opnd0,"==",opnd1,1,2);
         } 
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"==",opnd1,1,2);
@@ -1582,7 +1689,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "distint("+opnd0+","+opnd1+")";
+            //return "distint("+opnd0+","+opnd1+")";
+        	return imprimeExpBinRecursivo(opnd0,"!=",opnd1,1,2);
         } 
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"!=",opnd1,1,2);
@@ -1598,7 +1706,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "and("+opnd0+","+opnd1+")";
+            //return "and("+opnd0+","+opnd1+")";
+        	return imprimeExpBinRecursivo(opnd0,"and",opnd1,4,3);
         } 
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"and",opnd1,4,3);
@@ -1614,7 +1723,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "or("+opnd0+","+opnd1+")";
+            //return "or("+opnd0+","+opnd1+")";
+        	return imprimeExpBinRecursivo(opnd0,"and",opnd1,4,4);
         } 
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"or",opnd1,4,4);
@@ -1630,7 +1740,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0);
         }
         public String toString() {
-            return "negacion("+opnd0+")";
+            //return "negacion("+opnd0+")";
+        	return imprimeOpndRecursivo(opnd0,5);
         } 
         public void imprime() {
 			imprimeOpnd(opnd0,5);
@@ -1646,7 +1757,8 @@ public class SintaxisAbstractaTiny {
             super(opnd0);
         }
         public String toString() {
-            return "menosUnario("+opnd0+")";
+            //return "menosUnario("+opnd0+")";
+        	return imprimeOpndRecursivo(opnd0,5);
         }
         public void imprime() {
 			imprimeOpnd(opnd0,5);
@@ -1662,11 +1774,15 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "indexacion("+opnd0+","+opnd1+")";
+            //return "indexacion("+opnd0+","+opnd1+")";
+        	return opnd0().rec()
+        		 + "[" + "$f:" + opnd0().leeFila() + ",c:" + opnd0().leeCol()+"$\n"
+        		 + opnd1().rec()
+        		 + "]\n";
         } 
         public void imprime() {
 			opnd0().imprime();
-			System.out.println("[" + "$f:" + opnd0().leeFila() + ",c:" + opnd0().leeCol() + "$");
+			System.out.println("[" + "$f:" + opnd0().leeFila() + ",c:" + opnd0().leeCol()+"$");
 			opnd1().imprime(); 
 			System.out.println("]");
 		}
@@ -1682,12 +1798,15 @@ public class SintaxisAbstractaTiny {
             super(opnd0,opnd1);
         }
         public String toString() {
-            return "acceso("+opnd0+","+opnd1+")";
+            //return "acceso("+opnd0+","+opnd1+")";
+        	return opnd0().rec()
+        		 + ".\n"
+        		 + opnd1String() + "$f:" + opnd0().leeFila() + ",c:" + (opnd0().leeCol()+2)+"$\n";
         } 
         public void imprime() {
 			opnd0().imprime();
 			System.out.println(".");
-			System.out.println(opnd1String() + "$f:" + opnd0().leeFila() + ",c:" + (opnd0().leeCol()+2) + "$");
+			System.out.println(opnd1String() + "$f:" + opnd0().leeFila() + ",c:" + (opnd0().leeCol()+2)+"$");
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1700,7 +1819,9 @@ public class SintaxisAbstractaTiny {
             super(opnd0);
         }
         public String toString() {
-            return "indireccion("+opnd0+")";
+            //return "indireccion("+opnd0+")";
+        	return opnd0().rec()
+        		 + "^" + "$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         } 
         public void imprime() {
 			opnd0().imprime();
@@ -1723,7 +1844,8 @@ public class SintaxisAbstractaTiny {
         }
         public String id() {return id;}
         public String toString() {
-            return "iden("+id+"["+leeFila()+","+leeCol()+"])";
+            //return "iden("+id+"["+leeFila()+","+leeCol()+"])";
+        	return id + "$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         } 
         public void imprime() {
 			System.out.println(id + "$f:" + leeFila() + ",c:" + leeCol()+"$");
@@ -1746,15 +1868,19 @@ public class SintaxisAbstractaTiny {
         }
         public String valor() {return num;}
         public String toString() {
-            return "lit_ent("+num+"["+leeFila()+","+leeCol()+"])";
+            //return "lit_ent("+num+"["+leeFila()+","+leeCol()+"])";
+        	return num + "$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         } 
+        
+        public void imprime() {
+			System.out.println(num + "$f:" + leeFila() + ",c:" + leeCol()+"$");
+		}
+        
         @Override
         public void procesa(Procesamiento p) {
             p.procesa(this);
         }
-        public void imprime() {
-			System.out.println(num + "$f:" + leeFila() + ",c:" + leeCol()+"$");
-		}
+       
 		@Override
 		public int prioridad() {
 			// TODO Auto-generated method stub
@@ -1769,7 +1895,8 @@ public class SintaxisAbstractaTiny {
         }
         public String valor() {return num;}
         public String toString() {
-            return "lit_real("+num+"["+leeFila()+","+leeCol()+"])";
+            //return "lit_real("+num+"["+leeFila()+","+leeCol()+"])";
+        	return num + "$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         } 
         public void imprime() {
 			System.out.println(num + "$f:" + leeFila() + ",c:" + leeCol()+"$");
@@ -1790,7 +1917,7 @@ public class SintaxisAbstractaTiny {
             super();
         }
         public String toString() {
-            return "<true>";
+            return "<true>$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         } 
         public void imprime() {
 			System.out.println("<true>$f:" + leeFila() + ",c:" + leeCol()+"$");
@@ -1810,7 +1937,7 @@ public class SintaxisAbstractaTiny {
             super();
         }
         public String toString() {
-            return "false";
+            return "<false>$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         }
         public void imprime() {
 			System.out.println("<false>$f:" + leeFila() + ",c:" + leeCol()+"$");
@@ -1835,7 +1962,8 @@ public class SintaxisAbstractaTiny {
         public String valor() {return id;}
         public String id() {return id;}
         public String toString() {
-            return "lit_cadena("+id+"["+leeFila()+","+leeCol()+"])";
+            //return "lit_cadena("+id+"["+leeFila()+","+leeCol()+"])";
+        	return id + "$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         } 
         public void imprime() {
 			System.out.println(id + "$f:" + leeFila() + ",c:" + leeCol()+"$");
@@ -1855,7 +1983,7 @@ public class SintaxisAbstractaTiny {
             super();
         }
         public String toString() {
-            return "null";
+            return "<null>$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         }
         public void imprime() {
 			System.out.println("<null>$f:" + leeFila() + ",c:" + leeCol()+"$");
@@ -1885,12 +2013,12 @@ public class SintaxisAbstractaTiny {
     
     public Si_tipo si_tipo(Tipo tipo) { return new Si_tipo(tipo); }
     public No_tipo no_tipo() { return new No_tipo(); }
-    public Tipo_lista tipo_lista(Tipo tipo, Token literalEntero) { 
+    public Tipo_lista tipo_lista(Tipo tipo, String literalEntero) { 
     	return new Tipo_lista(tipo, literalEntero); 
 	}
     public Tipo_circum tipo_circum(Tipo tipo) { return new Tipo_circum(tipo); }
     public Tipo_struct tipo_struct(Campos campos) { return new Tipo_struct(campos); }
-    public Tipo_iden tipo_iden(Token id) { return new Tipo_iden(id); }
+    public Tipo_iden tipo_iden(String id) { return new Tipo_iden(id); }
     public Tipo_int tipo_int() { return new Tipo_int(); }
     public Tipo_real tipo_real() { return new Tipo_real(); }
     public Tipo_bool tipo_bool() { return new Tipo_bool(); }
@@ -1900,13 +2028,13 @@ public class SintaxisAbstractaTiny {
     public Muchos_campos muchos_campos(Campos campos, Campo campo) { 
     	return new Muchos_campos(campos, campo); }
     public Un_campo un_campo(Campo campo) { return new Un_campo(campo); }
-    public Crea_campo crea_campo(Tipo tipo, Token id) { return new Crea_campo(tipo, id); }
+    public Crea_campo crea_campo(Tipo tipo, String id) { return new Crea_campo(tipo, id); }
     
     public Muchas_decs muchas_decs(Decs decs, Dec dec) { return new Muchas_decs(decs, dec); }
     public Una_dec una_dec(Dec dec) { return new Una_dec(dec); }
-    public Dec_variable dec_variable(Tipo tipo, Token id) { return new Dec_variable(tipo, id); }
-    public Dec_tipo dec_tipo(Tipo tipo, Token id) { return new Dec_tipo(tipo, id); }
-    public Dec_proc dec_proc(Token id, ParsFOp parsfop, Bloq bloq) { 
+    public Dec_variable dec_variable(Tipo tipo, String id) { return new Dec_variable(tipo, id); }
+    public Dec_tipo dec_tipo(Tipo tipo, String id) { return new Dec_tipo(tipo, id); }
+    public Dec_proc dec_proc(String id, ParsFOp parsfop, Bloq bloq) { 
     	return new Dec_proc(id,parsfop,bloq); 
 	}
     
@@ -1932,7 +2060,7 @@ public class SintaxisAbstractaTiny {
     public Instr_nl instr_nl() { return new Instr_nl(); }
     public Instr_new instr_new(Exp exp){ return new Instr_new(exp); }
     public Instr_del instr_del(Exp exp) { return new Instr_del(exp); }
-    public Instr_call instr_call(Token id, ParsReOp parsreop) { return new Instr_call(id, parsreop); }
+    public Instr_call instr_call(String id, ParsReOp parsreop) { return new Instr_call(id, parsreop); }
     public Instr_bloque instr_bloque(Bloq bloq) { return new Instr_bloque(bloq); }
     
     public Si_parsRe si_parsRe(ParsRe parsre) { return new Si_parsRe(parsre); }

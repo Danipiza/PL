@@ -278,7 +278,7 @@ public class Impresion extends ProcesamientoDef {
 
 	@Override
 	public void procesa(Instr_del instr_del) {
-		System.out.println("<del>");
+		System.out.println("<delete>");
 		instr_del.exp().procesa(this);
 		
 	}
