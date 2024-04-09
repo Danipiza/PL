@@ -145,6 +145,7 @@ public class SintaxisAbstractaTiny {
     	
         public void imprime() {
 			decs.imprime();
+            System.out.println("&&");
 		}
         
         @Override
@@ -272,7 +273,7 @@ public class SintaxisAbstractaTiny {
 			tipo.imprime();
 			System.out.println("[");
 			System.out.println(literalEntero());
-			System.out.println("]" + "$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println("]" + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
         
         @Override
@@ -293,7 +294,7 @@ public class SintaxisAbstractaTiny {
         }
 		
         public void imprime() {
-			System.out.print("^");
+			System.out.println("^");
 			tipo.imprime();
 		}
         
@@ -345,7 +346,7 @@ public class SintaxisAbstractaTiny {
         
         public void imprime() {
 			//System.out.print(identificador);
-			System.out.println(identificador() + "$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println(identificador() + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
 		 
         @Override
@@ -379,7 +380,7 @@ public class SintaxisAbstractaTiny {
         }
 		
         public void imprime() {
-			System.out.print("<real>");
+			System.out.println("<real>");
 		}
         
         @Override
@@ -396,7 +397,7 @@ public class SintaxisAbstractaTiny {
         } 
         
         public void imprime() {
-			System.out.print("<bool>");
+			System.out.println("<bool>");
 		}
         
         @Override
@@ -413,7 +414,7 @@ public class SintaxisAbstractaTiny {
         } 
         
         public void imprime() {
-			System.out.print("<string>");
+			System.out.println("<string>");
 		}
         
         @Override
@@ -443,6 +444,7 @@ public class SintaxisAbstractaTiny {
 			campo.imprime();*/
 			
 			campos().imprime();
+            System.out.println(",");
 			campo().imprime();
 		}	
         
@@ -464,8 +466,7 @@ public class SintaxisAbstractaTiny {
         }
         
         public void imprime() {
-			campo.imprime();
-			System.out.println(",");			
+			campo.imprime();	
 		}
         
         @Override
@@ -493,7 +494,7 @@ public class SintaxisAbstractaTiny {
 			/*tipo.imprime();
 			System.out.print(identificador);*/
 			tipo().imprime();
-			System.out.println(identificador  + "$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println(identificador  + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
         
         @Override
@@ -574,7 +575,7 @@ public class SintaxisAbstractaTiny {
 			System.out.println(id);*/
 			
 			tipo.imprime();
-			System.out.println(id + "$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println(id + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
         
         @Override
@@ -604,7 +605,7 @@ public class SintaxisAbstractaTiny {
 			System.out.println(id +";");		*/	
 			System.out.println("<type>");
 			tipo.imprime();
-			System.out.println(id  + "$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println(id  + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
         
         @Override
@@ -641,7 +642,7 @@ public class SintaxisAbstractaTiny {
 			bloq.imprime();*/
 			
 			System.out.println("<proc>");
-			System.out.println(id  + "$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println(id  + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 			System.out.println("(");
 			parsfop.imprime();
 			System.out.println(")");
@@ -764,7 +765,7 @@ public class SintaxisAbstractaTiny {
 			/*tipo.imprime();
 			System.out.print(id);*/
 			tipo.imprime();
-			System.out.println(id + "$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println(id + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
         
         @Override
@@ -794,7 +795,7 @@ public class SintaxisAbstractaTiny {
 			System.out.print(id);*/
 			
 			tipo.imprime();
-			System.out.println(id + "$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println(id + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 		} 
         
         @Override
@@ -969,9 +970,9 @@ public class SintaxisAbstractaTiny {
 			bloq.imprime();*/
 			
 			System.out.println("<while>");
-			System.out.println("(");
+			// System.out.println("(");
 			exp.imprime();
-			System.out.println(")");
+			// System.out.println(")");
 			bloq.imprime();
 		}
 		
@@ -1038,7 +1039,7 @@ public class SintaxisAbstractaTiny {
         }
         
         public void imprime() {
-			System.out.print("<nl>");
+			System.out.println("<nl>");
 		}
         
         @Override
@@ -1059,7 +1060,7 @@ public class SintaxisAbstractaTiny {
         } 
         
         public void imprime() {
-			System.out.print("<new>");
+			System.out.println("<new>");
 			exp.imprime();
 		}
         
@@ -1081,7 +1082,7 @@ public class SintaxisAbstractaTiny {
         }
         
         public void imprime() {
-			System.out.print("<del>");
+			System.out.println("<del>");
 			exp.imprime();
 		}
 		
@@ -1110,7 +1111,7 @@ public class SintaxisAbstractaTiny {
 			parsreop.imprime();
 			System.out.print(")");*/
 			System.out.println("<call>");
-			System.out.println(identificador + "$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println(identificador + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 			System.out.println("(");
 			parsreop.imprime();
 			System.out.println(")");
@@ -1366,8 +1367,6 @@ public class SintaxisAbstractaTiny {
          // TODO
          //public LDecs ldecs() {throw new UnsupportedOperationException();}
      }
-     
-     //
  	
  	private static void imprimeOpndInterprete(Exp opnd, int np) {
  		/*if(opnd.prioridad() < np) {System.out.print("(");};
@@ -1384,7 +1383,7 @@ public class SintaxisAbstractaTiny {
  		imprimeOpndInterprete(opnd1,np1);*/
  		
  		imprimeOpndInterprete(opnd0,np0);
- 		System.out.println(op + "$f:" + opnd0.leeFila() + ",$c:" + opnd0.leeCol());
+ 		System.out.println(op + "$f:" + opnd0.leeFila() + ",c:" + opnd0.leeCol() + "$");
  		imprimeOpndInterprete(opnd1,np1);
  	}
 	
@@ -1667,7 +1666,7 @@ public class SintaxisAbstractaTiny {
         } 
         public void imprime() {
 			opnd0().imprime();
-			System.out.println("[" + "$f:" + opnd0().leeFila() + ",$c:" + opnd0().leeCol());
+			System.out.println("[" + "$f:" + opnd0().leeFila() + ",c:" + opnd0().leeCol() + "$");
 			opnd1().imprime(); 
 			System.out.println("]");
 		}
@@ -1688,7 +1687,7 @@ public class SintaxisAbstractaTiny {
         public void imprime() {
 			opnd0().imprime();
 			System.out.println(".");
-			System.out.println(opnd1String() + "$f:" + opnd0().leeFila() + ",$c:" + (opnd0().leeCol()+2));
+			System.out.println(opnd1String() + "$f:" + opnd0().leeFila() + ",c:" + (opnd0().leeCol()+2) + "$");
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1705,7 +1704,7 @@ public class SintaxisAbstractaTiny {
         } 
         public void imprime() {
 			opnd0().imprime();
-			System.out.println("^" + "$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println("^" + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1727,7 +1726,7 @@ public class SintaxisAbstractaTiny {
             return "iden("+id+"["+leeFila()+","+leeCol()+"])";
         } 
         public void imprime() {
-			System.out.println(id + "$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println(id + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1754,7 +1753,7 @@ public class SintaxisAbstractaTiny {
             p.procesa(this);
         }
         public void imprime() {
-			System.out.println(num + "$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println(num + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
 		@Override
 		public int prioridad() {
@@ -1773,7 +1772,7 @@ public class SintaxisAbstractaTiny {
             return "lit_real("+num+"["+leeFila()+","+leeCol()+"])";
         } 
         public void imprime() {
-			System.out.println(num + "$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println(num + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1794,7 +1793,7 @@ public class SintaxisAbstractaTiny {
             return "<true>";
         } 
         public void imprime() {
-			System.out.println("<true>$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println("<true>$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1814,7 +1813,7 @@ public class SintaxisAbstractaTiny {
             return "false";
         }
         public void imprime() {
-			System.out.println("<false>$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println("<false>$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1839,7 +1838,7 @@ public class SintaxisAbstractaTiny {
             return "lit_cadena("+id+"["+leeFila()+","+leeCol()+"])";
         } 
         public void imprime() {
-			System.out.println(id + "$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println(id + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1859,7 +1858,7 @@ public class SintaxisAbstractaTiny {
             return "null";
         }
         public void imprime() {
-			System.out.println("<null>$f:" + leeFila() + ",$c:" + leeCol());
+			System.out.println("<null>$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
         @Override
         public void procesa(Procesamiento p) {
