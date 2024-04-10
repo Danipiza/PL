@@ -123,7 +123,7 @@ public class SintaxisAbstractaTiny {
         
         public String toString() {
            //return "bloq("+decsOp+","+instrsOp+")";
-        	return "{\n"+decsOp+instrsOp+"\n}\n";
+        	return "{\n"+decsOp+instrsOp+"}\n";
         }
         
         public void imprime() {
@@ -148,7 +148,7 @@ public class SintaxisAbstractaTiny {
         
         public String toString() {
              //return "si_decs("+decs+")";
-        	return decs+"&&\n";
+        	return decs+"&&\n"; // TODO
         }
     	
         public void imprime() {
@@ -360,7 +360,7 @@ public class SintaxisAbstractaTiny {
         
         public String toString() {
              //return "tipo_iden("+identificador+")";
-        	return identificador() + "$f:" + leeFila() + ",c:" + leeCol()+"$";
+        	return identificador() + "$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         }
         
         public void imprime() {
@@ -510,13 +510,13 @@ public class SintaxisAbstractaTiny {
         
         public String toString() {
         	//return "crea_campo("+tipo+","+identificador+")";
-        	return tipo()+identificador + "$f:" + leeFila() + ",c:" + leeCol()+"$\n";
+        	return tipo+identificador + "$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         }
         
         public void imprime() {
 			/*tipo.imprime();
 			System.out.print(identificador);*/
-			tipo().imprime();
+			tipo.imprime();
 			System.out.println(identificador  + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
         
@@ -661,8 +661,8 @@ public class SintaxisAbstractaTiny {
         public String toString() {
             //return "dec_proc("+id+"["+leeFila()+","+leeCol()+"],"+parsfop + bloq +")";
         	return "<proc>\n"
-            	  + id  + "$f:" + leeFila() + ",c:" + leeCol()+"$"
-            	  + "\n(\n"
+            	  + id  + "$f:" + leeFila() + ",c:" + leeCol()+"$\n"
+            	  + "(\n"
             	  + parsfop
             	  + ")\n"
             	  + bloq;
@@ -973,9 +973,9 @@ public class SintaxisAbstractaTiny {
         public String toString() {
             //return "instr_ifelse("+exp+"["+leeFila()+","+leeCol()+"]" + bloq1 + "," + bloq2 +")";
         	return "<if>\n"
-        		 + "(\n"
+        		 //+ "(\n"
         		 + exp
-        		 + ")\n"
+        		 //+ ")\n"
         		 + bloq1
         		 + "<else>\n"
         		 + bloq2;
@@ -1017,9 +1017,9 @@ public class SintaxisAbstractaTiny {
         public String toString() {
             //return "instr_while("+exp+"["+leeFila()+","+leeCol()+"]" + bloq +")";
         	return "<while>\n"
-        		 + "(\n"
+        		 //+ "(\n"
         		 + exp
-        		 + ")\n"
+        		 //+ ")\n"
         		 + bloq;        			
         }
         
@@ -1097,7 +1097,7 @@ public class SintaxisAbstractaTiny {
         }     
         
         public String toString() {
-            return "<nl>";
+            return "<nl>\n";
         }
         
         public void imprime() {
@@ -1169,10 +1169,10 @@ public class SintaxisAbstractaTiny {
         public String toString() {
             //return "instr_call("+identificador +"["+leeFila()+","+leeCol()+"] ,"+parsreop+")";
         	return "<call>\n"
-            	  + identificador + "$f:" + leeFila() + ",c:" + leeCol()+"$"
-            	  + "\n(\n"
+            	  + identificador + "$f:" + leeFila() + ",c:" + leeCol()+"$\n"
+            	  + "(\n"
             	  + parsreop
-            	  + ")";
+            	  + ")\n";
         }
         
         public void imprime() {
@@ -1444,6 +1444,8 @@ public class SintaxisAbstractaTiny {
      }
      
      //
+     
+     
      private static String imprimeOpndRecursivo(Exp opnd, int np) {    	 
     	 String ret="";
     	 
@@ -1453,31 +1455,23 @@ public class SintaxisAbstractaTiny {
     	 
     	 return ret;
      }
-  	 private static String imprimeExpBinRecursivo(Exp opnd0, String op, Exp opnd1, int np0, int np1) {  		
+  	 private static String imprimeExpBinRecursivo(Exp opnd0, String op, Exp opnd1, int np0, int np1, int opFila, int opCol) {  		
   		 String ret="";
   		 
   		 ret+=imprimeOpndRecursivo(opnd0,np0);
-  		 ret+=op + "$f:" + opnd0.leeFila() + ",c:" + opnd0.leeCol()+"$\n";
+  		 ret+=op + "$f:" + opFila + ",c:" + opCol +"$\n";
   		 ret+=imprimeOpndRecursivo(opnd1,np1);
   		 
   		 return ret;
   	 }
      
      
- 	 private static void imprimeOpndInterprete(Exp opnd, int np) {
- 		 /*if(opnd.prioridad() < np) {System.out.print("(");};
- 		 opnd.imprime();
- 		 if(opnd.prioridad() < np) {System.out.print(")");};*/
- 		
+ 	 private static void imprimeOpndInterprete(Exp opnd, int np) { 		  		
  		if(opnd.prioridad() < np) { System.out.println("("); };
  		opnd.imprime();
  		if(opnd.prioridad() < np) { System.out.println(")"); };
  	}
  	private static void imprimeExpBinInterprete(Exp opnd0, String op, Exp opnd1, int np0, int np1, int opFila, int opCol) {
- 		/*imprimeOpndInterprete(opnd0,np0);
- 		System.out.print(" "+op+" ");
- 		imprimeOpndInterprete(opnd1,np1);*/
- 		
  		imprimeOpndInterprete(opnd0,np0);
  		System.out.println(op + "$f:" + opFila + ",c:" + opCol + "$");
  		imprimeOpndInterprete(opnd1,np1);
@@ -1501,7 +1495,7 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "suma("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,"+",opnd1,2,3);
+        	return imprimeExpBinRecursivo(opnd0,"+",opnd1,2,3,leeFila(), leeCol());
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"+",opnd1,2,3, leeFila(), leeCol());
@@ -1518,7 +1512,7 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "resta("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,"-",opnd1,3,3);
+        	return imprimeExpBinRecursivo(opnd0,"-",opnd1,3,3,leeFila(), leeCol());
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"-",opnd1,3,3, leeFila(), leeCol());
@@ -1535,7 +1529,7 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "mul("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,"*",opnd1,4,5);
+        	return imprimeExpBinRecursivo(opnd0,"*",opnd1,4,5,leeFila(), leeCol());
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"*",opnd1,4,5, leeFila(), leeCol());
@@ -1552,7 +1546,7 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "div("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,"/",opnd1,4,5);
+        	return imprimeExpBinRecursivo(opnd0,"/",opnd1,4,5,leeFila(), leeCol());
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"/",opnd1,4,5, leeFila(), leeCol());
@@ -1569,7 +1563,7 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "mod("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,"%",opnd1,4,5);
+        	return imprimeExpBinRecursivo(opnd0,"%",opnd1,4,5,leeFila(), leeCol());
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"%",opnd1,4,5, leeFila(), leeCol());
@@ -1587,7 +1581,7 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "asig("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,"=",opnd1,0,1);
+        	return imprimeExpBinRecursivo(opnd0,"=",opnd1,0,1,leeFila(), leeCol());
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"=",opnd1,0,1, leeFila(), leeCol());
@@ -1604,7 +1598,7 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "menorI("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,"<=",opnd1,1,2);
+        	return imprimeExpBinRecursivo(opnd0,"<=",opnd1,1,2,leeFila(), leeCol());
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"<=",opnd1,1,2, leeFila(), leeCol());
@@ -1621,7 +1615,7 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "menor("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,"<",opnd1,1,2);
+        	return imprimeExpBinRecursivo(opnd0,"<",opnd1,1,2,leeFila(), leeCol());
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"<",opnd1,1,2, leeFila(), leeCol());
@@ -1638,7 +1632,7 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "mayorI("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,">=",opnd1,1,2);
+        	return imprimeExpBinRecursivo(opnd0,">=",opnd1,1,2,leeFila(), leeCol());
         }
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,">=",opnd1,1,2, leeFila(), leeCol());
@@ -1656,7 +1650,7 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "mayor("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,">",opnd1,1,2);
+        	return imprimeExpBinRecursivo(opnd0,">",opnd1,1,2,leeFila(), leeCol());
         } 
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,">",opnd1,1,2, leeFila(), leeCol());
@@ -1673,7 +1667,7 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "igual("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,"==",opnd1,1,2);
+        	return imprimeExpBinRecursivo(opnd0,"==",opnd1,1,2,leeFila(), leeCol());
         } 
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"==",opnd1,1,2, leeFila(), leeCol());
@@ -1690,7 +1684,7 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "distint("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,"!=",opnd1,1,2);
+        	return imprimeExpBinRecursivo(opnd0,"!=",opnd1,1,2,leeFila(), leeCol());
         } 
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"!=",opnd1,1,2, leeFila(), leeCol());
@@ -1707,7 +1701,7 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "and("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,"and",opnd1,4,3);
+        	return imprimeExpBinRecursivo(opnd0,"and",opnd1,4,3,leeFila(), leeCol());
         } 
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"and",opnd1,4,3, leeFila(), leeCol());
@@ -1724,7 +1718,7 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "or("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,"and",opnd1,4,4);
+        	return imprimeExpBinRecursivo(opnd0,"and",opnd1,4,4,leeFila(), leeCol());
         } 
         public void imprime() {
 			imprimeExpBinInterprete(opnd0,"or",opnd1,4,4, leeFila(), leeCol());
@@ -1776,13 +1770,13 @@ public class SintaxisAbstractaTiny {
         public String toString() {
             //return "indexacion("+opnd0+","+opnd1+")";
         	return opnd0().rec()
-        		 + "[" + "$f:" + opnd0().leeFila() + ",c:" + opnd0().leeCol()+"$\n"
+        		 + "[" + "$f:" + opnd0().leeFila() + ",c:" + (opnd0().leeCol()+1)+"$\n"
         		 + opnd1().rec()
         		 + "]\n";
         } 
         public void imprime() {
 			opnd0().imprime();
-			System.out.println("[" + "$f:" + opnd0().leeFila() + ",c:" + opnd0().leeCol()+"$");
+			System.out.println("[" + "$f:" + opnd0().leeFila() + ",c:" + (opnd0().leeCol()+1)+"$");
 			opnd1().imprime(); 
 			System.out.println("]");
 		}

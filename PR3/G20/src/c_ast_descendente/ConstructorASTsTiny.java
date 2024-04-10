@@ -1078,8 +1078,8 @@ Token t; Exp e1;
       case corcheteApertura:{
         jj_consume_token(corcheteApertura);
         e1 = E0();
-        jj_consume_token(corcheteCierre);
-{if ("" != null) return sem.indexacion(eh, e1);}
+        t = jj_consume_token(corcheteCierre);
+{if ("" != null) return (Exp) sem.indexacion(eh, e1).ponFila(t.beginLine).ponCol(t.beginColumn);}
         break;
         }
       case punto:{

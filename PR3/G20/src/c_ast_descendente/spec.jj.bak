@@ -587,8 +587,8 @@ Exp RFE6(Exp eh)  :
 Exp FE6(Exp eh)  : 
 {Token t; Exp e1;} 
 {
-	<corcheteApertura> e1 = E0() t=<corcheteCierre> // "[" e1 = E0()"]"
-	{return (Exp) sem.indexacion(eh, e1).ponFila(t.beginLine).ponCol(t.beginColumn);}
+	<corcheteApertura> e1 = E0() <corcheteCierre> // "[" e1 = E0()"]"
+	{return sem.indexacion(eh, e1);}
 |
 	<punto> t = <identificador>//"." <identificador>
 	{return (Exp) sem.acceso(eh, t.image).ponFila(t.beginLine).ponCol(t.beginColumn);}

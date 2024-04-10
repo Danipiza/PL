@@ -59,7 +59,7 @@ public class Main {
 	            asint.disable_tracing();
 	            switch (patron) {
 				case "rec":
-					System.out.println(asint.inicial());
+					System.out.print(asint.inicial());
 					break;
 				case "int":					
 					asint.inicial().imprime();
