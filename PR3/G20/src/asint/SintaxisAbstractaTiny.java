@@ -799,13 +799,14 @@ public class SintaxisAbstractaTiny {
         public String iden() {return id;}        
         
         public String toString() {
-            return tipo+id + "$f:" + leeFila() + ",c:" + leeCol()+"$\n";
+            return tipo+"&\n"+id + "$f:" + leeFila() + ",c:" + leeCol()+"$\n";
         }
 		
         public void imprime() {
 			/*tipo.imprime();
 			System.out.print(id);*/
-			tipo.imprime();
+			tipo.imprime();		
+			System.out.println("&");
 			System.out.println(id + "$f:" + leeFila() + ",c:" + leeCol()+"$");
 		}
         
@@ -1701,10 +1702,10 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "and("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,"and",opnd1,4,3,leeFila(), leeCol());
+        	return imprimeExpBinRecursivo(opnd0,"<and>",opnd1,4,3,leeFila(), leeCol());
         } 
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,"and",opnd1,4,3, leeFila(), leeCol());
+			imprimeExpBinInterprete(opnd0,"<and>",opnd1,4,3, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1718,10 +1719,10 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "or("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,"and",opnd1,4,4,leeFila(), leeCol());
+        	return imprimeExpBinRecursivo(opnd0,"<or>",opnd1,4,4,leeFila(), leeCol());
         } 
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,"or",opnd1,4,4, leeFila(), leeCol());
+			imprimeExpBinInterprete(opnd0,"<or>",opnd1,4,4, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1735,10 +1736,13 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "negacion("+opnd0+")";
-        	return imprimeOpndRecursivo(opnd0,5);
+        	//System.out.println("<not>$f:" + leeFila() + ",c:" + leeCol()+"$");
+        	return "<not>$f:" + leeFila() + ",c:" + leeCol()+"$\n" +imprimeOpndRecursivo(opnd0,5);
         } 
         public void imprime() {
-			imprimeOpnd(opnd0,5);
+        	System.out.println("<not>$f:" + leeFila() + ",c:" + leeCol()+"$");
+        	imprimeOpnd(opnd0,5);
+			
 		}
         @Override
         public void procesa(Procesamiento p) {
@@ -1752,9 +1756,10 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "menosUnario("+opnd0+")";
-        	return imprimeOpndRecursivo(opnd0,5);
+        	return "-$f:" + leeFila() + ",c:" + leeCol()+"$\n"+imprimeOpndRecursivo(opnd0,5);
         }
         public void imprime() {
+        	System.out.println("-$f:" + leeFila() + ",c:" + leeCol()+"$");
 			imprimeOpnd(opnd0,5);
 		}
         @Override
@@ -1770,13 +1775,13 @@ public class SintaxisAbstractaTiny {
         public String toString() {
             //return "indexacion("+opnd0+","+opnd1+")";
         	return opnd0().rec()
-        		 + "[" + "$f:" + opnd0().leeFila() + ",c:" + (opnd0().leeCol()+1)+"$\n"
+        		 + "[" + "$f:" + leeFila() + ",c:" + (leeCol())+"$\n"
         		 + opnd1().rec()
         		 + "]\n";
         } 
         public void imprime() {
 			opnd0().imprime();
-			System.out.println("[" + "$f:" + opnd0().leeFila() + ",c:" + (opnd0().leeCol()+1)+"$");
+			System.out.println("[" + "$f:" + leeFila() + ",c:" + (leeCol())+"$");
 			opnd1().imprime(); 
 			System.out.println("]");
 		}
@@ -1795,12 +1800,12 @@ public class SintaxisAbstractaTiny {
             //return "acceso("+opnd0+","+opnd1+")";
         	return opnd0().rec()
         		 + ".\n"
-        		 + opnd1String() + "$f:" + opnd0().leeFila() + ",c:" + (opnd0().leeCol()+2)+"$\n";
+        		 + opnd1String() + "$f:" + leeFila() + ",c:" + (leeCol())+"$\n";
         } 
         public void imprime() {
 			opnd0().imprime();
 			System.out.println(".");
-			System.out.println(opnd1String() + "$f:" + opnd0().leeFila() + ",c:" + (opnd0().leeCol()+2)+"$");
+			System.out.println(opnd1String() + "$f:" + leeFila() + ",c:" + (leeCol())+"$");
 		}
         @Override
         public void procesa(Procesamiento p) {

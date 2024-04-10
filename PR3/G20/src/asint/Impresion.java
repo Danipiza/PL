@@ -189,6 +189,7 @@ public class Impresion extends ProcesamientoDef {
 	@Override
 	public void procesa(ParamF paramF) {
 		paramF.tipo().procesa(this);
+		System.out.println("&");
 		System.out.println(paramF.iden() + "$f:" + paramF.leeFila() + ",c:" + paramF.leeCol()+"$");
 		
 	}
@@ -411,24 +412,26 @@ public class Impresion extends ProcesamientoDef {
 
 	@Override
 	public void procesa(And and) {
-		imprimeExpBin(and.opnd0(),"and",and.opnd1(),4,3,and.leeFila(), and.leeCol());
+		imprimeExpBin(and.opnd0(),"<and>",and.opnd1(),4,3,and.leeFila(), and.leeCol());
 		
 	}
 
 	@Override
 	public void procesa(Or or) {
-		imprimeExpBin(or.opnd0(),"or",or.opnd1(),4,4,or.leeFila(), or.leeCol());
+		imprimeExpBin(or.opnd0(),"<or>",or.opnd1(),4,4,or.leeFila(), or.leeCol());
 		
 	}
 
 	@Override
 	public void procesa(Negacion negacion) {
+		System.out.println("<not>$f:" + negacion.leeFila() + ",c:" + negacion.leeCol()+"$");
 		imprimeOpnd(negacion.opnd0(),5);
 		
 	}
 
 	@Override
 	public void procesa(MenosUnario menosUnario) {
+		System.out.println("-$f:" + menosUnario.leeFila() + ",c:" + menosUnario.leeCol()+"$");
 		imprimeOpnd(menosUnario.opnd0(),5);
 		
 	}
@@ -436,7 +439,7 @@ public class Impresion extends ProcesamientoDef {
 	@Override
 	public void procesa(Indexacion indexacion) {
 		indexacion.opnd0().procesa(this);
-		System.out.println("[" + "$f:" + indexacion.opnd0().leeFila() + ",c:" + (indexacion.opnd0().leeCol()+1)+"$");		
+		System.out.println("[" + "$f:" + indexacion.leeFila() + ",c:" + (indexacion.leeCol())+"$");		
 		indexacion.opnd1().procesa(this);
 		System.out.println("]");
 	}
@@ -449,7 +452,8 @@ public class Impresion extends ProcesamientoDef {
 	public void procesa(Acceso acceso) {
 		acceso.opnd0().procesa(this);
 		System.out.println(".");
-		System.out.println(acceso.opnd1String() + "$f:" + acceso.opnd0().leeFila() + ",c:" + (acceso.opnd0().leeCol()+2)+"$");		
+		//System.out.println(acceso.opnd1String() + "$f:" + acceso.opnd0().leeFila() + ",c:" + (acceso.opnd0().leeCol()+2)+"$");		
+		System.out.println(acceso.opnd1String() + "$f:" + acceso.leeFila() + ",c:" + (acceso.leeCol())+"$");
 	}
 
 	@Override

@@ -278,5 +278,5 @@ E7 ::= LITERALCADENA: id
 E7 ::= PAP E0: exp PCIERRE
 	{: RESULT = exp; :};
 
-E7 ::= NULL: id
-	{: RESULT = (Exp) sem.lit_null().ponFila(id.fila()).ponCol(id.col());; :};
+E7 ::= NULL
+	{: RESULT = sem.lit_null(); :};

@@ -9,6 +9,8 @@ public class ClaseSemanticaTiny extends SintaxisAbstractaTiny{
     
         
     public Exp mkop(String op, Exp opnd1, Exp opnd2) {
+    	//System.out.println("Operacion: "+op+".");
+    	//op=op.toLowerCase();
         switch(op) {
         	case "=": return asig(opnd1, opnd2); 		// 0
         	case "<=": return menorI(opnd1, opnd2); 	// 1

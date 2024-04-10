@@ -436,21 +436,43 @@ ParF parF; ParsF parsF;
     }
 }
 
-// TODO .ponFila(t.beginLine).ponCol(t.beginColumn);}?
   final public ParF parametroFormal() throws ParseException {
     trace_call("parametroFormal");
     try {
-Tipo tipo; Token t;
-      //tipo = tipo1() "&" t = <identificador>
-              /*tipo = tipo1() <ampersand> t = <identificador>
-      	{return (ParF)sem.paramF(t.image,tipo).ponFila(t.beginLine).ponCol(t.beginColumn);}
-      	|*/
-              tipo = tipo1();
-      t = jj_consume_token(identificador);
-{if ("" != null) return (ParF)sem.param(t.image,tipo).ponFila(t.beginLine).ponCol(t.beginColumn);}
+Tipo tipo; Token t, aux;
+      tipo = tipo1();
+{if ("" != null) return aux(tipo);}
     throw new Error("Missing return statement in function");
     } finally {
       trace_return("parametroFormal");
+    }
+}
+
+  final public ParF aux(Tipo tipoh) throws ParseException {
+    trace_call("aux");
+    try {
+Token t, aux;
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case identificador:{
+        t = jj_consume_token(identificador);
+{if ("" != null) return (ParF)sem.param(t.image,tipoh).ponFila(t.beginLine).ponCol(t.beginColumn);}
+        break;
+        }
+      case ampersand:{
+        //tipo = tipo1() "&" t = <identificador>
+                aux = jj_consume_token(ampersand);
+        t = jj_consume_token(identificador);
+{if ("" != null) return (ParF)sem.paramF(t.image,tipoh).ponFila(t.beginLine).ponCol(t.beginColumn);}
+        break;
+        }
+      default:
+        jj_la1[11] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+    throw new Error("Missing return statement in function");
+    } finally {
+      trace_return("aux");
     }
 }
 
@@ -480,7 +502,7 @@ Instr instr; Instrs instrs;
         break;
         }
       default:
-        jj_la1[11] = jj_gen;
+        jj_la1[12] = jj_gen;
 {if ("" != null) return instrh;}
       }
     throw new Error("Missing return statement in function");
@@ -560,7 +582,7 @@ Exp e; Bloq bloq; Token t; ParsReOp parsReOp; Instr i;
         break;
         }
       default:
-        jj_la1[12] = jj_gen;
+        jj_la1[13] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -582,7 +604,7 @@ Bloq bloq;
         break;
         }
       default:
-        jj_la1[13] = jj_gen;
+        jj_la1[14] = jj_gen;
 {if ("" != null) return sem.instr_if(eh,bloqh);}
       }
     throw new Error("Missing return statement in function");
@@ -612,7 +634,7 @@ ParsRe parsRe;
         break;
         }
       default:
-        jj_la1[14] = jj_gen;
+        jj_la1[15] = jj_gen;
 {if ("" != null) return sem.no_parsRe();}
       }
     throw new Error("Missing return statement in function");
@@ -647,7 +669,7 @@ Exp exp; ParsRe parsRe;
         break;
         }
       default:
-        jj_la1[15] = jj_gen;
+        jj_la1[16] = jj_gen;
 {if ("" != null) return parsReh;}
       }
     throw new Error("Missing return statement in function");
@@ -711,7 +733,7 @@ Exp e1,e2; Token op;
         break;
         }
       default:
-        jj_la1[16] = jj_gen;
+        jj_la1[17] = jj_gen;
 {if ("" != null) return eh;}
       }
     throw new Error("Missing return statement in function");
@@ -751,7 +773,7 @@ Token op; Exp e1,e2;
         break;
         }
       default:
-        jj_la1[17] = jj_gen;
+        jj_la1[18] = jj_gen;
 {if ("" != null) return eh;}
       }
     throw new Error("Missing return statement in function");
@@ -796,7 +818,7 @@ Token op;
         break;
         }
       default:
-        jj_la1[18] = jj_gen;
+        jj_la1[19] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -833,7 +855,7 @@ Exp e1,e2; Token op;
         break;
         }
       default:
-        jj_la1[19] = jj_gen;
+        jj_la1[20] = jj_gen;
 {if ("" != null) return eh;}
       }
     throw new Error("Missing return statement in function");
@@ -854,7 +876,7 @@ Exp e1; Token op;
         break;
         }
       default:
-        jj_la1[20] = jj_gen;
+        jj_la1[21] = jj_gen;
 {if ("" != null) return eh;}
       }
     throw new Error("Missing return statement in function");
@@ -894,7 +916,7 @@ Exp e1; Token op;
         break;
         }
       default:
-        jj_la1[21] = jj_gen;
+        jj_la1[22] = jj_gen;
 {if ("" != null) return eh;}
       }
     throw new Error("Missing return statement in function");
@@ -931,7 +953,7 @@ Token op; Exp e1,e2;
         break;
         }
       default:
-        jj_la1[22] = jj_gen;
+        jj_la1[23] = jj_gen;
 {if ("" != null) return eh;}
       }
     throw new Error("Missing return statement in function");
@@ -962,7 +984,7 @@ Token op;
         break;
         }
       default:
-        jj_la1[23] = jj_gen;
+        jj_la1[24] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -997,7 +1019,7 @@ Token op; Exp e1;
         break;
         }
       default:
-        jj_la1[24] = jj_gen;
+        jj_la1[25] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1024,7 +1046,7 @@ Token op;
         break;
         }
       default:
-        jj_la1[25] = jj_gen;
+        jj_la1[26] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1061,7 +1083,7 @@ Exp e1,e2;
         break;
         }
       default:
-        jj_la1[26] = jj_gen;
+        jj_la1[27] = jj_gen;
 {if ("" != null) return eh;}
       }
     throw new Error("Missing return statement in function");
@@ -1076,9 +1098,9 @@ Exp e1,e2;
 Token t; Exp e1;
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case corcheteApertura:{
-        jj_consume_token(corcheteApertura);
+        t = jj_consume_token(corcheteApertura);
         e1 = E0();
-        t = jj_consume_token(corcheteCierre);
+        jj_consume_token(corcheteCierre);
 {if ("" != null) return (Exp) sem.indexacion(eh, e1).ponFila(t.beginLine).ponCol(t.beginColumn);}
         break;
         }
@@ -1094,7 +1116,7 @@ Token t; Exp e1;
         break;
         }
       default:
-        jj_la1[27] = jj_gen;
+        jj_la1[28] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1152,7 +1174,7 @@ Token t; Exp e;
         break;
         }
       default:
-        jj_la1[28] = jj_gen;
+        jj_la1[29] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1171,7 +1193,7 @@ Token t; Exp e;
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[29];
+  final private int[] jj_la1 = new int[30];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1179,10 +1201,10 @@ Token t; Exp e;
 	   jj_la1_init_1();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0xa08bc000,0x5f500000,0x0,0x8083c000,0x8083c000,0x3c000,0x0,0x0,0xa08bc000,0x8083c000,0x0,0x0,0x5f500000,0x200000,0x80042600,0x0,0x0,0x0,0x0,0x0,0x0,0x1800,0x0,0x0,0x80042600,0x2000,0x0,0x0,0x80040600,};
+	   jj_la1_0 = new int[] {0xa08bc000,0x5f500000,0x0,0x8083c000,0x8083c000,0x3c000,0x0,0x0,0xa08bc000,0x8083c000,0x0,0x80000000,0x0,0x5f500000,0x200000,0x80042600,0x0,0x0,0x0,0x0,0x0,0x0,0x1800,0x0,0x0,0x80042600,0x2000,0x0,0x0,0x80040600,};
 	}
 	private static void jj_la1_init_1() {
-	   jj_la1_1 = new int[] {0x2000000,0xa0000,0x200000,0x2000000,0x0,0x0,0x1000000,0x4000,0x2000000,0x2000000,0x1000000,0x4000,0xa0000,0x0,0x8017,0x1000000,0x2000,0x1f80,0x1f80,0x8,0x10,0x0,0x100060,0x100060,0x8017,0x10,0x2a00000,0x2a00000,0x8007,};
+	   jj_la1_1 = new int[] {0x2000000,0xa0000,0x200000,0x2000000,0x0,0x0,0x1000000,0x4000,0x2000000,0x2000000,0x1000000,0x4000000,0x4000,0xa0000,0x0,0x8017,0x1000000,0x2000,0x1f80,0x1f80,0x8,0x10,0x0,0x100060,0x100060,0x8017,0x10,0x2a00000,0x2a00000,0x8007,};
 	}
 
   {
@@ -1199,7 +1221,7 @@ Token t; Exp e;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 30; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1213,7 +1235,7 @@ Token t; Exp e;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 30; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -1223,7 +1245,7 @@ Token t; Exp e;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 30; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1241,7 +1263,7 @@ Token t; Exp e;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 30; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -1250,7 +1272,7 @@ Token t; Exp e;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 30; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1259,7 +1281,7 @@ Token t; Exp e;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 30; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -1317,7 +1339,7 @@ Token t; Exp e;
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
 	 }
-	 for (int i = 0; i < 29; i++) {
+	 for (int i = 0; i < 30; i++) {
 	   if (jj_la1[i] == jj_gen) {
 		 for (int j = 0; j < 32; j++) {
 		   if ((jj_la1_0[i] & (1<<j)) != 0) {

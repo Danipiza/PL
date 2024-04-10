@@ -116,11 +116,11 @@ public class ALexOperations {
 	}
 
 	public UnidadLexica unidadOr() {
-		return new UnidadLexica(alex.fila(),alex.columna(),sym.OR,"<or>");     
+		return new UnidadLexica(alex.fila(),alex.columna(),sym.OR,"or");     
 	}
 
 	public UnidadLexica unidadAnd() {
-		return new UnidadLexica(alex.fila(),alex.columna(),sym.AND,"<and>");     
+		return new UnidadLexica(alex.fila(),alex.columna(),sym.AND,"and");     
 	}
 
 	public UnidadLexica unidadNew() {

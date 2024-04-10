@@ -275,16 +275,25 @@ ParsF RparametrosFormales(ParsF parsFh)  :
 }
 
 
-// TODO .ponFila(t.beginLine).ponCol(t.beginColumn);}?
 ParF parametroFormal ()  :
-{Tipo tipo; Token t;}
+{Tipo tipo; Token t, aux;}
+{	
+	tipo = tipo1() 
+	{return aux(tipo);}		
+}
+
+ParF aux (Tipo tipoh)  :
+{Token t, aux;}
 {
+	
+	t = <identificador>
+	{return (ParF)sem.param(t.image,tipoh).ponFila(t.beginLine).ponCol(t.beginColumn);}
+| 
 	//tipo = tipo1() "&" t = <identificador>
-	/*tipo = tipo1() <ampersand> t = <identificador>
-	{return (ParF)sem.paramF(t.image,tipo).ponFila(t.beginLine).ponCol(t.beginColumn);}
-	|*/
-	tipo = tipo1() t = <identificador>
-	{return (ParF)sem.param(t.image,tipo).ponFila(t.beginLine).ponCol(t.beginColumn);}
+	aux=<ampersand> t = <identificador>
+	{return (ParF)sem.paramF(t.image,tipoh).ponFila(t.beginLine).ponCol(t.beginColumn);}
+	
+	
 }
 
 Instrs instrucciones ()  : 
@@ -587,7 +596,7 @@ Exp RFE6(Exp eh)  :
 Exp FE6(Exp eh)  : 
 {Token t; Exp e1;} 
 {
-	<corcheteApertura> e1 = E0() t=<corcheteCierre> // "[" e1 = E0()"]"
+	t=<corcheteApertura> e1 = E0() <corcheteCierre> // "[" e1 = E0()"]"
 	{return (Exp) sem.indexacion(eh, e1).ponFila(t.beginLine).ponCol(t.beginColumn);}
 |
 	<punto> t = <identificador>//"." <identificador>
