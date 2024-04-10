@@ -128,7 +128,7 @@ public class ALexOperations {
 	}
 
 	public UnidadLexica unidadNot() {
-		return new UnidadLexica(alex.fila(),alex.columna(),sym.NOT,"<not>");     
+		return new UnidadLexica(alex.fila(),alex.columna(),sym.NOT,"not");     
 	}
 
 	public UnidadLexica unidadBool() {
@@ -144,7 +144,7 @@ public class ALexOperations {
 	}
 
 	public UnidadLexica unidadNull() {
-		return new UnidadLexica(alex.fila(),alex.columna(),sym.NULL,"<null>");     
+		return new UnidadLexica(alex.fila(),alex.columna(),sym.NULL,"NULL");     
 	}
 
 	public UnidadLexica unidadProc() {

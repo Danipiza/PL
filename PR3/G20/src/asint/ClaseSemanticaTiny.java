@@ -31,6 +31,7 @@ public class ClaseSemanticaTiny extends SintaxisAbstractaTiny{
     }
     
     public Exp mkopUn(String op, Exp opnd1) {
+    	//System.out.println(op);
         switch(op) {
             case "not": return negacion(opnd1);		// 5
             case "-": return menosUnario(opnd1); 	// 5

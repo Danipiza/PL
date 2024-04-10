@@ -4,7 +4,7 @@ package c_ast_descendente;
 import asint.ClaseSemanticaTiny;
 import asint.SintaxisAbstractaTiny.*;
 public class ConstructorASTsTiny implements ConstructorASTsTinyConstants {
-   private ClaseSemanticaTiny sem = new ClaseSemanticaTiny();
+   public ClaseSemanticaTiny sem = new ClaseSemanticaTiny();
 
   final public Prog inicial() throws ParseException {
     trace_call("inicial");

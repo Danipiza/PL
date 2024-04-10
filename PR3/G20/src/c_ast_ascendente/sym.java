@@ -9,58 +9,58 @@ package c_ast_ascendente;
 public class sym {
   /* terminals */
   public static final int SEP = 9;
-  public static final int POR = 36;
   public static final int LLCIERRE = 8;
-  public static final int GE = 39;
-  public static final int CCIERRE = 15;
-  public static final int CIRCUNFLEJO = 48;
+  public static final int POR = 33;
+  public static final int GE = 36;
+  public static final int CCIERRE = 13;
+  public static final int CIRCUNFLEJO = 45;
   public static final int PCIERRE = 3;
-  public static final int LITERALREAL = 50;
+  public static final int LITERALREAL = 47;
   public static final int CAP = 52;
-  public static final int DELETE = 26;
-  public static final int WRITE = 28;
-  public static final int NOT = 47;
-  public static final int AND = 45;
-  public static final int LT = 40;
+  public static final int DELETE = 23;
+  public static final int WRITE = 25;
+  public static final int NOT = 44;
+  public static final int AND = 42;
+  public static final int LT = 37;
   public static final int LLAP = 7;
-  public static final int TYPE = 30;
-  public static final int OR = 46;
+  public static final int TYPE = 27;
+  public static final int OR = 43;
   public static final int EVAL = 5;
-  public static final int BOOL = 12;
-  public static final int CALL = 31;
-  public static final int LITERALCADENA = 51;
-  public static final int DIV = 37;
-  public static final int IF = 21;
-  public static final int LE = 41;
+  public static final int BOOL = 10;
+  public static final int CALL = 28;
+  public static final int LITERALCADENA = 48;
+  public static final int DIV = 34;
+  public static final int IF = 18;
+  public static final int LE = 38;
   public static final int EOF = 0;
-  public static final int ASIG = 33;
-  public static final int AMP = 17;
-  public static final int TRUE = 10;
-  public static final int NEW = 25;
+  public static final int ASIG = 30;
+  public static final int AMP = 15;
+  public static final int TRUE = 49;
+  public static final int NEW = 22;
   public static final int error = 1;
   public static final int COMA = 4;
-  public static final int MENOS = 35;
-  public static final int NULL = 19;
-  public static final int MOD = 44;
-  public static final int EQ = 42;
-  public static final int REAL = 14;
-  public static final int ENT = 13;
+  public static final int MENOS = 32;
+  public static final int NULL = 51;
+  public static final int MOD = 41;
+  public static final int EQ = 39;
+  public static final int REAL = 12;
+  public static final int ENT = 11;
   public static final int PAP = 2;
-  public static final int ELSE = 22;
-  public static final int PUNTO = 16;
-  public static final int NL = 29;
-  public static final int READ = 27;
-  public static final int IDEN = 32;
-  public static final int WHILE = 23;
-  public static final int NE = 43;
-  public static final int PROC = 20;
-  public static final int STRING = 18;
-  public static final int FALSE = 11;
-  public static final int STRUCT = 24;
-  public static final int GT = 38;
-  public static final int LITERALENTERO = 49;
+  public static final int ELSE = 19;
+  public static final int PUNTO = 14;
+  public static final int NL = 26;
+  public static final int READ = 24;
+  public static final int IDEN = 29;
+  public static final int WHILE = 20;
+  public static final int NE = 40;
+  public static final int PROC = 17;
+  public static final int STRING = 16;
+  public static final int FALSE = 50;
+  public static final int STRUCT = 21;
+  public static final int GT = 35;
+  public static final int LITERALENTERO = 46;
   public static final int PYC = 6;
-  public static final int MAS = 34;
+  public static final int MAS = 31;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -72,8 +72,6 @@ public class sym {
   "LLAP",
   "LLCIERRE",
   "SEP",
-  "TRUE",
-  "FALSE",
   "BOOL",
   "ENT",
   "REAL",
@@ -81,7 +79,6 @@ public class sym {
   "PUNTO",
   "AMP",
   "STRING",
-  "NULL",
   "PROC",
   "IF",
   "ELSE",
@@ -114,6 +111,9 @@ public class sym {
   "LITERALENTERO",
   "LITERALREAL",
   "LITERALCADENA",
+  "TRUE",
+  "FALSE",
+  "NULL",
   "CAP"
   };
 }

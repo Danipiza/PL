@@ -36,13 +36,26 @@ public class Main {
 			if(constructor.equals("asc")) {				
 				AnalizadorLexicoTiny alex = new AnalizadorLexicoTiny(input);
 				ConstructorAST asint = new ConstructorAST(alex);
+				
+				System.out.println("CONSTRUCCION AST ASCENDENTE");
+				
+				
+				
+				asint.debug_parse();
 				Prog prog = (Prog)asint.parse().value;
+				
 				switch (patron) {
 				case "rec":
-					System.out.println(prog);
+					System.out.print(prog);
 					break;
-				case "int":					
+				case "int":	
+					//Prog a=asint.inicial();
+					System.out.println("IMPRESION RECURSIVA");
+					System.out.print(prog);
+					System.out.println("IMPRESION INTERPRETE");
 					prog.imprime();
+					System.out.println("IMPRESION VISITANTE");					
+					prog.procesa(new Impresion());
 					break;
 				case "vis":					
 		        	prog.procesa(new Impresion());
@@ -62,10 +75,17 @@ public class Main {
 					System.out.print(asint.inicial());
 					break;
 				case "int":					
-					asint.inicial().imprime();
+					Prog a=asint.inicial();
+					System.out.println("IMPRESION RECURSIVA");
+					System.out.print(a);
+					System.out.println("IMPRESION INTERPRETE");
+					a.imprime();
+					System.out.println("IMPRESION VISITANTE");					
+					a.procesa(new Impresion());
 					break;
 				case "vis":					
-					asint.inicial().procesa(new Impresion());   
+					asint.inicial().procesa(new Impresion());  
+					
 					break;
 				default:
 					System.out.println("El patron tiene que ser 'rec', 'int' o 'vis'");
@@ -76,8 +96,9 @@ public class Main {
 			
 		} 
 		catch (FileNotFoundException e) { e.printStackTrace(); } 
-		catch (ParseException e) { e.printStackTrace(); } 
+		catch (ParseException e) { System.out.println("ERROR_SINTACTICO"); } 
 		catch (Exception e) { e.printStackTrace(); }
+		
 		  
 		   
 	      

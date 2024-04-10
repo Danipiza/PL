@@ -3,12 +3,14 @@ options  {
   DEBUG_PARSER=true;
 }  
 PARSER_BEGIN(ConstructorASTsTiny)
+
 package c_ast_descendente;
 import asint.ClaseSemanticaTiny;
 import asint.SintaxisAbstractaTiny.*;
 public class ConstructorASTsTiny {
-   private ClaseSemanticaTiny sem = new ClaseSemanticaTiny();   
+   public ClaseSemanticaTiny sem = new ClaseSemanticaTiny();   
 }
+
 
 
 PARSER_END(ConstructorASTsTiny)

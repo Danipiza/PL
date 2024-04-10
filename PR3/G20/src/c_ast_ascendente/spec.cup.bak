@@ -45,12 +45,12 @@ action code {:
 
 
 terminal    PAP, PCIERRE, COMA, EVAL, PYC, LLAP, LLCIERRE, 
-            SEP, TRUE, FALSE, BOOL,ENT, REAL, CCIERRE, PUNTO, 
-            AMP, STRING, NULL, PROC, IF, ELSE, WHILE, STRUCT, NEW, DELETE, READ, WRITE, NL, TYPE, CALL;
+            SEP, BOOL,ENT, REAL, CCIERRE, PUNTO, 
+            AMP, STRING, PROC, IF, ELSE, WHILE, STRUCT, NEW, DELETE, READ, WRITE, NL, TYPE, CALL;
 
 terminal StringLocalizado  IDEN, ASIG, MAS, MENOS, POR, DIV, GT, GE, LT,
                            LE, EQ, NE, MOD, AND, OR, NOT, CIRCUNFLEJO, 
-                           LITERALENTERO, LITERALREAL, LITERALCADENA, CAP;
+                           LITERALENTERO, LITERALREAL, LITERALCADENA, TRUE, FALSE, NULL, CAP;
 
 non terminal		Prog programa;
 non terminal		Bloq bloque;
@@ -266,11 +266,11 @@ E7 ::= LITERALENTERO: num
 E7 ::= LITERALREAL: num
 	{: RESULT = (Exp)sem.lit_real(num.str()).ponFila(num.fila()).ponCol(num.col()); :};
 
-E7 ::= TRUE
-	{: RESULT = sem.lit_true(); :};
+E7 ::= TRUE: id
+	{: RESULT = (Exp) sem.lit_true().ponFila(id.fila()).ponCol(id.col()); :};
 
-E7 ::= FALSE
-	{: RESULT = sem.lit_false(); :};
+E7 ::= FALSE: id
+	{: RESULT = (Exp)sem.lit_false().ponFila(id.fila()).ponCol(id.col()); :};
 
 E7 ::= LITERALCADENA: id
 	{: RESULT = (Exp)sem.lit_cadena(id.str()).ponFila(id.fila()).ponCol(id.col()); :};
@@ -278,5 +278,5 @@ E7 ::= LITERALCADENA: id
 E7 ::= PAP E0: exp PCIERRE
 	{: RESULT = exp; :};
 
-E7 ::= NULL
-	{: RESULT = sem.lit_null(); :};
+E7 ::= NULL: id
+	{: RESULT = (Exp)sem.lit_null().ponFila(id.fila()).ponCol(id.col()); :};
