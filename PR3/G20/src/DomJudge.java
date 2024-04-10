@@ -41,15 +41,15 @@ public class DomJudge {
 				//System.out.println("Prueba: " +prueba);
 				
 				// Con esto lo imprime pero mal porque imprime clases de StringLocalizado
-				//ConstructorAST asint = new AnalizadorSintacticoTinyDJAsc(alex);							
-				//Prog prog =(Prog) asint.debug_parse().value;		
+				ConstructorAST asint = new AnalizadorSintacticoTinyDJAsc(alex);							
+				Prog prog =(Prog) asint.debug_parse().value;		
 				
 				
 				
 				
 				// Asi no imprime el constructor
-				ConstructorAST asint = new ConstructorAST(alex);
-				Prog prog =(Prog) asint.parse().value;
+				//ConstructorAST asint = new ConstructorAST(alex);
+				//Prog prog =(Prog) asint.parse().value;
 				
 				System.out.println("IMPRESION RECURSIVA");
 				System.out.print(prog);
