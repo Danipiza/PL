@@ -7,8 +7,10 @@ import asint.Impresion;
 import asint.SintaxisAbstractaTiny.Prog;
 import c_ast_ascendente.ALexOperations.ECaracterInesperado;
 import c_ast_ascendente.AnalizadorLexicoTiny;
+import c_ast_ascendente.AnalizadorSintacticoTinyDJAsc;
 import c_ast_ascendente.ConstructorAST;
 import c_ast_ascendente.GestionErroresTiny.ErrorSintactico;
+import c_ast_ascendente.UnidadLexica.StringLocalizado;
 import c_ast_descendente.AnalizadorSintacticoTinyDJ;
 import c_ast_descendente.ConstructorASTsTiny;
 import c_ast_descendente.ParseException;
@@ -33,12 +35,22 @@ public class DomJudge {
 			if(parser.equals("a")) { // ASCENDENTE 
 				System.out.println("CONSTRUCCION AST ASCENDENTE");
 				AnalizadorLexicoTiny alex = new AnalizadorLexicoTiny(bufferedReader);
+				
+				
+				//StringLocalizado prueba =new StringLocalizado("{",4,0);
+				//System.out.println("Prueba: " +prueba);
+				
+				// Con esto lo imprime pero mal porque imprime clases de StringLocalizado
+				//ConstructorAST asint = new AnalizadorSintacticoTinyDJAsc(alex);							
+				//Prog prog =(Prog) asint.debug_parse().value;		
+				
+				
+				
+				
+				// Asi no imprime el constructor
 				ConstructorAST asint = new ConstructorAST(alex);
+				Prog prog =(Prog) asint.parse().value;
 				
-				//asint.debug_parse();
-				
-
-				Prog prog = (Prog)asint.parse().value;
 				System.out.println("IMPRESION RECURSIVA");
 				System.out.print(prog);
 				
@@ -69,11 +81,16 @@ public class DomJudge {
 		}
 		catch(TokenMgrError e) {
 			System.out.println("ERROR_LEXICO"); 
-		}
+		}		
+		catch(ECaracterInesperado e2) {
+			System.out.println("ERROR_LEXICO"); 
+		}		
 		catch(ParseException e) {
 			System.out.println("ERROR_SINTACTICO"); 
 		}
-		
+		catch(ErrorSintactico e) {
+			System.out.println("ERROR_SINTACTICO"); 
+		}
 			 
 		
 			

@@ -3,6 +3,9 @@ package c_ast_ascendente;
 import java_cup.runtime.Symbol;
 
 public class UnidadLexica extends Symbol {
+	
+	//private String s;
+	
    public static class StringLocalizado {
      private int fila;
      private int col;
@@ -15,12 +18,21 @@ public class UnidadLexica extends Symbol {
      public int fila() {return fila;}
      public int col() {return col;}
      public String str() {return s;}
+     
+     public String tString() {
+    	 return s;
+     }
    }
-   public UnidadLexica(int fila, int columna, int clase, String lexema) {
-     super(clase, new StringLocalizado(lexema,fila,columna));  
+   
+   public UnidadLexica(int fila, int columna, int clase, String lexema) {	   
+	   super(clase, new StringLocalizado(lexema,fila,columna));  
+	   System.out.println(lexema);     
    }
    public int clase () {return sym;}
    public int fila() {return ((StringLocalizado)value).fila();}
    public int columna() {return ((StringLocalizado)value).col();}
    public String lexema() {return ((StringLocalizado)value).str();}
+   /*public String tString() {
+  	 return s;
+   }*/
 }
