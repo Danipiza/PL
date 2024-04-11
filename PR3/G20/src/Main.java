@@ -11,71 +11,83 @@ import c_ast_ascendente.AnalizadorSintacticoTinyDJAsc;
 import c_ast_ascendente.ConstructorAST;
 import c_ast_ascendente.GestionErroresTiny.ErrorSintactico;
 import c_ast_descendente.AnalizadorSintacticoTinyDJ;
+import c_ast_descendente.ConstructorASTsTiny;
 import c_ast_descendente.ParseException;
 import c_ast_descendente.TokenMgrError;
 
 //import c_ast_ascendente.ALexOperations.ECaracterInesperado;
 //import c_ast_ascendente.GestionErroresTiny.ErrorSintactico;
 
-public class Test {
+public class Main {
 	
 	public static void main(String[] args) throws Exception {
 			
+		if (args.length != 3) {
+            System.out.println("Uso: java Main.java <archivo.txt> opc opp");
+            System.out.println("- Constructor AST 'opc':\n'desc': descendente\n'asc': ascendente.");
+            System.out.println("- Patron 'opp':\n'rec': recursivo\n'int': interprete\n'vis': visitante");
+            return;
+		}
 		
-		Reader input = new InputStreamReader(new FileInputStream("input.txt"));
+		String archivo=args[0];
+		String constructor=args[1];
+		String patron=args[2];
+		
+		Reader input = new InputStreamReader(new FileInputStream(archivo));
+		
+		//Reader input = new InputStreamReader(new FileInputStream("data/input.txt"));
 		
 		//Reader input = new InputStreamReader(System.in);	
-		BufferedReader bufferedReader = new BufferedReader(input);
+		BufferedReader bufferedReader = new BufferedReader(input);         
          
-         
-		// String parser = bufferedReader.readLine();
+		
 		try { 
-			// if(parser.equals("a")) { // ASCENDENTE 
+			if(constructor.equals("asc")) { // ASCENDENTE 
+				
 				System.out.println("CONSTRUCCION AST ASCENDENTE");
-				AnalizadorLexicoTiny alex = new AnalizadorLexicoTiny(bufferedReader);
+				AnalizadorLexicoTiny alex = new AnalizadorLexicoTiny(bufferedReader);						
 				
-				
-				//StringLocalizado prueba =new StringLocalizado("{",4,0);
-				//System.out.println("Prueba: " +prueba);
-				
-				// Con esto lo imprime pero mal porque imprime clases de StringLocalizado
 				ConstructorAST asint = new AnalizadorSintacticoTinyDJAsc(alex);							
 				Prog prog =(Prog) asint.debug_parse().value;		
 				
+				if(patron.equals("rec")) {
+					System.out.println("IMPRESION RECURSIVA");
+					System.out.print(prog);
+				}
+				else if(patron.equals("int")) {
+					System.out.println("IMPRESION INTERPRETE");
+					prog.imprime();
+				}
+				else {
+					System.out.println("IMPRESION VISITANTE");					
+					prog.procesa(new Impresion());
+				}				
 				
-				
-				
-				// Asi no imprime el constructor
-				//ConstructorAST asint = new ConstructorAST(alex);
-				//Prog prog =(Prog) asint.parse().value;
-				
-				System.out.println("IMPRESION RECURSIVA");
-				System.out.print(prog);
-				
-				System.out.println("IMPRESION INTERPRETE");
-				prog.imprime();
-				
-				System.out.println("IMPRESION VISITANTE");					
-				prog.procesa(new Impresion());
-			// }
-			//else { // DESCENDENTE
-				// System.out.println("CONSTRUCCION AST DESCENDENTE");
+			}
+			else { // DESCENDENTE
+				System.out.println("CONSTRUCCION AST DESCENDENTE");
 				// // CONSTRUYE
-				// ConstructorASTsTiny asint = new AnalizadorSintacticoTinyDJ(bufferedReader);
-				// //ConstructorASTsTiny asint = new ConstructorASTsTiny(bufferedReader);
+				ConstructorASTsTiny asint = new AnalizadorSintacticoTinyDJ(bufferedReader);
+				
 	            // asint.disable_tracing();
 	            
 				
-				// Prog a=asint.inicial();
+				Prog prog=asint.inicial();
 				
+				if(patron.equals("rec")) {
+					System.out.println("IMPRESION RECURSIVA");
+					System.out.print(prog);
+				}
+				else if(patron.equals("int")) {
+					System.out.println("IMPRESION INTERPRETE");
+					prog.imprime();
+				}
+				else {
+					System.out.println("IMPRESION VISITANTE");					
+					prog.procesa(new Impresion());
+				}
 				
-				// System.out.println("IMPRESION RECURSIVA");
-				// System.out.print(a);
-				// System.out.println("IMPRESION INTERPRETE");
-				// a.imprime();
-				// System.out.println("IMPRESION VISITANTE");					
-				// a.procesa(new Impresion());
-			//}
+			}
 		}
 		catch(TokenMgrError e) {
 			System.out.println("ERROR_LEXICO"); 

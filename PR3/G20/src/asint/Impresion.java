@@ -328,9 +328,9 @@ public class Impresion extends ProcesamientoDef {
 	}
 	
 	private void imprimeOpnd(Exp opnd, int np) {
-		if(opnd.prioridad() < np) { System.out.println("("); };
+		//if(opnd.prioridad() < np) { System.out.println("("); };
 		opnd.procesa(this);
-		if(opnd.prioridad() < np) { System.out.println(")"); };
+		//if(opnd.prioridad() < np) { System.out.println(")"); };
 	}
 	
 	private void imprimeExpBin(Exp opnd0, String op, Exp opnd1, int np0, int np1, int opFila, int opCol) {
