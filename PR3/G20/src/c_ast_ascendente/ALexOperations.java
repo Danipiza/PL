@@ -144,7 +144,7 @@ public class ALexOperations {
 	}
 
 	public UnidadLexica unidadNull() {
-		return new UnidadLexica(alex.fila(),alex.columna(),sym.NULL,"NULL");     
+		return new UnidadLexica(alex.fila(),alex.columna(),sym.NULL,"<null>");     
 	}
 
 	public UnidadLexica unidadProc() {
