@@ -1450,9 +1450,9 @@ public class SintaxisAbstractaTiny {
      private static String imprimeOpndRecursivo(Exp opnd, int np) {    	 
     	 String ret="";
     	 
-    	 //if(opnd.prioridad() < np) ret+="(\n";
+    	 if(opnd.prioridad() < np) ret+="(\n";
     	 ret+=opnd.rec();
-    	 //if(opnd.prioridad() < np) ret+=")\n";
+    	 if(opnd.prioridad() < np) ret+=")\n";
     	 
     	 return ret;
      }
@@ -1468,9 +1468,9 @@ public class SintaxisAbstractaTiny {
      
      
  	 private static void imprimeOpndInterprete(Exp opnd, int np) { 		  		
- 		//if(opnd.prioridad() < np) { System.out.println("("); };
+ 		if(opnd.prioridad() < np) { System.out.println("("); };
  		opnd.imprime();
- 		//if(opnd.prioridad() < np) { System.out.println(")"); };
+ 		if(opnd.prioridad() < np) { System.out.println(")"); };
  	}
  	 private static void imprimeExpBinInterprete(Exp opnd0, String op, Exp opnd1, int np0, int np1, int opFila, int opCol) {
  		imprimeOpndInterprete(opnd0,np0);
@@ -1582,10 +1582,10 @@ public class SintaxisAbstractaTiny {
         }
         public String toString() {
             //return "asig("+opnd0+","+opnd1+")";
-        	return imprimeExpBinRecursivo(opnd0,"=",opnd1,0,1,leeFila(), leeCol());
+        	return imprimeExpBinRecursivo(opnd0,"=",opnd1,1,0,leeFila(), leeCol());
         }
         public void imprime() {
-			imprimeExpBinInterprete(opnd0,"=",opnd1,0,1, leeFila(), leeCol());
+			imprimeExpBinInterprete(opnd0,"=",opnd1,1,0, leeFila(), leeCol());
 		}
         @Override
         public void procesa(Procesamiento p) {

@@ -19,14 +19,14 @@ public class UnidadLexica extends Symbol {
      public int col() {return col;}
      public String str() {return s;}
      
-     public String tString() {
+     public String toString() {
     	 return s;
      }
    }
    
    public UnidadLexica(int fila, int columna, int clase, String lexema) {	   
 	   super(clase, new StringLocalizado(lexema,fila,columna));  
-	   System.out.println(lexema);     
+	   //System.out.println(lexema);     
    }
    public int clase () {return sym;}
    public int fila() {return ((StringLocalizado)value).fila();}
