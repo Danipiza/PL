@@ -435,10 +435,10 @@ Exp E0 ()  :
 }
 
 Exp FE0(Exp eh)  : 
-{Exp e1,e2; Token op;} 
+{Exp e1; Token op;} 
 {
-	op = <asignar> e1 = E1() e2 = FE0((Exp)sem.mkop("=",eh,e1).ponFila(op.beginLine).ponCol(op.beginColumn))
-	{return e2;}
+	op = <asignar> e1 = E0()
+	{return (Exp)sem.mkop("=",eh,e1).ponFila(op.beginLine).ponCol(op.beginColumn);}
 |
 	{return eh;}
 }

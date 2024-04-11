@@ -723,13 +723,12 @@ Exp e1,e2;
   final public Exp FE0(Exp eh) throws ParseException {
     trace_call("FE0");
     try {
-Exp e1,e2; Token op;
+Exp e1; Token op;
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case asignar:{
         op = jj_consume_token(asignar);
-        e1 = E1();
-        e2 = FE0((Exp)sem.mkop("=",eh,e1).ponFila(op.beginLine).ponCol(op.beginColumn));
-{if ("" != null) return e2;}
+        e1 = E0();
+{if ("" != null) return (Exp)sem.mkop("=",eh,e1).ponFila(op.beginLine).ponCol(op.beginColumn);}
         break;
         }
       default:

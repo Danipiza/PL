@@ -1468,9 +1468,9 @@ public class SintaxisAbstractaTiny {
      
      
  	 private static void imprimeOpndInterprete(Exp opnd, int np) { 		  		
- 		//if(opnd.prioridad() < np) { System.out.println("("); };
+ 		if(opnd.prioridad() < np) { System.out.println("("); };
  		opnd.imprime();
- 		//if(opnd.prioridad() < np) { System.out.println(")"); };
+ 		if(opnd.prioridad() < np) { System.out.println(")"); };
  	}
  	 private static void imprimeExpBinInterprete(Exp opnd0, String op, Exp opnd1, int np0, int np1, int opFila, int opCol) {
  		imprimeOpndInterprete(opnd0,np0);
@@ -1479,9 +1479,9 @@ public class SintaxisAbstractaTiny {
  	}
 	
 	 private static void imprimeOpnd(Exp opnd, int np) {
-		 //if(opnd.prioridad() < np) {System.out.print("(");};
+		 if(opnd.prioridad() < np) {System.out.print("(");};
 		 opnd.imprime();
-		 //if(opnd.prioridad() < np) {System.out.print(")");};
+		 if(opnd.prioridad() < np) {System.out.print(")");};
 	 }
 	 private static void imprimeExpBin(Exp opnd0, String op, Exp opnd1, int np0, int np1) {
 		 imprimeOpnd(opnd0,np0);
