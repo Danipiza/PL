@@ -9,8 +9,8 @@ public interface Procesamiento {
 	void procesa(No_decs no_decs);
 	void procesa(Si_instrs si_instrs);
 	void procesa(No_instrs no_instrs);
-	void procesa(Si_tipo si_tipo);
-	void procesa(No_tipo no_tipo);
+	// void procesa(Si_tipo si_tipo);
+	// void procesa(No_tipo no_tipo);
 	void procesa(Tipo_lista tipo_lista);
 	void procesa(Tipo_circum tipo_circum);
 	void procesa(Tipo_struct tipo_struct);
@@ -80,5 +80,32 @@ public interface Procesamiento {
 	void procesa(InstrsOp instrsOp);
 	void procesa(ParsFOp parsFOp);
 	void procesa(ParsReOp parsReOp);*/
+
+
+
+	// void procesa2(Si_tipo si_tipo);
+	// void procesa2(No_tipo no_tipo);
+	void procesa2(Tipo_lista tipo_lista);
+	void procesa2(Tipo_circum tipo_circum);
+	void procesa2(Tipo_struct tipo_struct);
+	void procesa2(Tipo_iden tipo_iden);
+	void procesa2(Tipo_int tipo_int);
+	void procesa2(Tipo_real tipo_real);
+	void procesa2(Tipo_bool tipo_bool);
+	void procesa2(Tipo_string tipo_string);
+	void procesa2(Muchos_campos muchos_campos);
+	void procesa2(Un_campo un_campo);
+	void procesa2(Crea_campo crea_campo);
+	void procesa2(Muchas_decs muchas_decs);
+	void procesa2(Una_dec una_dec);
+	void procesa2(Dec_variable dec_variable);
+	void procesa2(Dec_tipo dec_tipo);
+	void procesa2(Dec_proc dec_proc);
+	void procesa2(Si_parsF si_parsF);
+	void procesa2(No_parsF no_parsF);
+	void procesa2(Muchos_parsF muchos_parsF);
+	void procesa2(Un_parF un_parF);
+	void procesa2(ParamF paramF);
+	void procesa2(Param param);
 	
 }

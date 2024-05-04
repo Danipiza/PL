@@ -1,15 +1,14 @@
 package asint;
 
-import asint.ProcesamientoDef;
 import asint.SintaxisAbstractaTiny.*;
 
-public class Impresion extends ProcesamientoDef {
-    @Override
+public class Impresion implements Procesamiento {
+    
 	public void procesa(Prog prog) {
 		prog.bloq().procesa(this);
 	}
 
-	@Override
+	
 	public void procesa(Bloq bloq) {
 		System.out.println("{");
 		bloq.decsOp().procesa(this);
@@ -39,17 +38,17 @@ public class Impresion extends ProcesamientoDef {
 		
 	}
 
-	@Override
-	public void procesa(Si_tipo si_tipo) {
-		// TODO Auto-generated method stub
-		si_tipo.tipo().procesa(this);
-	}
+	// @Override
+	// public void procesa(Si_tipo si_tipo) {
+	// 	// TODO Auto-generated method stub
+	// 	si_tipo.tipo().procesa(this);
+	// }
 
-	@Override
-	public void procesa(No_tipo no_tipo) {
-		// TODO Auto-generated method stub
+	// @Override
+	// public void procesa(No_tipo no_tipo) {
+	// 	// TODO Auto-generated method stub
 		
-	}
+	// }
 
 	@Override
 	public void procesa(Tipo_lista tipo_lista) {
@@ -501,5 +500,175 @@ public class Impresion extends ProcesamientoDef {
 	@Override
 	public void procesa(NULL null1) {
 		System.out.print(null1);		
+	}
+
+
+	
+
+	// @Override
+	// public void procesa2(Si_tipo si_tipo) {
+	// 	// TODO Auto-generated method stub
+	// 	throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	// }
+
+
+	// @Override
+	// public void procesa2(No_tipo no_tipo) {
+	// 	// TODO Auto-generated method stub
+	// 	throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	// }
+
+
+	@Override
+	public void procesa2(Tipo_lista tipo_lista) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Tipo_circum tipo_circum) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Tipo_struct tipo_struct) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Tipo_iden tipo_iden) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Tipo_int tipo_int) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Tipo_real tipo_real) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Tipo_bool tipo_bool) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Tipo_string tipo_string) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Muchos_campos muchos_campos) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Un_campo un_campo) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Crea_campo crea_campo) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Muchas_decs muchas_decs) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Una_dec una_dec) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Dec_variable dec_variable) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Dec_tipo dec_tipo) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Dec_proc dec_proc) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Si_parsF si_parsF) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(No_parsF no_parsF) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Muchos_parsF muchos_parsF) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Un_parF un_parF) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(ParamF paramF) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+
+	@Override
+	public void procesa2(Param param) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
 	}
 }
