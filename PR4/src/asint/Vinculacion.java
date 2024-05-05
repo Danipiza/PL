@@ -218,6 +218,7 @@ public class Vinculacion implements Procesamiento{
 	@Override
 	public void procesa(Instr_if instr_if) {
 		instr_if.exp().procesa(this);
+        instr_if.bloq().procesa(this);
 	}
 
 	@Override
@@ -260,6 +261,10 @@ public class Vinculacion implements Procesamiento{
 
 	@Override
 	public void procesa(Instr_call instr_call) {
+		instr_call.vinculo = ts.valorDe(instr_call.id());
+		if (instr_call.vinculo == null){
+            SemanticErrors.addError(instr_call.leeFila(), instr_call.leeCol(), "cannot find the link of: "+ instr_call.id());
+        }
 		instr_call.parsreop().procesa(this);
 	}
 

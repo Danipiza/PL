@@ -1,5 +1,7 @@
 package asint;
 
+import java.util.HashMap;
+
 //import c_ast_descendente.String;
 
 public class SintaxisAbstractaTiny {
@@ -12,6 +14,7 @@ public class SintaxisAbstractaTiny {
 	   private int fila;
 	   private int col;
        public Nodo vinculo;
+       public Tipo t;
 
 	   public Nodo ponFila(int fila) {
 		    this.fila = fila;
@@ -365,11 +368,12 @@ public class SintaxisAbstractaTiny {
 
     public static class Tipo_struct extends Tipo { // TODO extends Tipo?
  	   	private Campos campos;
+        public HashMap<String, Tipo> nm;
         public Tipo_struct(Campos campos) {
  		   super();
  		   this.campos = campos;
         }   
-        public Campos campos() {return campos;}
+        public Campos campos() {return campos;} 
         
         public String toString() {
              //return "tipo_struct("+campos+")";
@@ -2411,6 +2415,25 @@ public class SintaxisAbstractaTiny {
 			return 7;
 		} 
     }
+
+    // added a tipo_null for type checking
+    public static class Tipo_null extends Tipo { // TODO extends Tipo?
+        public Tipo_null() {
+           super();
+       }   
+       public String toString() { 
+            return "null";
+       }
+       public void imprime() {}
+       @Override
+       public void procesa(Procesamiento p) {}
+       @Override
+       public void procesa2(Procesamiento p) {}
+   }
+
+
+
+
     //
     
     // -----------------------------------------------------------------------------------------
