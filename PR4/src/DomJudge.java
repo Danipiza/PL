@@ -4,6 +4,10 @@ import java.io.Reader;
 
 import asint.Impresion;
 import asint.SintaxisAbstractaTiny.Prog;
+import asint.Vinculacion;
+import asint.PreTipado;
+import asint.SemanticErrors;
+import asint.Tipado;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -24,56 +28,30 @@ public class DomJudge {
 
 	public static void main(String[] args) throws Exception  {
 		
-		//Reader input = new InputStreamReader(new FileInputStream("input.txt"));
-		
-		Reader input = new InputStreamReader(System.in);	
+		Reader input = new InputStreamReader(new FileInputStream("input.txt"));
+		//Reader input = new InputStreamReader(System.in);
+
 		BufferedReader bufferedReader = new BufferedReader(input);
-        
-         
 		int parser = bufferedReader.read();
+		Prog prog = null;
 		//System.out.println(parser);
 		//ConstructorAST asint = null;
-		try {		
+		try {	
 			
 			if(parser=='a') { // ASCENDENTE 		
 				AnalizadorLexicoTiny alex = new AnalizadorLexicoTiny(bufferedReader);
 				AnalizadorSintacticoTinyDJAsc asint = new AnalizadorSintacticoTinyDJAsc(alex);
-				
 				System.out.println("CONSTRUCCION AST ASCENDENTE");
-				
-				Prog prog =(Prog) asint.debug_parse().value;
-				// asint.debug_parse();
-				// Prog prog = (Prog)asint.parse().value;				
-				
-				System.out.println("IMPRESION RECURSIVA");
-				System.out.print(prog);
-				
-				System.out.println("IMPRESION INTERPRETE");
-				prog.imprime();
-				
-				System.out.println("IMPRESION VISITANTE");					
-				prog.procesa(new Impresion());
-					
-				
-				
+				prog =(Prog) asint.debug_parse().value;
+				//prog.procesa(new Impresion());
 			}
 			else {
 				System.out.println("CONSTRUCCION AST DESCENDENTE");
 				AnalizadorSintacticoTinyDJ asint = new AnalizadorSintacticoTinyDJ(bufferedReader);
 	            asint.disable_tracing();
-	            Prog prog=asint.inicial();
-	            
-				System.out.println("IMPRESION RECURSIVA");
-				System.out.print(prog);
-				
-				System.out.println("IMPRESION INTERPRETE");
-				prog.imprime();
-				
-				System.out.println("IMPRESION VISITANTE");					
-				prog.procesa(new Impresion());					   	            
+	            prog=asint.inicial();					
+				//prog.procesa(new Impresion());					   	            
 			}			
-			
-			
 		} 
 		catch(TokenMgrError e) {
 			System.out.println("ERROR_LEXICO"); 
@@ -86,6 +64,35 @@ public class DomJudge {
 		}
 		catch(ErrorSintactico e) {
 			System.out.println("ERROR_SINTACTICO"); 
+		}
+
+		if (prog != null){
+			new Vinculacion().procesa(prog);
+
+			if(SemanticErrors.noHayError()) {
+				new PreTipado().procesa(prog);
+			}
+			else{
+				SemanticErrors.printErrorsDJ("Errores_vinculacion");
+				System.exit(0);
+			}
+
+			if(SemanticErrors.noHayError()) {
+			new Tipado().procesa(prog);
+			}
+			else{
+				SemanticErrors.printErrorsDJ("Errores_pretipado");
+				//SemanticErrors.printErrors();
+				System.exit(0);
+			}
+			if(SemanticErrors.noHayError()) {
+				// do nothing
+				}
+				else{
+					SemanticErrors.printErrorsDJ("Errores_tipado");
+					//SemanticErrors.printErrors();
+					System.exit(0);
+				}
 		}
 	}
 }

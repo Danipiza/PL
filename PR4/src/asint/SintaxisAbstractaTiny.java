@@ -15,6 +15,7 @@ public class SintaxisAbstractaTiny {
 	   private int col;
        public Nodo vinculo;
        public Tipo t;
+       public int dir;
 
 	   public Nodo ponFila(int fila) {
 		    this.fila = fila;
@@ -527,6 +528,7 @@ public class SintaxisAbstractaTiny {
     public static class Muchos_campos extends Campos { // TODO extends ?
  	   	private Campos campos;
  	   	private Campo campo;
+        public Tipo_struct parenStruct;
         public Muchos_campos(Campos campos, Campo campo) {
  		   super();
  		   this.campos = campos;
@@ -559,10 +561,15 @@ public class SintaxisAbstractaTiny {
         public void procesa2(Procesamiento p) {
             p.procesa2(this);
         }
+        @Override
+        public void SetParentStruct(Tipo_struct val) {
+            parenStruct = val;
+        }
     }
 
     public static class Un_campo extends Campos { // TODO extends ?
  	   	private Campo campo;
+        public Tipo_struct parentStruct;
         public Un_campo(Campo campo) {
  		   super();
  		   this.campo = campo;
@@ -587,12 +594,22 @@ public class SintaxisAbstractaTiny {
         @Override
         public void procesa2(Procesamiento p) {
             p.procesa2(this);
+        }
+        @Override
+        public void SetParentStruct(Tipo_struct val) {
+            parentStruct = val;
+        }
+        @Override
+        public Campos campos() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'campos'");
         } 
     }
 
     public static class Crea_campo extends Campo { // TODO extends ?
  	   	private Tipo tipo;
     	private String identificador;
+        public Tipo_struct parentStruct;
         public Crea_campo(Tipo tipo, String identificador) {
  		   super();
  		   this.tipo = tipo;
@@ -621,6 +638,10 @@ public class SintaxisAbstractaTiny {
         @Override
         public void procesa2(Procesamiento p) {
             p.procesa2(this);
+        }
+        @Override
+        public void SetParentStruct(Tipo_struct val) {
+            parentStruct = val;
         }
     }
     
@@ -689,6 +710,11 @@ public class SintaxisAbstractaTiny {
         @Override
         public void procesa2(Procesamiento p) {
             p.procesa2(this);
+        }
+        @Override
+        public Decs decs() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'decs'");
         }
     }
 
@@ -820,11 +846,14 @@ public class SintaxisAbstractaTiny {
     
     public static class Si_parsF extends ParsFOp { // Si_decs, Si_parsRe
     	private ParsF parsf ; 
+        private int length;
         public Si_parsF(ParsF parsf) {
  		   super();
  		   this.parsf = parsf;
+           this.length = parsf.length();
         }   
         public ParsF parsf() {return parsf;}
+        public int length() {return length;}
         
         public String toString() {
              //return "si_parsF("+parsf+")";
@@ -907,6 +936,10 @@ public class SintaxisAbstractaTiny {
         public void procesa2(Procesamiento p) {
             p.procesa2(this);
         }
+        @Override
+        public int length() {
+            return parsF.length()+1;
+        }
     }
 
     public static class Un_parF extends ParsF { // Una_dec, Un_parRe 
@@ -935,9 +968,18 @@ public class SintaxisAbstractaTiny {
         public void procesa2(Procesamiento p) {
             p.procesa2(this);
         }
+        @Override
+        public int length() {
+            return 1;
+        }
+        @Override
+        public ParsF parsF() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'parsF'");
+        }
     }
 
-    public static class ParamF extends ParF { // TODO Param?
+    public static class ParamF extends ParF {
     	private String id;
     	private Tipo tipo;
     	
@@ -955,8 +997,6 @@ public class SintaxisAbstractaTiny {
         }
 		
         public void imprime() {
-			/*tipo.imprime();
-			System.out.print(id);*/
 			tipo.imprime();		
 			System.out.println("&");
 			System.out.println(id + "$f:" + leeFila() + ",c:" + leeCol()+"$");
@@ -980,6 +1020,7 @@ public class SintaxisAbstractaTiny {
         public Param(String id, Tipo tipo) {
             this.tipo=tipo;
         	this.id = id;
+
             
         }
         public Tipo tipo() {return tipo;}
@@ -1072,6 +1113,11 @@ public class SintaxisAbstractaTiny {
         @Override
         public void procesa2(Procesamiento p) {
             
+        }
+        @Override
+        public Instrs instrs() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'instrs'");
         }
     }
 
@@ -1464,11 +1510,15 @@ public class SintaxisAbstractaTiny {
     
     public static class Si_parsRe extends ParsReOp { // Si_decs, Si_parsF
     	private ParsRe parsre;
+        private int length;
         public Si_parsRe(ParsRe parsre) {
  		   super();
  		   this.parsre = parsre;
-        }   
+           length = parsre.length();
+        }
         public ParsRe parsre() {return parsre;}
+        public int length() {return length;}
+
         public String toString() {
              //return "si_parsRE("+parsre+")";
         	return "" + parsre;
@@ -1477,7 +1527,6 @@ public class SintaxisAbstractaTiny {
         public void imprime() {
 			parsre.imprime();
 		}
-        
         @Override
         public void procesa(Procesamiento p) {
             p.procesa(this);
@@ -1549,6 +1598,10 @@ public class SintaxisAbstractaTiny {
         public void procesa2(Procesamiento p) {
             
         }
+        @Override
+        public int length() {
+            return parsRe.length() + 1;
+        }
     }
 
 
@@ -1558,7 +1611,6 @@ public class SintaxisAbstractaTiny {
            super();
            this.exp = exp;
         }
-        public Exp parsre() {return exp;}
         public String toString() {
              //return "un_parRe("+exp+")";
         	return ""+exp;
@@ -1576,6 +1628,19 @@ public class SintaxisAbstractaTiny {
         public void imprime() {
 			exp.imprime();
 		}
+        @Override
+        public int length() {
+            return 1;
+        }
+        @Override
+        public Exp parF() {
+            return exp;
+        }
+        @Override
+        public ParsRe parsF() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'parsF'");
+        }
     }
     
     
@@ -1586,16 +1651,16 @@ public class SintaxisAbstractaTiny {
         }
         protected abstract void imprime();
         
-        public Dec dec() {throw new UnsupportedOperationException();}
- 	   public Decs ldecs() {throw new UnsupportedOperationException();}
+        public abstract Dec dec();
+ 	   public abstract Decs decs();
      }
  	public static abstract class Instrs extends Nodo { // Decs, ParsF
         public Instrs() {
      	   super();
         }
         protected abstract void imprime();
- 	public Instr instr() {throw new UnsupportedOperationException();}
- 	   public Instrs instrs() {throw new UnsupportedOperationException();}
+ 	    public abstract Instr instr();
+ 	    public abstract Instrs instrs();
 
      }	
      public static abstract class ParsF extends Nodo { // Decs, Instrs, ParsRe
@@ -1603,8 +1668,9 @@ public class SintaxisAbstractaTiny {
          	super();
          }
          protected abstract void imprime();
- 		public ParF parf() {throw new UnsupportedOperationException();}
-  	   	public ParsF parsf() {throw new UnsupportedOperationException();}
+ 		public abstract ParF parF();
+  	   	public abstract ParsF parsF();
+        public abstract int length();
      }
      public static abstract class ParsRe extends Nodo { // Decs, Instrs, ParsF
          public ParsRe() {
@@ -1612,8 +1678,9 @@ public class SintaxisAbstractaTiny {
          }
         //protected abstract void imprimir();
  		protected abstract void imprime();
- 		public ParRe parf() {throw new UnsupportedOperationException();}
-  	   	public ParsRe parsf() {throw new UnsupportedOperationException();}
+        public abstract int length();
+ 		public abstract Exp parF();
+  	   	public abstract ParsRe parsF();
      }
 
      
@@ -1649,70 +1716,38 @@ public class SintaxisAbstractaTiny {
          public Tipo() {
          }
          protected abstract void imprime();
-         // TODO
-         //public LDecs ldecs() {throw new UnsupportedOperationException();}
      }
      
      public static abstract class Campos extends Nodo {
-         public Campos() {
-         }
+         public abstract Campos campos();
+         public abstract Campo campo();
+         public abstract void SetParentStruct(Tipo_struct val);
          protected abstract void imprime();
-         // TODO
-         //public LDecs ldecs() {throw new UnsupportedOperationException();}
-
      }
      public static abstract class Campo extends Nodo {
          public Campo() {
          }
+         public abstract void SetParentStruct(Tipo_struct val);
          protected abstract void imprime();
-         // TODO
-         //public LDecs ldecs() {throw new UnsupportedOperationException();}
-
+        protected abstract Tipo tipo();
      }
      
      public static abstract class Dec extends Nodo { // ParF
          public Dec() {
          }
          protected abstract void imprime();
-         // TODO
-         //public LDecs ldecs() {throw new UnsupportedOperationException();}
      }
      public static abstract class Instr extends Nodo { // Dec, ParF 
          public Instr() {
          }
          protected abstract void imprime();
-         // TODO
-         //public LDecs ldecs() {throw new UnsupportedOperationException();}
      }       
      public static abstract class ParF extends Nodo { // Dec, Instr, ParRe
          public ParF() {
          }
          protected abstract void imprime();
-         public Tipo tipo() {throw new UnsupportedOperationException();}
-         public String string() {throw new UnsupportedOperationException();}
-     }           
-     public static abstract class ParRe extends Nodo { // Dec, Instr, ParF
-         public ParRe() {
-         }
-         protected abstract void imprime();
-         // TODO
-         //public LDecs ldecs() {throw new UnsupportedOperationException();}
-     }
-     
-     
-     public static abstract class FtypeDeclaracion extends Nodo { // Dec, Instr, ParF?
-         public FtypeDeclaracion () {
-         }
-         protected abstract void imprime();
-         // TODO
-         //public LDecs ldecs() {throw new UnsupportedOperationException();}
-     }
-     public static abstract class TypeDec extends Nodo { // Decs, Instrs, ParsRe
-         public TypeDec() {
-         }
-         protected abstract void imprime();
-         // TODO
-         //public LDecs ldecs() {throw new UnsupportedOperationException();}
+         public abstract Tipo tipo();
+         //public abstract String string();
      }
      
      //

@@ -245,9 +245,7 @@ public class Vinculacion implements Procesamiento{
 	}
 
 	@Override
-	public void procesa(Instr_nl instr_nl) {
-		System.out.println("<nl>");
-	}
+	public void procesa(Instr_nl instr_nl) {}
 
 	@Override
 	public void procesa(Instr_new instr_new) {
@@ -289,7 +287,7 @@ public class Vinculacion implements Procesamiento{
 
 	@Override
 	public void procesa(Un_parRe un_parRe) {
-		un_parRe.parsre().procesa(this);
+		un_parRe.parF().procesa(this);
 	}
 
     // infixes (binary operations)
@@ -429,11 +427,14 @@ public class Vinculacion implements Procesamiento{
     @Override
     public void procesa2(Tipo_circum tipo_circum) {
         if (tipo_circum.tipo() instanceof Tipo_iden){
-            Tipo_iden tipo = (Tipo_iden)tipo_circum.tipo();
+            Tipo_iden tipo = (Tipo_iden)(tipo_circum.tipo());
             tipo.vinculo = ts.valorDe(tipo.identificador());
             if(tipo.vinculo == null){
                 SemanticErrors.addError(tipo.leeFila(), tipo.leeCol(), "cannot find the link of: "+ tipo.identificador());
-            }  
+            }
+			else{
+				// System.out.println(tipo + " " + tipo.leeFila() + ":" + tipo.leeCol() + " linked to " + tipo.vinculo.leeFila()+":"+tipo.vinculo.leeCol());
+			}  
         }
         else{
             tipo_circum.tipo().procesa2(this); 
@@ -490,7 +491,7 @@ public class Vinculacion implements Procesamiento{
 
     @Override
     public void procesa2(Dec_tipo dec_tipo) {
-        dec_tipo.tipo().procesa(this);
+        dec_tipo.tipo().procesa2(this);
     }
 
     @Override

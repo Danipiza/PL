@@ -2,9 +2,7 @@ package asint;
 import asint.SintaxisAbstractaTiny.*;
 import java.util.HashMap; 
 
-public class CompruebaTipo implements Procesamiento{
-
-	private HashMap<String, Tipo> nm;
+public class PreTipado implements Procesamiento{
 
     @Override
     public void procesa(Prog prog) {
@@ -64,15 +62,19 @@ public class CompruebaTipo implements Procesamiento{
 
 	@Override
 	public void procesa(Tipo_struct tipo_struct) {
-		nm = new HashMap<>();
+		tipo_struct.nm = new HashMap<>();
+		tipo_struct.campos().SetParentStruct(tipo_struct);
 		tipo_struct.campos().procesa(this);
 		tipo_struct.t = tipo_struct.campos().t;
-		tipo_struct.nm = nm;
 	}
 
 	// it is fine to leave the t as empty because in runtime null is not an instance of error, which indicates null is ok
 	@Override
-	public void procesa(Tipo_iden tipo_iden) {}
+	public void procesa(Tipo_iden tipo_iden) {
+        if (!(tipo_iden.vinculo instanceof Dec_tipo)){
+            SemanticErrors.avisoError(tipo_iden,null,"tipo_iden " + tipo_iden.identificador() + " is not correctly linked to type declaration.");
+        }
+    }
 	@Override
 	public void procesa(Tipo_int tipo_int) {}
 	@Override
@@ -84,6 +86,8 @@ public class CompruebaTipo implements Procesamiento{
 
 	@Override
 	public void procesa(Muchos_campos muchos_campos) {
+		muchos_campos.campos().SetParentStruct(muchos_campos.parenStruct);
+		muchos_campos.campo().SetParentStruct(muchos_campos.parenStruct);
 		muchos_campos.campos().procesa(this);
 		muchos_campos.campo().procesa(this);
 		muchos_campos.t = TipoUtil.ambosOK(muchos_campos.campos().t, muchos_campos.campo().t);
@@ -91,6 +95,7 @@ public class CompruebaTipo implements Procesamiento{
 
 	@Override
 	public void procesa(Un_campo un_campo) {
+		un_campo.campo().SetParentStruct(un_campo.parentStruct);
 		un_campo.campo().procesa(this);
 		un_campo.t = un_campo.campo().t;
 	}
@@ -98,8 +103,11 @@ public class CompruebaTipo implements Procesamiento{
 	@Override
 	public void procesa(Crea_campo crea_campo) {
 		crea_campo.tipo().procesa(this);
-		if (nm.containsKey(crea_campo.identificador())){
-			SemanticErrors.avisoError(crea_campo, crea_campo.tipo().t,"duplicate field name: "+crea_campo.identificador());
+		if (crea_campo.parentStruct.nm.containsKey(crea_campo.identificador())){
+			SemanticErrors.avisoError(crea_campo, null,"duplicate field name: "+crea_campo.identificador());
+		}
+		else{
+			crea_campo.parentStruct.nm.put(crea_campo.identificador(), crea_campo.tipo());
 		}
 	}
 
@@ -107,39 +115,39 @@ public class CompruebaTipo implements Procesamiento{
 	public void procesa(Muchas_decs muchas_decs) {
 		muchas_decs.decs().procesa(this);
 		muchas_decs.dec().procesa(this);
-		muchas_decs.t = TipoUtil.ambosOK(muchas_decs.decs().t, muchas_decs.dec().t);
+		//muchas_decs.t = TipoUtil.ambosOK(muchas_decs.decs().t, muchas_decs.dec().t);
 	}
 
 	@Override
 	public void procesa(Una_dec una_dec) {
 		una_dec.dec().procesa(this);
-		una_dec.t = una_dec.dec().t;
+		//una_dec.t = una_dec.dec().t;
 	}
 
 	@Override
 	public void procesa(Dec_variable dec_variable) {
 		dec_variable.tipo().procesa(this);
 
-        dec_variable.t = dec_variable.tipo().t;
+        //dec_variable.t = dec_variable.tipo().t;
 	}
 
 	@Override
 	public void procesa(Dec_tipo dec_tipo) {
 		dec_tipo.tipo().procesa(this);
-        dec_tipo.t = dec_tipo.tipo().t;
+        //dec_tipo.t = dec_tipo.tipo().t;
 	}
 
 	@Override
 	public void procesa(Dec_proc dec_proc) {
 		dec_proc.parsfop().procesa(this);
 		dec_proc.bloq().procesa(this);	
-        dec_proc.t = TipoUtil.ambosOK(dec_proc.parsfop().t, dec_proc.bloq().t);
+        //dec_proc.t = TipoUtil.ambosOK(dec_proc.parsfop().t, dec_proc.bloq().t);
 	}
 
 	@Override
 	public void procesa(Si_parsF si_parsF) {
 		si_parsF.parsf().procesa(this);
-		si_parsF.t = si_parsF.parsf().t;
+		//si_parsF.t = si_parsF.parsf().t;
 	}
 
 	@Override
@@ -149,13 +157,13 @@ public class CompruebaTipo implements Procesamiento{
 	public void procesa(Muchos_parsF muchos_parsF) {
 		muchos_parsF.parsF().procesa(this);
 		muchos_parsF.parF().procesa(this);
-		muchos_parsF.t = TipoUtil.ambosOK(muchos_parsF.parsF().t, muchos_parsF.parF().t);
+		//muchos_parsF.t = TipoUtil.ambosOK(muchos_parsF.parsF().t, muchos_parsF.parF().t);
 	}
 
 	@Override
 	public void procesa(Un_parF un_parF) {
 		un_parF.parF().procesa(this);
-		un_parF.t = un_parF.parF().t;
+		//un_parF.t = un_parF.parF().t;
 	}
 
 	@Override
@@ -174,66 +182,66 @@ public class CompruebaTipo implements Procesamiento{
 	public void procesa(Muchas_instrs muchas_instrs) {
 		muchas_instrs.instrs().procesa(this);
 		muchas_instrs.instr().procesa(this);
-		muchas_instrs.t = TipoUtil.ambosOK(muchas_instrs.instrs().t, muchas_instrs.instr().t);
+		// muchas_instrs.t = TipoUtil.ambosOK(muchas_instrs.instrs().t, muchas_instrs.instr().t);
 	}
 
 	@Override
 	public void procesa(Una_instr una_instr) {
 		una_instr.instr().procesa(this);
-		una_instr.t = una_instr.instr().t;
+		// una_instr.t = una_instr.instr().t;
 	}
 
 	@Override
 	public void procesa(Instr_eval instr_eval) {
-		instr_eval.exp().procesa(this);
-		instr_eval.t = TipoUtil.OK(instr_eval.exp().t);
+		// instr_eval.exp().procesa(this);
+		// instr_eval.t = TipoUtil.OK(instr_eval.exp().t);
 	}
 
 	@Override
 	public void procesa(Instr_if instr_if) {
-		instr_if.exp().procesa(this);
+		// instr_if.exp().procesa(this);
 		instr_if.bloq().procesa(this);
-		if( !(TipoUtil.REF(instr_if.exp().t) instanceof Tipo_bool) || (instr_if.bloq().t instanceof NameError)){
-			SemanticErrors.avisoError(instr_if, instr_if.exp().t, instr_if.bloq().t, "the condition in if statement should be bool");
-		}
+		// if( !(TipoUtil.REF(instr_if.exp().t) instanceof Tipo_bool) || (instr_if.bloq().t instanceof NameError)){
+		// 	SemanticErrors.avisoError(instr_if, instr_if.exp().t, instr_if.bloq().t, "the condition in if statement should be bool");
+		// }
 	}
 
 	@Override
 	public void procesa(Instr_ifelse instr_ifelse) {
-		instr_ifelse.exp().procesa(this);
+		// instr_ifelse.exp().procesa(this);
 		instr_ifelse.bloq1().procesa(this);
 		instr_ifelse.bloq2().procesa(this);
-		if( !(TipoUtil.REF(instr_ifelse.exp().t) instanceof Tipo_bool) || (instr_ifelse.bloq1().t instanceof NameError) || (instr_ifelse.bloq2().t instanceof NameError)){
-		SemanticErrors.avisoError(instr_ifelse, instr_ifelse.exp().t, instr_ifelse.bloq1().t, instr_ifelse.bloq2().t, "the condition in if statement should be bool");
-		}
+		// if( !(TipoUtil.REF(instr_ifelse.exp().t) instanceof Tipo_bool) || (instr_ifelse.bloq1().t instanceof NameError) || (instr_ifelse.bloq2().t instanceof NameError)){
+		// SemanticErrors.avisoError(instr_ifelse, instr_ifelse.exp().t, instr_ifelse.bloq1().t, instr_ifelse.bloq2().t, "the condition in if statement should be bool");
+		// }
 	}
 
 	@Override
 	public void procesa(Instr_while instr_while) {
-		instr_while.exp().procesa(this);
+		// instr_while.exp().procesa(this);
 		instr_while.bloq().procesa(this);
-		if(!(TipoUtil.REF(instr_while.exp().t) instanceof Tipo_bool) || (instr_while.bloq().t instanceof NameError)){
-			SemanticErrors.avisoError(instr_while, instr_while.exp().t, instr_while.bloq().t, "the condition in while statement should be bool");
-		}
+		// if(!(TipoUtil.REF(instr_while.exp().t) instanceof Tipo_bool) || (instr_while.bloq().t instanceof NameError)){
+		// 	SemanticErrors.avisoError(instr_while, instr_while.exp().t, instr_while.bloq().t, "the condition in while statement should be bool");
+		// }
 	}
 
 	@Override
 	public void procesa(Instr_read instr_read) {
-		instr_read.exp().procesa(this);
-		Tipo tipoExp = TipoUtil.REF(instr_read.exp().t);
-		if(!(((tipoExp instanceof Tipo_int)||(tipoExp instanceof Tipo_real)||(tipoExp instanceof Tipo_string)) && TipoUtil.esDesignador(instr_read.exp()))){
-			SemanticErrors.avisoError(instr_read, tipoExp, "cannot read invalid value type");
-		}
+		//instr_read.exp().procesa(this);
+		// Tipo tipoExp = TipoUtil.REF(instr_read.exp().t);
+		// if(!(((tipoExp instanceof Tipo_int)||(tipoExp instanceof Tipo_real)||(tipoExp instanceof Tipo_string)) && TipoUtil.esDesignador(instr_read.exp()))){
+		// 	SemanticErrors.avisoError(instr_read, tipoExp, "cannot read invalid value type");
+		// }
 	}
 
 	@Override
 	public void procesa(Instr_write instr_write) {
-		instr_write.exp().procesa(this);
-		Tipo tipoExp = TipoUtil.REF(instr_write.exp().t);
-		if(!(((tipoExp instanceof Tipo_int)||(tipoExp instanceof Tipo_real)||
-		(tipoExp instanceof Tipo_bool) || (tipoExp instanceof Tipo_string)) && TipoUtil.esDesignador(instr_write.exp()))){
-			SemanticErrors.avisoError(instr_write, tipoExp, "cannot write invalid value type");
-		}
+		// instr_write.exp().procesa(this);
+		// Tipo tipoExp = TipoUtil.REF(instr_write.exp().t);
+		// if(!(((tipoExp instanceof Tipo_int)||(tipoExp instanceof Tipo_real)||
+		// (tipoExp instanceof Tipo_bool) || (tipoExp instanceof Tipo_string)) && TipoUtil.esDesignador(instr_write.exp()))){
+		// 	SemanticErrors.avisoError(instr_write, tipoExp, "cannot write invalid value type");
+		// }
 	}
 
 	@Override
@@ -241,50 +249,50 @@ public class CompruebaTipo implements Procesamiento{
 
 	@Override
 	public void procesa(Instr_new instr_new) {
-		instr_new.exp().procesa(this);
-		Tipo tipoExp = TipoUtil.REF(instr_new.exp().t);
-		if(!(tipoExp instanceof Tipo_circum)){
-			SemanticErrors.avisoError(instr_new, tipoExp, "the new exp type should be a pointer");
-		}
+		// instr_new.exp().procesa(this);
+		// Tipo tipoExp = TipoUtil.REF(instr_new.exp().t);
+		// if(!(tipoExp instanceof Tipo_circum)){
+		// 	SemanticErrors.avisoError(instr_new, tipoExp, "the new exp type should be a pointer");
+		// }
 	}
 
 	@Override
 	public void procesa(Instr_del instr_del) {
-		instr_del.exp().procesa(this);
-		Tipo tipoExp = TipoUtil.REF(instr_del.exp().t);
-		if(!(tipoExp instanceof Tipo_circum)){
-			SemanticErrors.avisoError(instr_del, tipoExp, "the del exp type should be a pointer");
-		}
+		// instr_del.exp().procesa(this);
+		// Tipo tipoExp = TipoUtil.REF(instr_del.exp().t);
+		// if(!(tipoExp instanceof Tipo_circum)){
+		// 	SemanticErrors.avisoError(instr_del, tipoExp, "the del exp type should be a pointer");
+		// }
 	}
 
 	@Override
 	public void procesa(Instr_call instr_call) {
 		// TODO: may need extra type checking of this vinculo
-		Dec_proc dec_proc = (Dec_proc)instr_call.vinculo;
-		ParsFOp parsFOp = dec_proc.parsfop();
-		ParsReOp parsReOp = instr_call.parsreop();
-		parsReOp.procesa(this);
+		// Dec_proc dec_proc = (Dec_proc)instr_call.vinculo;
+		// ParsFOp parsFOp = dec_proc.parsfop();
+		// ParsReOp parsReOp = instr_call.parsreop();
+		// parsReOp.procesa(this);
 
-		if((parsFOp instanceof No_parsF)&&(parsReOp instanceof No_parsRe)){}
-		else if((parsFOp instanceof Si_parsF)&&(parsReOp instanceof Si_parsRe)){
-			Si_parsF si_parsF = (Si_parsF) parsFOp;
-			Si_parsRe si_parsRe = (Si_parsRe) parsReOp;
-			if (!TipoUtil.comprobarParametros(si_parsF.parsf(), si_parsRe.parsre())){
-				SemanticErrors.avisoError(instr_call, si_parsF.t, si_parsRe.t, "incompatible params");
-			};
-		}
+		// if((parsFOp instanceof No_parsF)&&(parsReOp instanceof No_parsRe)){}
+		// else if((parsFOp instanceof Si_parsF)&&(parsReOp instanceof Si_parsRe)){
+		// 	Si_parsF si_parsF = (Si_parsF) parsFOp;
+		// 	Si_parsRe si_parsRe = (Si_parsRe) parsReOp;
+		// 	if (!TipoUtil.comprobarParametros(si_parsF.parsf(), si_parsRe.parsre())){
+		// 		SemanticErrors.avisoError(instr_call, si_parsF.t, si_parsRe.t, "incompatible params");
+		// 	};
+		// }
 	}
 
 	@Override
 	public void procesa(Instr_bloque instr_bloque) {
 		instr_bloque.bloq().procesa(this);
-		instr_bloque.t = instr_bloque.bloq().t;
+		// instr_bloque.t = instr_bloque.bloq().t;
 	}
 
 	@Override
 	public void procesa(Si_parsRe si_parsRe) {
-		si_parsRe.parsre().procesa(this);
-		si_parsRe.t = si_parsRe.parsre().t;
+		// si_parsRe.parsre().procesa(this);
+		// si_parsRe.t = si_parsRe.parsre().t;
 	}
 
 	@Override
@@ -292,179 +300,179 @@ public class CompruebaTipo implements Procesamiento{
 
 	@Override
 	public void procesa(Muchos_parsRe muchos_parsRe) {
-		muchos_parsRe.parsF().procesa(this);
-		muchos_parsRe.parF().procesa(this);
-		muchos_parsRe.t = TipoUtil.ambosOK(muchos_parsRe.parsF().t, muchos_parsRe.parF().t);
+		// muchos_parsRe.parsF().procesa(this);
+		// muchos_parsRe.parF().procesa(this);
+		// muchos_parsRe.t = TipoUtil.ambosOK(muchos_parsRe.parsF().t, muchos_parsRe.parF().t);
 	}
 
 	@Override
 	public void procesa(Un_parRe un_parRe) {
-		un_parRe.parsre().procesa(this);
-		un_parRe.t = TipoUtil.OK(un_parRe.parsre().t);
+		// un_parRe.parsre().procesa(this);
+		// un_parRe.t = TipoUtil.OK(un_parRe.parsre().t);
 	}
 
     // infixes (binary operations)
     private void procesaBin(ExpBin exp){
-        exp.opnd0().procesa(this);
-        exp.opnd1().procesa(this);
+        // exp.opnd0().procesa(this);
+        // exp.opnd1().procesa(this);
     }
 	@Override
 	public void procesa(Suma suma) {		
-		procesaBin(suma);
-		TipoUtil.tipadoBinAritmetico(suma);			
+		// procesaBin(suma);
+		// TipoUtil.tipadoBinAritmetico(suma);			
 	}
 	@Override
 	public void procesa(Resta resta) {
-		procesaBin(resta);
-		TipoUtil.tipadoBinAritmetico(resta);	
+		// procesaBin(resta);
+		// TipoUtil.tipadoBinAritmetico(resta);	
 	}
 	@Override
 	public void procesa(Mul mul) {
-		procesaBin(mul);
-		TipoUtil.tipadoBinAritmetico(mul);	
+		// procesaBin(mul);
+		// TipoUtil.tipadoBinAritmetico(mul);	
 	}
 	@Override
 	public void procesa(Div div) {
-		procesaBin(div);
-		TipoUtil.tipadoBinAritmetico(div);	
+		// procesaBin(div);
+		// TipoUtil.tipadoBinAritmetico(div);	
 	}
 	@Override
 	public void procesa(Mod mod) {
-		procesaBin(mod);
-		if((mod.opnd0().t instanceof Tipo_int) && (mod.opnd1().t instanceof Tipo_int)){
-            mod.t = new Tipo_int();
-        }
-        else{
-            SemanticErrors.avisoError(mod, mod.opnd0().t, mod.opnd1().t, "incompatible values for mod");
-        }
+		// procesaBin(mod);
+		// if((mod.opnd0().t instanceof Tipo_int) && (mod.opnd1().t instanceof Tipo_int)){
+        //     mod.t = new Tipo_int();
+        // }
+        // else{
+        //     SemanticErrors.avisoError(mod, mod.opnd0().t, mod.opnd1().t, "incompatible values for mod");
+        // }
 	}
 	@Override
 	public void procesa(Asig asig) {
-		procesaBin(asig);
-		if (TipoUtil.esDesignador(asig.opnd0) && TipoUtil.compatible(asig.opnd0().t, asig.opnd1().t)){
-			asig.t = asig.opnd0().t;
-		}
-		else{
-			SemanticErrors.avisoError(asig, asig.opnd0().t, asig.opnd1().t, "invalid values for mod");
-		}
+		// procesaBin(asig);
+		// if (TipoUtil.esDesignador(asig.opnd0) && TipoUtil.compatible(asig.opnd0().t, asig.opnd1().t)){
+		// 	asig.t = asig.opnd0().t;
+		// }
+		// else{
+		// 	SemanticErrors.avisoError(asig, asig.opnd0().t, asig.opnd1().t, "invalid values for mod");
+		// }
 	}
 	@Override
 	public void procesa(MenorI menorI) {
-		procesaBin(menorI);
-		TipoUtil.tipadoBinRelacional(menorI);
+		// procesaBin(menorI);
+		// TipoUtil.tipadoBinRelacional(menorI);
 	}
 	@Override
 	public void procesa(Menor menor) {
-		procesaBin(menor);
-		TipoUtil.tipadoBinRelacional(menor);
+		// procesaBin(menor);
+		// TipoUtil.tipadoBinRelacional(menor);
 	}
 	@Override
 	public void procesa(MayorI mayorI) {
-		procesaBin(mayorI);
-		TipoUtil.tipadoBinRelacional(mayorI);
+		// procesaBin(mayorI);
+		// TipoUtil.tipadoBinRelacional(mayorI);
 	}
 	@Override
 	public void procesa(Mayor mayor) {
-		procesaBin(mayor);
-		TipoUtil.tipadoBinRelacional(mayor);
+		// procesaBin(mayor);
+		// TipoUtil.tipadoBinRelacional(mayor);
 	}
 	@Override
 	public void procesa(Igual igual) {
-		procesaBin(igual);
-		TipoUtil.tipadoBinRelacionalEspecial(igual);
+		// procesaBin(igual);
+		// TipoUtil.tipadoBinRelacionalEspecial(igual);
 	}
 	@Override
 	public void procesa(Distint distint) {
-		procesaBin(distint);
-		TipoUtil.tipadoBinRelacionalEspecial(distint);
+		// procesaBin(distint);
+		// TipoUtil.tipadoBinRelacionalEspecial(distint);
 	}
 	@Override
 	public void procesa(And and) {
-		procesaBin(and);
-		TipoUtil.tipadoBinLogico(and);
+		// procesaBin(and);
+		// TipoUtil.tipadoBinLogico(and);
 	}
 	@Override
 	public void procesa(Or or) {
-		procesaBin(or);
-		TipoUtil.tipadoBinLogico(or);
+		// procesaBin(or);
+		// TipoUtil.tipadoBinLogico(or);
 	}
 
 
     // prefixes
 	@Override
 	public void procesa(Negacion negacion) {
-		negacion.opnd0().procesa(this);
-		if(TipoUtil.REF(negacion.opnd0().t) instanceof Tipo_bool){
-			negacion.t = new Tipo_bool();
-		}
-		else{
-			SemanticErrors.avisoError(negacion, negacion.opnd0().t, "negation exp should be bool");
-		}
+		// negacion.opnd0().procesa(this);
+		// if(TipoUtil.REF(negacion.opnd0().t) instanceof Tipo_bool){
+		// 	negacion.t = new Tipo_bool();
+		// }
+		// else{
+		// 	SemanticErrors.avisoError(negacion, negacion.opnd0().t, "negation exp should be bool");
+		// }
 
 	}
 	@Override
 	public void procesa(MenosUnario menosUnario) {
-		menosUnario.opnd0().procesa(this);
-		if(TipoUtil.REF(menosUnario.opnd0().t) instanceof Tipo_int){
-			menosUnario.t = new Tipo_int();
-		}
-		else if(TipoUtil.REF(menosUnario.opnd0().t) instanceof Tipo_real){
-			menosUnario.t = new Tipo_real();
-		}
-		else{
-			SemanticErrors.avisoError(menosUnario, menosUnario.opnd0().t, "negative exp should be int or real");
-		}
+		// menosUnario.opnd0().procesa(this);
+		// if(TipoUtil.REF(menosUnario.opnd0().t) instanceof Tipo_int){
+		// 	menosUnario.t = new Tipo_int();
+		// }
+		// else if(TipoUtil.REF(menosUnario.opnd0().t) instanceof Tipo_real){
+		// 	menosUnario.t = new Tipo_real();
+		// }
+		// else{
+		// 	SemanticErrors.avisoError(menosUnario, menosUnario.opnd0().t, "negative exp should be int or real");
+		// }
 	}
 
     // postfixes (designadores)
 	@Override
 	public void procesa(Indexacion indexacion) {
-		indexacion.opnd0().procesa(this);	
-		indexacion.opnd1().procesa(this);
-		if((TipoUtil.REF(indexacion.opnd0().t) instanceof Tipo_lista) && (TipoUtil.REF(indexacion.opnd1().t) instanceof Tipo_int)){
-			indexacion.t = indexacion.opnd0().t;
-		}
-		else{
-			SemanticErrors.avisoError(indexacion, indexacion.opnd0().t, indexacion.opnd1().t, "invalid indexation value types ");
-		}
+		// indexacion.opnd0().procesa(this);	
+		// indexacion.opnd1().procesa(this);
+		// if((TipoUtil.REF(indexacion.opnd0().t) instanceof Tipo_lista) && (TipoUtil.REF(indexacion.opnd1().t) instanceof Tipo_int)){
+		// 	indexacion.t = indexacion.opnd0().t;
+		// }
+		// else{
+		// 	SemanticErrors.avisoError(indexacion, indexacion.opnd0().t, indexacion.opnd1().t, "invalid indexation value types ");
+		// }
 	}
 
 	@Override
 	public void procesa(Acceso acceso) {
-		acceso.opnd0().procesa(this);
-		Tipo T = TipoUtil.REF(acceso.opnd0().t);
-		if(T instanceof Tipo_struct){
-			Tipo_struct TS = (Tipo_struct) T;
-			if (TS.nm.containsKey(acceso.opnd1String())){
-				acceso.t = TS.nm.get(acceso.opnd1String());
-			}
-			else{
-				SemanticErrors.avisoError(acceso, null, "invalid field name");
-			}
-		}
-		else{
-			SemanticErrors.avisoError(acceso, T, "the accesed value type is not a struct");
-		}
+		// acceso.opnd0().procesa(this);
+		// Tipo T = TipoUtil.REF(acceso.opnd0().t);
+		// if(T instanceof Tipo_struct){
+		// 	Tipo_struct TS = (Tipo_struct) T;
+		// 	if (TS.nm.containsKey(acceso.opnd1String())){
+		// 		acceso.t = TS.nm.get(acceso.opnd1String());
+		// 	}
+		// 	else{
+		// 		SemanticErrors.avisoError(acceso, null, "invalid field name");
+		// 	}
+		// }
+		// else{
+		// 	SemanticErrors.avisoError(acceso, T, "the accesed value type is not a struct");
+		// }
 	}
 
 	@Override
 	public void procesa(Indireccion indireccion) {
-		indireccion.opnd0().procesa(this);
-		Tipo T = TipoUtil.REF(indireccion.opnd0().t);
-		if(T instanceof Tipo_circum){
-			Tipo_circum TC = (Tipo_circum) T;
-			indireccion.t = TC.tipo().t;
-		}
-		else{
-			SemanticErrors.avisoError(indireccion, T, "the indirected value type is not a pointer");
-		}
+		// indireccion.opnd0().procesa(this);
+		// Tipo T = TipoUtil.REF(indireccion.opnd0().t);
+		// if(T instanceof Tipo_circum){
+		// 	Tipo_circum TC = (Tipo_circum) T;
+		// 	indireccion.t = TC.tipo().t;
+		// }
+		// else{
+		// 	SemanticErrors.avisoError(indireccion, T, "the indirected value type is not a pointer");
+		// }
 	}
 
     // iden and literals
 	@Override
 	public void procesa(Iden iden) {
-		Dec_variable dec = (Dec_variable) iden.vinculo;
-		iden.t = dec.tipo();
+		// Dec_variable dec = (Dec_variable) iden.vinculo;
+		// iden.t = dec.tipo();
 	}
 	@Override
 	public void procesa(Lit_ent lit_ent) {lit_ent.t = new Tipo_int();}

@@ -322,8 +322,7 @@ public class Impresion implements Procesamiento {
 
 	@Override
 	public void procesa(Un_parRe un_parRe) {
-		un_parRe.parsre().procesa(this);
-
+		un_parRe.parF().procesa(this);
 	}
 	
 	private void imprimeOpnd(Exp opnd, int np) {

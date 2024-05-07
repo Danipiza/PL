@@ -1,5 +1,6 @@
 package asint;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import asint.SintaxisAbstractaTiny.*;
 
@@ -8,6 +9,10 @@ import asint.SintaxisAbstractaTiny.*;
 public class SemanticErrors {
 
 	public static List<NameError> errorList = new ArrayList<>();
+
+    public static boolean noHayError(){
+        return errorList.isEmpty();
+    }
 
 	public static void addError(int line, int col, String errorText) {
 		NameError error = new NameError(line, col, errorText);
@@ -55,4 +60,24 @@ public class SemanticErrors {
             addError(n, errorText);
         } 
     }
+
+    public static void sort() {
+		Collections.sort(errorList);
+	}
+
+    public static void printErrors(){
+        SemanticErrors.sort();
+		for (NameError e : SemanticErrors.errorList) {
+						System.err.println(e);
+		}
+    }
+
+    public static void printErrorsDJ(String errormessage){
+        SemanticErrors.sort();
+		for (NameError e : SemanticErrors.errorList) {
+						System.out.println(e.ErrDJ(errormessage));
+		}
+    }
+
+
 }

@@ -3,7 +3,7 @@ import asint.SintaxisAbstractaTiny.*;
 
 // this file is adapted from https://github.com/bhavinshah7/Mini-Java-Compiler/blob/master/Compiler/src/main/java/eminijava/semantics/NameError.java
 
-public class NameError extends Tipo{
+public class NameError extends Tipo implements Comparable<NameError>{
 
 	private int line;
 	private int column;
@@ -44,6 +44,10 @@ public class NameError extends Tipo{
 		return line + ":" + column + " error: " + errorText;
 	}
 
+	public String ErrDJ(String errormessage) {
+		return errormessage + " fila:" + line + " col:" + column;
+	}
+
 	@Override
 	protected void imprime() {
 		// TODO Auto-generated method stub
@@ -60,6 +64,23 @@ public class NameError extends Tipo{
 	public void procesa2(Procesamiento p) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'procesa2'");
+	}
+
+	@Override
+	public int compareTo(NameError o) {
+		if (getLine() < o.getLine()) {
+			return -1;
+		} else if (getLine() > o.getLine()) {
+			return 1;
+		} else {
+			if (getColumn() < o.getColumn()) {
+				return -1;
+			} else if (getColumn() > o.getColumn()) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
 	}
 
 }
