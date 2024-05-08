@@ -43,6 +43,6 @@ public class AnalizadorSintacticoTinyDJ extends ConstructorASTsTiny  {
         disable_tracing();
     }
     final protected void trace_token(Token t, String where) {
-        imprime(t);
+        //imprime(t);
     }
 }

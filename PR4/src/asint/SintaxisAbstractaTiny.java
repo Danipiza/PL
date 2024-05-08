@@ -610,6 +610,7 @@ public class SintaxisAbstractaTiny {
  	   	private Tipo tipo;
     	private String identificador;
         public Tipo_struct parentStruct;
+        public int desp;
         public Crea_campo(Tipo tipo, String identificador) {
  		   super();
  		   this.tipo = tipo;
@@ -721,6 +722,7 @@ public class SintaxisAbstractaTiny {
     public static class Dec_variable extends Dec { // TODO Nodo en vez de Dec?
     	private Tipo tipo;
     	private String id;
+        public int nivel;
         
         public Dec_variable(Tipo tipo, String id) {
             this.tipo=tipo;
@@ -796,6 +798,8 @@ public class SintaxisAbstractaTiny {
     	private String id;
     	private ParsFOp parsfop;
     	private Bloq bloq;
+        public int nivel;
+        public int tam;
         
         public Dec_proc(String id, ParsFOp parsfop, Bloq bloq) {            
         	this.id = id;
@@ -1713,6 +1717,7 @@ public class SintaxisAbstractaTiny {
      
      
      public static abstract class Tipo extends Nodo {
+        public int tam;
          public Tipo() {
          }
          protected abstract void imprime();
@@ -1743,6 +1748,7 @@ public class SintaxisAbstractaTiny {
          protected abstract void imprime();
      }       
      public static abstract class ParF extends Nodo { // Dec, Instr, ParRe
+        public int nivel;
          public ParF() {
          }
          protected abstract void imprime();

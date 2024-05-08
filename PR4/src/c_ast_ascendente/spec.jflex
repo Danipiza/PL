@@ -100,8 +100,11 @@ circunflejo = \^
 ampersand = &
 amp = &&
 
+eof = \$
+
 %%
 
+{eof} 			{return ops.unidadEof();}
 {int}                  {return ops.unidadEnt();}
 {real}                  {return ops.unidadReal();}
 {true}                  {return ops.unidadTrue();}

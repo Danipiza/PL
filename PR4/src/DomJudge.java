@@ -8,6 +8,7 @@ import asint.Vinculacion;
 import asint.PreTipado;
 import asint.SemanticErrors;
 import asint.Tipado;
+import asint.BISReader;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -28,26 +29,27 @@ public class DomJudge {
 
 	public static void main(String[] args) throws Exception  {
 		
-		Reader input = new InputStreamReader(new FileInputStream("input.txt"));
+		Reader input = new BISReader(new FileInputStream("input.txt"));
 		//Reader input = new InputStreamReader(System.in);
 
-		BufferedReader bufferedReader = new BufferedReader(input);
-		int parser = bufferedReader.read();
+		//BufferedReader bufferedReader = new BufferedReader(input);
+		//int parser = bufferedReader.read();
+		int parser = input.read();
 		Prog prog = null;
 		//System.out.println(parser);
 		//ConstructorAST asint = null;
 		try {	
 			
 			if(parser=='a') { // ASCENDENTE 		
-				AnalizadorLexicoTiny alex = new AnalizadorLexicoTiny(bufferedReader);
+				AnalizadorLexicoTiny alex = new AnalizadorLexicoTiny(input);
 				AnalizadorSintacticoTinyDJAsc asint = new AnalizadorSintacticoTinyDJAsc(alex);
-				System.out.println("CONSTRUCCION AST ASCENDENTE");
+				//System.out.println("CONSTRUCCION AST ASCENDENTE");
 				prog =(Prog) asint.debug_parse().value;
 				//prog.procesa(new Impresion());
 			}
 			else {
-				System.out.println("CONSTRUCCION AST DESCENDENTE");
-				AnalizadorSintacticoTinyDJ asint = new AnalizadorSintacticoTinyDJ(bufferedReader);
+				//System.out.println("CONSTRUCCION AST DESCENDENTE");
+				AnalizadorSintacticoTinyDJ asint = new AnalizadorSintacticoTinyDJ(input);
 	            asint.disable_tracing();
 	            prog=asint.inicial();					
 				//prog.procesa(new Impresion());					   	            

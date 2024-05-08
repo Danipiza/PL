@@ -312,10 +312,10 @@ public class PreTipado implements Procesamiento{
 	}
 
     // infixes (binary operations)
-    private void procesaBin(ExpBin exp){
-        // exp.opnd0().procesa(this);
-        // exp.opnd1().procesa(this);
-    }
+    // private void procesaBin(ExpBin exp){
+    //     exp.opnd0().procesa(this);
+    //     exp.opnd1().procesa(this);
+    // }
 	@Override
 	public void procesa(Suma suma) {		
 		// procesaBin(suma);
