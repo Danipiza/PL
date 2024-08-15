@@ -11,11 +11,11 @@ import java.io.InputStreamReader;
 
 import c_ast_ascendente.AnalizadorLexicoTiny;
 
-import c_ast_ascendente.AnalizadorSintacticoTinyDJAsc;
+import c_ast_ascendente.ConstructorASTTinyDJAsc;
 import c_ast_ascendente.ALexOperations.ECaracterInesperado;
 import c_ast_ascendente.GestionErroresTiny.ErrorSintactico;
 //import c_ast_ascendente.ConstructorAST;
-import c_ast_descendente.AnalizadorSintacticoTinyDJ;
+import c_ast_descendente.ConstructorASTsTinyDJ;
 // import c_ast_descendente.ConstructorASTsTiny;
 import c_ast_descendente.ParseException;
 import c_ast_descendente.TokenMgrError;
@@ -37,7 +37,7 @@ public class DomJudge {
 			
 			if(parser=='a') { // ASCENDENTE 		
 				AnalizadorLexicoTiny alex = new AnalizadorLexicoTiny(bufferedReader);
-				AnalizadorSintacticoTinyDJAsc asint = new AnalizadorSintacticoTinyDJAsc(alex);
+				ConstructorASTTinyDJAsc asint = new ConstructorASTTinyDJAsc(alex);
 				
 				System.out.println("CONSTRUCCION AST ASCENDENTE");
 				
@@ -59,7 +59,7 @@ public class DomJudge {
 			}
 			else {
 				System.out.println("CONSTRUCCION AST DESCENDENTE");
-				AnalizadorSintacticoTinyDJ asint = new AnalizadorSintacticoTinyDJ(bufferedReader);
+				ConstructorASTsTinyDJ asint = new ConstructorASTsTinyDJ(bufferedReader);
 	            asint.disable_tracing();
 	            Prog prog=asint.inicial();
 	            
