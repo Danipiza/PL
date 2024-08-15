@@ -6,7 +6,7 @@ import c_ast_ascendente.ConstructorAST;
 import c_ast_ascendente.sym;
 
 // TODO ESPACIO AL IMPRIMIR
-public class ConstructorASTsTinyDJ extends ConstructorASTsTiny  {
+public class AnalizadorSintacticoTinyDJ extends ConstructorASTsTiny  {
     private void imprime(Token t) {
         switch(t.kind) {
         	case TRUE: System.out.println("<true>"); break;
@@ -38,7 +38,7 @@ public class ConstructorASTsTinyDJ extends ConstructorASTsTiny  {
         }
     }
     
-    public ConstructorASTsTinyDJ(Reader r) {
+    public AnalizadorSintacticoTinyDJ(Reader r) {
         super(r);
         disable_tracing();
     }
